@@ -227,7 +227,7 @@ var _hmt = _hmt || [];
     <div class="nav-links">
       <a href="index.html#features" data-i18n="nav.features">功能</a>
       <a href="guide.html" class="active" data-i18n="nav.guide">手册</a>
-      <a href="https://github.com/turinglambdaai/syncpilot">GitHub</a>
+      <a href="https://github.com/turlamai/syncpilot">GitHub</a>
       <div class="lang-dropdown-wrapper">
         <button class="lang-btn" type="button" aria-label="Switch language">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -248,7 +248,7 @@ var _hmt = _hmt || [];
   <div class="container">
     <div class="eyebrow" data-i18n="hero.eyebrow">使用手册</div>
     <h1 data-i18n="hero.h1">把 SyncPilot 用明白</h1>
-<aside class="guide-status"><p class="reader-en " lang="en">Free Linux maintenance project under AGPL-3.0. Resilio’s separate licence and service limits still apply; no SyncPilot paid tier.</p><p class="reader-zh " lang="zh">AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</p><a class="reader-en" lang="en" href="https://github.com/turinglambdaai/syncpilot/blob/main/docs/USER-GUIDE.md">Current installation, privacy and recovery</a><a class="reader-zh" lang="zh" href="https://github.com/turinglambdaai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md">当前安装、隐私与恢复</a></aside>
+<aside class="guide-status"><p class="reader-en " lang="en">Free Linux maintenance project under AGPL-3.0. Resilio’s separate licence and service limits still apply; no SyncPilot paid tier.</p><p class="reader-zh " lang="zh">AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</p><a class="reader-en" lang="en" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.md">Current installation, privacy and recovery</a><a class="reader-zh" lang="zh" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md">当前安装、隐私与恢复</a></aside>
     <p class="lead" data-i18n="hero.lead">安装、守护进程、设置、更新与常见问题——短句，动词开头，一页说清。</p>
   </div>
 </section>
@@ -280,14 +280,14 @@ var _hmt = _hmt || [];
       <h2 class="manual-h2"><span class="h2-emoji">🚀</span><span data-i18n="q.title">五分钟上手</span></h2>
       <p data-i18n="q.intro">装好、启动、连上 Resilio Sync。到这里就能用了——其余内容都是可选的。</p>
       <ol>
-        <li data-i18n-html="q.s1"><strong>安装。</strong>到 <a href="https://github.com/turinglambdaai/syncpilot/releases/latest">Releases</a> 页选对应架构的包：<code>deb</code> 用 <code>sudo apt install ./…deb</code>，<code>rpm</code> 用 <code>sudo dnf install ./…rpm</code>，<code>AppImage</code> 加可执行权限直接运行。不想安装就解压 <code>tar.gz</code> / <code>zip</code>，运行其中的 <code>RivetHost</code>。x64 与 arm64 全格式齐备。</li>
+        <li data-i18n-html="q.s1"><strong>安装。</strong>到 <a href="https://github.com/turlamai/syncpilot/releases/latest">Releases</a> 页选对应架构的包：<code>deb</code> 用 <code>sudo apt install ./…deb</code>，<code>rpm</code> 用 <code>sudo dnf install ./…rpm</code>，<code>AppImage</code> 加可执行权限直接运行。不想安装就解压 <code>tar.gz</code> / <code>zip</code>，运行其中的 <code>RivetHost</code>。x64 与 arm64 全格式齐备。</li>
         <li data-i18n-html="q.s2"><strong>首次启动。</strong>从应用菜单打开 SyncPilot（deb/rpm 装在 <code>/opt/syncpilot</code>，带桌面入口）。还没有官方 <code>rslsync</code> 二进制？启动页一键从 Resilio 官方 CDN 下载（约 15 MB，sha256 校验后装入 <code>~/.local/bin</code>）。也可以自行安装后到设置里指定路径——自动探测覆盖 <code>~/.local/bin</code>、<code>/usr/bin</code>、<code>/usr/local/bin</code>、<code>/opt/resilio-sync</code> 和 <code>$PATH</code>。</li>
         <li data-i18n-html="q.s3"><strong>连上 Resilio Sync。</strong>窗口里加载的就是<strong>官方 Web UI</strong>。在官方面板登录或激活、添加同步文件夹——与 Windows、macOS 上完全一致，没有要重新学的东西。</li>
         <li data-i18n="q.s4">管好守护进程。SyncPilot 默认随应用启动并看护 rslsync：崩了按退避自动重启，退出应用默认保活。设置窗口的 Daemon 卡片可随时重启。</li>
         <li data-i18n="q.s5">按需调整。设置 → Desktop 卡片：开机自启、关闭到托盘、界面语言。改端口后按提示重启守护进程生效。</li>
       </ol>
-      <img class="manual-shot" src="screenshot.png" alt="SyncPilot 窗口：内嵌的官方 Resilio Web UI" data-alt-en="The SyncPilot window embedding the official Resilio Web UI" data-alt-zh="SyncPilot 窗口：内嵌的官方 Resilio Web UI" loading="lazy" />
-      <p class="manual-hint" data-i18n="q.hint">以上为 SyncPilot（Linux）运行官方界面的真实软件截图。</p>
+      
+      <p class="manual-hint" data-i18n="q.hint">预期结果：守护进程正常运行后，使用测试文件夹连接第二台设备，小文件应能双向同步。失败时检查守护进程状态、官方界面鉴权、网络与同步权限。</p>
     </section>
 
     <!-- =================== Daemon lifecycle =================== -->
@@ -491,8 +491,8 @@ var _hmt = _hmt || [];
 </div>
 
 <footer>
-  <span data-i18n="footer.legal-pre">SyncPilot 为</span> <a href="https://github.com/turinglambdaai/syncpilot/blob/main/LICENSE">AGPL-3.0</a> <span data-i18n="footer.legal-post">自由软件，与 Resilio, Inc. 无隶属关系。「Resilio Sync」为其所有者的商标。</span><br /><br />
-  <a href="index.html" data-i18n="footer.home">返回首页</a> · <a href="https://github.com/turinglambdaai/syncpilot" data-i18n="footer.source">GitHub 查看源码</a>
+  <span data-i18n="footer.legal-pre">SyncPilot 为</span> <a href="https://github.com/turlamai/syncpilot/blob/main/LICENSE">AGPL-3.0</a> <span data-i18n="footer.legal-post">自由软件，与 Resilio, Inc. 无隶属关系。「Resilio Sync」为其所有者的商标。</span><br /><br />
+  <a href="index.html" data-i18n="footer.home">返回首页</a> · <a href="https://github.com/turlamai/syncpilot" data-i18n="footer.source">GitHub 查看源码</a>
 </footer>
 
 <script>
@@ -534,12 +534,12 @@ const i18n = {
     'toc.faq-uninstall': 'How do I uninstall?',
     'q.title': 'Five-minute start',
     'q.intro': 'Install, launch, connect to Resilio Sync. That is the whole tutorial — everything below is optional.',
-    'q.s1': '<strong>Install.</strong> Pick your architecture on the <a href="https://github.com/turinglambdaai/syncpilot/releases/latest">Releases</a> page: <code>deb</code> via <code>sudo apt install ./…deb</code>, <code>rpm</code> via <code>sudo dnf install ./…rpm</code>, or make the <code>AppImage</code> executable and run it. No install wanted? Unpack the <code>tar.gz</code> / <code>zip</code> and run <code>RivetHost</code>. All formats ship for x64 and arm64.',
+    'q.s1': '<strong>Install.</strong> Pick your architecture on the <a href="https://github.com/turlamai/syncpilot/releases/latest">Releases</a> page: <code>deb</code> via <code>sudo apt install ./…deb</code>, <code>rpm</code> via <code>sudo dnf install ./…rpm</code>, or make the <code>AppImage</code> executable and run it. No install wanted? Unpack the <code>tar.gz</code> / <code>zip</code> and run <code>RivetHost</code>. All formats ship for x64 and arm64.',
     'q.s2': '<strong>First launch.</strong> Open SyncPilot from the app menu (deb/rpm install under <code>/opt/syncpilot</code> with a desktop entry). No official <code>rslsync</code> binary yet? The boot page fetches it from Resilio’s official CDN in one click (~15 MB, sha256-verified into <code>~/.local/bin</code>). Prefer your own install? Point SyncPilot at it in Settings — auto-detection covers <code>~/.local/bin</code>, <code>/usr/bin</code>, <code>/usr/local/bin</code>, <code>/opt/resilio-sync</code> and <code>$PATH</code>.',
     'q.s3': '<strong>Connect to Resilio Sync.</strong> The window embeds the <strong>official Web UI</strong>. Sign in or activate, add synced folders — exactly like on Windows and macOS. Nothing to re-learn.',
     'q.s4': 'Mind the daemon. SyncPilot starts and supervises rslsync by default: crashes restart with backoff, the daemon survives app exit. Restart any time from the Daemon card in Settings.',
     'q.s5': 'Tune it. Settings → Desktop: launch at login, close-to-tray, UI language. Port changes apply after the daemon restart, as the toast says.',
-    'q.hint': 'The screenshot is the real SyncPilot (Linux) build running the official UI.',
+    'q.hint': 'Expected result: with the daemon running, connect a second device using disposable test folders and verify a small file transfers both ways. If it fails, review daemon status, authentication, network and folder permissions.',
     'd.title': 'Daemon start / stop',
     'd.intro': 'SyncPilot owns the official <code>rslsync</code> daemon’s whole life: start, adopt, stop, keep alive.',
     'd.start': 'Start',
@@ -644,12 +644,12 @@ const i18n = {
     'toc.faq-uninstall': '怎么卸载？',
     'q.title': '五分钟上手',
     'q.intro': '装好、启动、连上 Resilio Sync。到这里就能用了——其余内容都是可选的。',
-    'q.s1': '<strong>安装。</strong>到 <a href="https://github.com/turinglambdaai/syncpilot/releases/latest">Releases</a> 页选对应架构的包：<code>deb</code> 用 <code>sudo apt install ./…deb</code>，<code>rpm</code> 用 <code>sudo dnf install ./…rpm</code>，<code>AppImage</code> 加可执行权限直接运行。不想安装就解压 <code>tar.gz</code> / <code>zip</code>，运行其中的 <code>RivetHost</code>。x64 与 arm64 全格式齐备。',
+    'q.s1': '<strong>安装。</strong>到 <a href="https://github.com/turlamai/syncpilot/releases/latest">Releases</a> 页选对应架构的包：<code>deb</code> 用 <code>sudo apt install ./…deb</code>，<code>rpm</code> 用 <code>sudo dnf install ./…rpm</code>，<code>AppImage</code> 加可执行权限直接运行。不想安装就解压 <code>tar.gz</code> / <code>zip</code>，运行其中的 <code>RivetHost</code>。x64 与 arm64 全格式齐备。',
     'q.s2': '<strong>首次启动。</strong>从应用菜单打开 SyncPilot（deb/rpm 装在 <code>/opt/syncpilot</code>，带桌面入口）。还没有官方 <code>rslsync</code> 二进制？启动页一键从 Resilio 官方 CDN 下载（约 15 MB，sha256 校验后装入 <code>~/.local/bin</code>）。也可以自行安装后到设置里指定路径——自动探测覆盖 <code>~/.local/bin</code>、<code>/usr/bin</code>、<code>/usr/local/bin</code>、<code>/opt/resilio-sync</code> 和 <code>$PATH</code>。',
     'q.s3': '<strong>连上 Resilio Sync。</strong>窗口里加载的就是<strong>官方 Web UI</strong>。在官方面板登录或激活、添加同步文件夹——与 Windows、macOS 上完全一致，没有要重新学的东西。',
     'q.s4': '管好守护进程。SyncPilot 默认随应用启动并看护 rslsync：崩了按退避自动重启，退出应用默认保活。设置窗口的 Daemon 卡片可随时重启。',
     'q.s5': '按需调整。设置 → Desktop 卡片：开机自启、关闭到托盘、界面语言。改端口后按提示重启守护进程生效。',
-    'q.hint': '以上为 SyncPilot（Linux）运行官方界面的真实软件截图。',
+    'q.hint': '预期结果：守护进程正常运行后，使用测试文件夹连接第二台设备，小文件应能双向同步。失败时检查守护进程状态、官方界面鉴权、网络与同步权限。',
     'd.title': '守护进程启停',
     'd.intro': 'SyncPilot 管理官方 <code>rslsync</code> 守护进程的一生：启动、接管、停止、保活。',
     'd.start': '启动',
