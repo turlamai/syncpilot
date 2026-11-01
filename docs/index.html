@@ -281,8 +281,8 @@ html:lang(en) .reader-zh,html:lang(zh) .reader-en{display:none!important}@media(
     <div class="nav-links">
       <a href="#features" data-i18n="nav.features">功能</a>
       <a href="guide.html" data-i18n="nav.guide">手册</a>
-      <a href="https://github.com/turinglambdaai/syncpilot#readme" data-i18n="nav.docs">文档</a>
-      <a href="https://github.com/turinglambdaai/syncpilot">GitHub</a>
+      <a href="https://github.com/turlamai/syncpilot#readme" data-i18n="nav.docs">文档</a>
+      <a href="https://github.com/turlamai/syncpilot">GitHub</a>
       <div class="lang-dropdown-wrapper">
         <button class="lang-btn" type="button" onclick="void 0" aria-label="Switch language">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -306,8 +306,8 @@ html:lang(en) .reader-zh,html:lang(zh) .reader-en{display:none!important}@media(
 <p class="reader-en product-availability" lang="en">Development preview. Free Linux maintenance project under AGPL-3.0. Resilio’s separate licence and service limits still apply; no SyncPilot paid tier.</p><p class="reader-zh product-availability" lang="zh">开发预览。AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</p>
     <p class="hero-sub animate" data-i18n-html="hero.sub">SyncPilot 把<strong>官方 Resilio Web UI</strong>装进原生桌面窗口，并在背后托管官方 <code style="font-family:var(--font-mono);font-size:0.9em;">rslsync</code> 守护进程。每一屏都是官方界面——无需重新学习。</p>
     <div class="hero-actions animate">
-      <a class="btn btn-primary" href="https://github.com/turinglambdaai/syncpilot/releases/latest/download/syncpilot-linux-x64.deb" data-i18n="hero.download">下载</a>
-      <a class="btn btn-secondary" href="https://github.com/turinglambdaai/syncpilot" data-i18n="hero.source">在 GitHub 查看</a>
+      <a class="btn btn-primary" href="https://github.com/turlamai/syncpilot/releases/latest/download/syncpilot-linux-x64.deb" data-i18n="hero.download">下载</a>
+      <a class="btn btn-secondary" href="https://github.com/turlamai/syncpilot" data-i18n="hero.source">在 GitHub 查看</a>
     </div>
     <div class="trust-row animate" data-i18n-html="hero.trust"><b>deb · rpm · AppImage · tar.gz · zip</b> &nbsp;—&nbsp; x64 / arm64（Ubuntu 24.04+）&nbsp;—&nbsp; 免费开源，AGPL-3.0</div>
 
@@ -321,7 +321,10 @@ html:lang(en) .reader-zh,html:lang(zh) .reader-en{display:none!important}@media(
           </div>
           <div class="window-title">SyncPilot — Resilio Sync</div>
         </div>
-        <div class="window-body"><img src="screenshot.png" alt="The official Resilio Web UI running inside SyncPilot" /></div>
+        <div class="window-body" style="padding:26px;">
+          <p class="reader-en" lang="en">Select a verified rslsync binary and a disposable test folder. Connect another test device in the official interface and confirm that a small file transfers both ways before using valuable data.</p>
+          <p class="reader-zh" lang="zh">选择已验证的 rslsync 程序和可丢弃的测试文件夹，通过官方界面连接第二台测试设备，确认小文件能够双向传输后再使用重要数据。</p>
+        </div>
       </div>
     </div>
   </div>
@@ -412,23 +415,23 @@ html:lang(en) .reader-zh,html:lang(zh) .reader-en{display:none!important}@media(
       <p data-i18n="download.sub">安装即用。之后每天按签名 manifest 静默检查一次，下载前必先询问；验证过的更新交到你手上，应用那一步按安装形态手动完成（见手册）。缺失官方 rslsync 二进制时，会在首次启动时自动获取。</p>
     </div>
     <div class="dl-cards animate">
-      <a class="dl-card" href="https://github.com/turinglambdaai/syncpilot/releases/latest/download/syncpilot-linux-x64.deb">
+      <a class="dl-card" href="https://github.com/turlamai/syncpilot/releases/latest/download/syncpilot-linux-x64.deb">
         <div class="dl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg></div>
         <div><b>deb · rpm · AppImage · tar.gz · zip</b><span data-i18n="dl.sub">Linux · x64 / arm64 · 签名更新 manifest</span></div>
       </a>
     </div>
-    <p style="text-align:center;margin-top:16px"><a href="https://github.com/turinglambdaai/syncpilot/releases" data-i18n="dl.all-releases">全部版本</a></p>
+    <p style="text-align:center;margin-top:16px"><a href="https://github.com/turlamai/syncpilot/releases" data-i18n="dl.all-releases">全部版本</a></p>
   </div>
 </section>
 
 <section id="start-here" class="product-start" aria-label="Get started / 开始使用">
-<h2 class="reader-en " lang="en">Start with one useful session.</h2><h2 class="reader-zh " lang="zh">从一次有效使用开始。</h2><p class="reader-en start-status" lang="en">Free Linux maintenance project under AGPL-3.0. Resilio’s separate licence and service limits still apply; no SyncPilot paid tier.</p><p class="reader-zh start-status" lang="zh">AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</p><p class="reader-en " lang="en">Linux only. The official rslsync binary and its own terms are separate from SyncPilot; Windows/macOS ports are not planned deliveries.</p><p class="reader-zh " lang="zh">仅支持 Linux。官方 rslsync 二进制及其条款独立于 SyncPilot；Windows/macOS 移植不是当前交付。</p><div class="product-start-grid"><article><h3 class="reader-en " lang="en">01</h3><h3 class="reader-zh " lang="zh">01</h3><p class="reader-en " lang="en">Launch with a disposable test folder and confirm the selected daemon binary/version.</p><p class="reader-zh " lang="zh">先使用可丢弃的测试文件夹启动，确认所选守护进程二进制与版本。</p></article><article><h3 class="reader-en " lang="en">02</h3><h3 class="reader-zh " lang="zh">02</h3><p class="reader-en " lang="en">Connect a second test device through the official UI and verify a small file in each direction.</p><p class="reader-zh " lang="zh">通过官方界面连接第二台测试设备，双向验证一个小文件。</p></article><article><h3 class="reader-en " lang="en">03</h3><h3 class="reader-zh " lang="zh">03</h3><p class="reader-en " lang="en">Test daemon stop/restart, login startup and recovery before giving it valuable folders.</p><p class="reader-zh " lang="zh">提供重要文件夹前，测试守护进程停止重启、登录自启与恢复。</p></article></div><p class="reader-en start-limits" lang="en">Third-party compatibility, daemon authentication/recovery and installation-specific updates remain tracked in <a href="https://github.com/turinglambdaai/syncpilot/issues/10">#10</a>. Server/static installs can require operator-managed updates.</p><p class="reader-zh start-limits" lang="zh">第三方兼容、守护进程鉴权恢复及各安装形态更新仍在 <a href="https://github.com/turinglambdaai/syncpilot/issues/10">#10</a> 跟进。服务或静态安装可能需要运维者管理更新。</p><div class="start-links"><a class="reader-en" lang="en" href="https://github.com/turinglambdaai/syncpilot/blob/main/docs/USER-GUIDE.md">Installation, privacy &amp; recovery</a><a class="reader-zh" lang="zh" href="https://github.com/turinglambdaai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md">安装、隐私与恢复</a><a href="https://github.com/turinglambdaai/syncpilot/issues"><span class="reader-en " lang="en">Get help</span><span class="reader-zh " lang="zh">反馈与帮助</span></a></div>
+<h2 class="reader-en " lang="en">Start with one useful session.</h2><h2 class="reader-zh " lang="zh">从一次有效使用开始。</h2><p class="reader-en start-status" lang="en">Free Linux maintenance project under AGPL-3.0. Resilio’s separate licence and service limits still apply; no SyncPilot paid tier.</p><p class="reader-zh start-status" lang="zh">AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</p><p class="reader-en " lang="en">Linux only. The official rslsync binary and its own terms are separate from SyncPilot; Windows/macOS ports are not planned deliveries.</p><p class="reader-zh " lang="zh">仅支持 Linux。官方 rslsync 二进制及其条款独立于 SyncPilot；Windows/macOS 移植不是当前交付。</p><div class="product-start-grid"><article><h3 class="reader-en " lang="en">01</h3><h3 class="reader-zh " lang="zh">01</h3><p class="reader-en " lang="en">Launch with a disposable test folder and confirm the selected daemon binary/version.</p><p class="reader-zh " lang="zh">先使用可丢弃的测试文件夹启动，确认所选守护进程二进制与版本。</p></article><article><h3 class="reader-en " lang="en">02</h3><h3 class="reader-zh " lang="zh">02</h3><p class="reader-en " lang="en">Connect a second test device through the official UI and verify a small file in each direction.</p><p class="reader-zh " lang="zh">通过官方界面连接第二台测试设备，双向验证一个小文件。</p></article><article><h3 class="reader-en " lang="en">03</h3><h3 class="reader-zh " lang="zh">03</h3><p class="reader-en " lang="en">Test daemon stop/restart, login startup and recovery before giving it valuable folders.</p><p class="reader-zh " lang="zh">提供重要文件夹前，测试守护进程停止重启、登录自启与恢复。</p></article></div><p class="reader-en start-limits" lang="en">Third-party compatibility, daemon authentication/recovery and installation-specific updates remain tracked in <a href="https://github.com/turlamai/syncpilot/issues/10">#10</a>. Server/static installs can require operator-managed updates.</p><p class="reader-zh start-limits" lang="zh">第三方兼容、守护进程鉴权恢复及各安装形态更新仍在 <a href="https://github.com/turlamai/syncpilot/issues/10">#10</a> 跟进。服务或静态安装可能需要运维者管理更新。</p><div class="start-links"><a class="reader-en" lang="en" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.md">Installation, privacy &amp; recovery</a><a class="reader-zh" lang="zh" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md">安装、隐私与恢复</a><a href="https://github.com/turlamai/syncpilot/issues"><span class="reader-en " lang="en">Get help</span><span class="reader-zh " lang="zh">反馈与帮助</span></a></div>
 </section>
 <footer>
-  <span data-i18n="footer.legal-pre">SyncPilot 为</span> <a href="https://github.com/turinglambdaai/syncpilot/blob/main/LICENSE">AGPL-3.0</a> <span data-i18n="footer.legal-post">自由软件，与 Resilio, Inc. 无隶属关系。「Resilio Sync」为其所有者的商标。</span><br /><br />
-  <a href="https://github.com/turinglambdaai/syncpilot" data-i18n="footer.source">GitHub 查看源码</a>
+  <span data-i18n="footer.legal-pre">SyncPilot 为</span> <a href="https://github.com/turlamai/syncpilot/blob/main/LICENSE">AGPL-3.0</a> <span data-i18n="footer.legal-post">自由软件，与 Resilio, Inc. 无隶属关系。「Resilio Sync」为其所有者的商标。</span><br /><br />
+  <a href="https://github.com/turlamai/syncpilot" data-i18n="footer.source">GitHub 查看源码</a>
 </footer>
-<nav id="product-support" aria-label="Support / 支持"><a href="https://github.com/turinglambdaai/syncpilot/issues"><span class="support-zh">反馈</span><span class="support-en" lang="en">Feedback</span></a> <a href="https://github.com/turinglambdaai/syncpilot/releases"><span class="support-zh">发布与更新</span><span class="support-en" lang="en">Releases</span></a> <a href="https://github.com/turinglambdaai/syncpilot/blob/main/LICENSE"><span class="support-zh">源码许可</span><span class="support-en" lang="en">Source license</span></a> <a class="support-zh" href="https://github.com/turinglambdaai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md">使用与帮助</a> <a class="support-en" lang="en" href="https://github.com/turinglambdaai/syncpilot/blob/main/docs/USER-GUIDE.md">Usage & help</a></nav>
+<nav id="product-support" aria-label="Support / 支持"><a href="https://github.com/turlamai/syncpilot/issues"><span class="support-zh">反馈</span><span class="support-en" lang="en">Feedback</span></a> <a href="https://github.com/turlamai/syncpilot/releases"><span class="support-zh">发布与更新</span><span class="support-en" lang="en">Releases</span></a> <a href="https://github.com/turlamai/syncpilot/blob/main/LICENSE"><span class="support-zh">源码许可</span><span class="support-en" lang="en">Source license</span></a> <a class="support-zh" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md">使用与帮助</a> <a class="support-en" lang="en" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.md">Usage & help</a></nav>
 
 <script>
 const io = new IntersectionObserver((entries) => {
@@ -592,8 +595,8 @@ document.getElementById('theme-btn').addEventListener('click', function () {
 // the detected architecture; other desktops keep the neutral link to the
 // Releases page. Labels switch through the i18n dictionary below.
 (function () {
-  const BASE = 'https://github.com/turinglambdaai/syncpilot/releases/latest/download/';
-  const RELEASES = 'https://github.com/turinglambdaai/syncpilot/releases';
+  const BASE = 'https://github.com/turlamai/syncpilot/releases/latest/download/';
+  const RELEASES = 'https://github.com/turlamai/syncpilot/releases';
   const ua = navigator.userAgent;
   const isLinux = /Linux|X11/i.test(ua) && !/Android/i.test(ua);
   const arch = /aarch64|arm/i.test(ua) ? 'arm64' : 'x64';
