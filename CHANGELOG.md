@@ -70,7 +70,7 @@ app's own behaviour.
 ### Changed
 
 - **The About card names the issue tracker.** The About text now ends
-  with `github.com/turinglambdaai/syncpilot/issues` (zh and en, plain
+  with `github.com/turlamai/syncpilot/issues` (zh and en, plain
   text in the i18n single source), beside the existing repo link — a bug
   report starts one glance away from the About card that describes it.
 - **Update failure text is selectable.** The update dialogs' message
@@ -104,7 +104,7 @@ app's own behaviour.
 ### Changed
 
 - **The site states the real asset matrix**: the hero trust row now lists zip beside deb · rpm · AppImage · tar.gz — the portable zips have shipped in every release since 0.7.0 — and the nav gains the manual link.
-- **docs/UPDATE.md caught up with 0.7.0**: its "known gaps" still claimed the artifact downloader ignores 302 redirects (fixed in 0.7.0, [#1](https://github.com/turinglambdaai/syncpilot/issues/1)) and that no deb/rpm/AppImage packaging exists (shipped since 0.7.0/0.8.0). It now states the one gap that remains: updates never self-replace, with the per-format apply path.
+- **docs/UPDATE.md caught up with 0.7.0**: its "known gaps" still claimed the artifact downloader ignores 302 redirects (fixed in 0.7.0, [#1](https://github.com/turlamai/syncpilot/issues/1)) and that no deb/rpm/AppImage packaging exists (shipped since 0.7.0/0.8.0). It now states the one gap that remains: updates never self-replace, with the per-format apply path.
 
 ## [0.8.1] - 2026-10-14
 
@@ -116,12 +116,12 @@ app's own behaviour.
 
 ### Fixed
 
-- **SIGTERM shuts the app down instead of killing the backend under a living window** ([#3](https://github.com/turinglambdaai/syncpilot/issues/3)): OS signals bypass the GTK main loop, so the orderly teardown never ran — `systemd --user stop`, session logout and `killall` all left a zombie window over a dead backend. The rivet shutdown hook is now installed once the embedded runtime finishes booting: installing in `main()` loses the race to the Racket runtime's own SIGTERM handler, which is what kept the hook inert. Teardown is exactly-once across the GTK and signal paths, and each step traces into the host log.
+- **SIGTERM shuts the app down instead of killing the backend under a living window** ([#3](https://github.com/turlamai/syncpilot/issues/3)): OS signals bypass the GTK main loop, so the orderly teardown never ran — `systemd --user stop`, session logout and `killall` all left a zombie window over a dead backend. The rivet shutdown hook is now installed once the embedded runtime finishes booting: installing in `main()` loses the race to the Racket runtime's own SIGTERM handler, which is what kept the hook inert. Teardown is exactly-once across the GTK and signal paths, and each step traces into the host log.
 - **README described a tar.gz-only world that ended in 0.7.0**: the "Honest gaps" entry claiming no deb/rpm/AppImage packaging and the Install section's "that tarball is the only artifact — Linux x64 only" were both stale; Install now documents the real per-architecture matrix (deb · rpm · AppImage · tar.gz · zip, x64 + arm64, with `SHA256SUMS`, SBOM, notices and the signed update manifest). The product-site URL is also gone from the README header — the GitHub About field is the single home for it.
 
 ### Changed
 
-- **Rivet is consumed as a package, pinned to v0.11.0**: the Linux host CMake no longer hand-copies rivet's 14 platform translation units into its executable list — it `add_subdirectory`s the installed Rivet platform and links `rivet::platform` (the rivet#238 contract taskly already follows), so rivet adding a translation unit needs no downstream change. CI and release install the package from the tag-pinned Git source `https://github.com/turinglambdaai/rivet.git#v0.11.0` and use the `setup-embed-racket` action at `@v0.11.0` — the hold-back form rivet docs/ci.md prescribes for releases (the package catalog has one moving entry per name and no version selector, so catalog floating was never a release pin).
+- **Rivet is consumed as a package, pinned to v0.11.0**: the Linux host CMake no longer hand-copies rivet's 14 platform translation units into its executable list — it `add_subdirectory`s the installed Rivet platform and links `rivet::platform` (the rivet#238 contract taskly already follows), so rivet adding a translation unit needs no downstream change. CI and release install the package from the tag-pinned Git source `https://github.com/turlamai/rivet.git#v0.11.0` and use the `setup-embed-racket` action at `@v0.11.0` — the hold-back form rivet docs/ci.md prescribes for releases (the package catalog has one moving entry per name and no version selector, so catalog floating was never a release pin).
 - **Product site defaults to Chinese** (`lang="zh-CN"`) with the family i18n mechanism: `data-i18n` keys resolved against a JS dictionary instead of per-element `data-en`/`data-zh` attributes, `<title>`/meta description following the active language; explicit choice still persists, otherwise the browser locale decides. Still one self-contained file, zero dependencies.
 
 ## [0.8.0]
@@ -139,7 +139,7 @@ app's own behaviour.
 
 ### Fixed
 
-- **The updater's artifact download follows HTTP redirects** ([#1](https://github.com/turinglambdaai/syncpilot/issues/1)): the hand-rolled `get-pure-port` call saved the empty 302 body GitHub serves before the CDN redirect and failed the signed size/SHA-256 check — the same trap rivet#153 fixed for the manifest fetch, which is why the check succeeded and the download then broke. Covered by a loopback regression test that 302s onto a real payload. Note for 0.6.1 users: the broken downloader ships in your build, so the in-app update to 0.7.0 fails at download — update manually this one time; from 0.7.0 on, auto-update works
+- **The updater's artifact download follows HTTP redirects** ([#1](https://github.com/turlamai/syncpilot/issues/1)): the hand-rolled `get-pure-port` call saved the empty 302 body GitHub serves before the CDN redirect and failed the signed size/SHA-256 check — the same trap rivet#153 fixed for the manifest fetch, which is why the check succeeded and the download then broke. Covered by a loopback regression test that 302s onto a real payload. Note for 0.6.1 users: the broken downloader ships in your build, so the in-app update to 0.7.0 fails at download — update manually this one time; from 0.7.0 on, auto-update works
 
 ### Changed
 
@@ -170,7 +170,7 @@ app's own behaviour.
 
 ### Added
 
-- **The tray is back**: SyncPilot hosts a `rivet::system::TrayIcon` (StatusNotifierItem + dbusmenu, shipped by rivet f37908f / [#130](https://github.com/turinglambdaai/rivet/pull/130)) with an 打开 / 设置 / 退出 menu (zh/en). Closing the window hides it to the tray instead of quitting — the desktop convention the official clients follow — with the setting honored from day one of the rebuild and the "Hide to tray on close" row in Settings live again (insensitive only on sessions where no tray watcher exists). The tray icon uses the themed `emblem-synchronizing` glyph for now; branded art is a follow-up
+- **The tray is back**: SyncPilot hosts a `rivet::system::TrayIcon` (StatusNotifierItem + dbusmenu, shipped by rivet f37908f / [#130](https://github.com/turlamai/rivet/pull/130)) with an 打开 / 设置 / 退出 menu (zh/en). Closing the window hides it to the tray instead of quitting — the desktop convention the official clients follow — with the setting honored from day one of the rebuild and the "Hide to tray on close" row in Settings live again (insensitive only on sessions where no tray watcher exists). The tray icon uses the themed `emblem-synchronizing` glyph for now; branded art is a follow-up
 - Settings changes now reach the main window live: saving the settings window updates the close-to-tray behavior immediately, no restart needed
 
 ### Fixed
@@ -183,13 +183,13 @@ app's own behaviour.
 
 ### Changed
 
-- **SyncPilot is rebuilt on [Rivet](https://github.com/turinglambdaai/rivet)**: one Racket domain core (daemon manager, conf generation, auth-injecting proxy, settings, first-run installer) driving a first-party GTK4 + WebKitGTK 6.0 host over typed RPC. The host only renders and interacts — all logic lives in the backend. The previous Tauri 2 stack is removed from the tree; it remains on the v0.4.0 tag for reference
+- **SyncPilot is rebuilt on [Rivet](https://github.com/turlamai/rivet)**: one Racket domain core (daemon manager, conf generation, auth-injecting proxy, settings, first-run installer) driving a first-party GTK4 + WebKitGTK 6.0 host over typed RPC. The host only renders and interacts — all logic lives in the backend. The previous Tauri 2 stack is removed from the tree; it remains on the v0.4.0 tag for reference
 - **Drop-in upgrade**: data paths and formats are byte-identical with 0.4.x (`~/.local/share/site.jrtx.syncpilot`) — settings, device identity and the daemon config carry over untouched
 - Distribution is now a plain `tar.gz` (Linux x86_64, Ubuntu 24.04+ for WebKitGTK 6.0); releases are built and launch-smoked by CI, which also integration-smokes the real chain (pinned rslsync spawn, Web UI on `127.0.0.1:38889`, proxy answering for `/gui/`)
 
 ### Removed
 
-- The tray icon and hide-to-tray on close: rivet has no Linux tray contract yet ([turinglambdaai/rivet#118](https://github.com/turinglambdaai/rivet/issues/118)); closing the window now quits (the keep-daemon-on-exit setting is honored, so syncing continues in the background)
+- The tray icon and hide-to-tray on close: rivet has no Linux tray contract yet ([turlamai/rivet#118](https://github.com/turlamai/rivet/issues/118)); closing the window now quits (the keep-daemon-on-exit setting is honored, so syncing continues in the background)
 - The in-app updater (deb pkexec flow and AppImage in-place update): pending the rivet signed-manifest update flow; update via the release page for now
 
 ## [0.4.0] - 2026-09-30

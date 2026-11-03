@@ -32,6 +32,6 @@ Before claiming an unrestricted release, remove any conflicting legacy product g
 
 Complete delivery/maintenance gates in #10 first. Free pricing does not reduce signed-update, recovery or privacy requirements.
 
-Execution entry: [issue #10](https://github.com/turinglambdaai/syncpilot/issues/10). Complete this bounded slice before expanding commercial features.
+Execution entry: [issue #10](https://github.com/turlamai/syncpilot/issues/10). Complete this bounded slice before expanding commercial features.
 
-Portfolio role and shared boundaries: [PORTFOLIO](https://github.com/turinglambdaai/turinglambdaai.github.io/blob/master/PORTFOLIO.md).
+Portfolio role and shared boundaries: [PORTFOLIO](https://github.com/turlamai/turlamai.github.io/blob/master/PORTFOLIO.md).
