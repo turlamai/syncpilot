@@ -174,33 +174,41 @@ jobs:
             on && /^## / {exit}
             on {print}
           ' CHANGELOG.md > /tmp/notes.md
-          cd dist
-          for f in *.sha256; do [ -s "$f" ] || rm -f "$f"; done
-          cat *.sha256 > SHA256SUMS
-          sha256sum --check SHA256SUMS
-          # every file a sidecar or SHA256SUMS describes must ship too, so
-          # `sha256sum -c SHA256SUMS` resolves against the release alone
-          gh release create "$GITHUB_REF_NAME" \
-            --title "SyncPilot ${VERSION}" \
-            --notes-file /tmp/notes.md \
-            *.tar.gz *.deb *.rpm *.AppImage *.zip \
-            *.sbom.cdx.json *-THIRD_PARTY_NOTICES.txt \
-            *.sha256 SHA256SUMS update-stable.json update-manifest.json
-      - name: Stable alias copies (versionless direct-download links)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          VERSION="${GITHUB_REF_NAME#v}"
-          # Family rule: download buttons point at
-          # releases/latest/download/<alias>, so every release also ships
-          # versionless copies of the primary installers. SyncPilot is
-          # Linux-only: deb and AppImage per architecture. rivet names debs
-          # amd64/arm64 and AppImages x86_64/aarch64 — aliases normalize to
-          # the x64/arm64 family form.
-          mkdir -p stable-alias
-          cp "dist/syncpilot-${VERSION}-linux-amd64.deb" stable-alias/syncpilot-linux-x64.deb
-          cp "dist/syncpilot-${VERSION}-linux-arm64.deb" stable-alias/syncpilot-linux-arm64.deb
-          cp "dist/syncpilot-${VERSION}-linux-x86_64.AppImage" stable-alias/syncpilot-linux-x64.AppImage
-          cp "dist/syncpilot-${VERSION}-linux-aarch64.AppImage" stable-alias/syncpilot-linux-arm64.AppImage
-          gh release upload "$GITHUB_REF_NAME" stable-alias/* --clobber -R turlamai/syncpilot
+          test -s /tmp/notes.md
+          # Linux-only product: all supported packages plus the two public
+          # license/SBOM inventories are part of the release contract.
+          mkdir -p public
+          for suffix in \
+            linux-arm64.tar.gz linux-arm64.zip linux-x64.tar.gz linux-x64.zip \
+            linux-amd64.deb linux-arm64.deb \
+            linux-aarch64.AppImage linux-x86_64.AppImage \
+            linux-arm64.sbom.cdx.json linux-x64.sbom.cdx.json \
+            linux-arm64-THIRD_PARTY_NOTICES.txt linux-x64-THIRD_PARTY_NOTICES.txt; do
+            name="syncpilot-$VERSION-$suffix"
+            test -s "dist/$name" || { echo "::error::Missing or empty $name"; exit 1; }
+            cp "dist/$name" "public/$name"
+          done
+          for arch in aarch64 x86_64; do
+            rpm="$(find dist -maxdepth 1 -type f -name "syncpilot-$VERSION-*-linux-$arch.rpm" -print -quit)"
+            test -s "$rpm" || { echo "::error::Missing $arch RPM"; exit 1; }
+            cp "$rpm" public/
+          done
+          cp dist/update-stable.json dist/update-manifest.json public/
+          cmp -s public/update-stable.json public/update-manifest.json
+          (cd public && sha256sum syncpilot-* | LC_ALL=C sort -k2 > SHA256SUMS && sha256sum -c SHA256SUMS)
+          test "$(grep -c '^' public/SHA256SUMS)" -eq 14
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release edit "$GITHUB_REF_NAME" --title "SyncPilot $VERSION" --notes-file /tmp/notes.md
+            gh release upload "$GITHUB_REF_NAME" public/* --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --title "SyncPilot $VERSION" \
+              --notes-file /tmp/notes.md \
+              public/*
+          fi
+          gh release view "$GITHUB_REF_NAME" --json assets --jq '.assets[].name' |
+            while IFS= read -r name; do
+              if [ ! -f "public/$name" ]; then
+                gh release delete-asset "$GITHUB_REF_NAME" "$name" --yes
+              fi
+            done
