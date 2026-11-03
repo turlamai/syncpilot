@@ -39,11 +39,11 @@ Grab an installer from [Releases](https://github.com/turlamai/syncpilot/releases
 |---|---|---|
 | deb | `syncpilot-<version>-linux-amd64.deb` · `…-arm64.deb` | installs under `/opt/syncpilot` with a desktop entry and icon |
 | rpm | `syncpilot-<version>-linux-x86_64.rpm` · `…-aarch64.rpm` | same payload as the deb |
-| AppImage | `syncpilot-<version>-linux-x64.AppImage` · `…-arm64.AppImage` | carries its own GTK4 dependency closure — runs on distributions older than the build image |
+| AppImage | `syncpilot-<version>-linux-x86_64.AppImage` · `…-aarch64.AppImage` | carries its own GTK4 dependency closure — runs on distributions older than the build image |
 | tar.gz | `syncpilot-<version>-linux-x64.tar.gz` · `…-arm64.tar.gz` | unpack and run `RivetHost`; also the update payload the in-app updater downloads and verifies |
 | portable zip | `syncpilot-<version>-linux-x64.zip` · `…-arm64.zip` | same layout as the tar.gz |
 
-Each file ships with a `.sha256` sidecar, plus a combined `SHA256SUMS`, a CycloneDX SBOM and third-party notices per architecture, and the Ed25519-signed `update-stable.json` manifest the in-app updater consumes. Ubuntu 24.04+ ships the required GTK 4 / WebKitGTK 6.0; everything else is bundled or base-system.
+Every release publishes one verified `SHA256SUMS` for its versioned packages, a CycloneDX SBOM and third-party notices per architecture, and the Ed25519-signed `update-stable.json` (with the standard `update-manifest.json` alias) for in-app updates. Individual checksum sidecars remain CI artifacts rather than extra release downloads. Ubuntu 24.04+ ships the required GTK 4 / WebKitGTK 6.0; everything else is bundled or base-system.
 
 If the official `rslsync` binary is not found (auto-detection covers `~/.local/bin`, `/usr/bin`, `/usr/local/bin`, `/opt/resilio-sync`, `$PATH`), SyncPilot offers to download it from Resilio's CDN on first launch (sha256-pinned, installed to `~/.local/bin`) — or install it yourself and point SyncPilot at it in **Settings**.
 
