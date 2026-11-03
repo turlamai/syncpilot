@@ -21,6 +21,10 @@ All notable changes to SyncPilot are documented here. Format: [Keep a Changelog]
 
 ### Changed
 
+- Preserve independent CI results for every `main` commit even when runners
+  are queued; continue cancelling only superseded PR checks without changing
+  the Linux-only product acceptance or pinned Rivet dependency.
+
 - **The update contract is now documented per install format.** docs/UPDATE.md
   (plus a new complete Chinese twin, docs/UPDATE.zh-CN.md) states exactly
   what the in-app updater does and what stays manual for each of
