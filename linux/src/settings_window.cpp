@@ -356,8 +356,8 @@ GtkWidget* build_about_card() {
   card_append(card, note);
 
   auto* link = gtk_link_button_new_with_label(
-      "https://github.com/turinglambdaai/syncpilot",
-      "github.com/turinglambdaai/syncpilot");
+      "https://github.com/turlamai/syncpilot",
+      "github.com/turlamai/syncpilot");
   gtk_widget_set_halign(link, GTK_ALIGN_START);
   card_append(card, link);
   return card;
