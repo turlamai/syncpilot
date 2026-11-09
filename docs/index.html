@@ -1,631 +1,453 @@
-<!doctype html>
-<html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh-CN" data-kit-id="syncpilot">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SyncPilot — Linux 上的官方 Resilio Sync 体验</title>
-<meta name="description" content="Resilio Sync 的原生 Linux 桌面外壳：官方 Web UI 装进真正的桌面窗口，带托盘、开机自启、守护进程看护与应用内更新。免费开源，AGPL-3.0。" />
-<link rel="icon" type="image/png" href="icon.png" />
-<script>
-  // Theme anti-flash: resolve data-theme before first paint — localStorage
-  // when the visitor has picked manually, otherwise the system preference.
-  (function () {
-    var t;
-    try { t = localStorage.getItem('syncpilot-theme'); } catch (e) {}
-    if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.dataset.theme = t;
-  })();
-</script>
-<style>
-/* Family palette (payback/taskly/keepsake values), light & dark, zero deps. */
-:root {
-  --bg: #faf7f2;
-  --surface: #ffffff;
-  --ink: #1f1d1a;
-  --muted: #6b6660;
-  --muted-2: #8a847c;
-  --line: #e8e2d9;
-  --line-strong: #d9d2c6;
-  --accent: #c15f3c;
-  --accent-hover: #a94f30;
-  --accent-soft: #f7e5dd;
-  --accent-ink: #ffffff;
-  --nav-bg: rgba(250, 247, 242, 0.88);
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
-  --wrapper-width: 1080px;
-  --radius: 14px;
-  --radius-l: 20px;
-  --radius-s: 10px;
-  --shadow-card: 0 1px 2px rgba(31, 29, 26, 0.04), 0 8px 24px rgba(31, 29, 26, 0.05);
-  --shadow-hover: 0 2px 4px rgba(31, 29, 26, 0.05), 0 14px 40px rgba(31, 29, 26, 0.09);
-  --shadow-window: 0 30px 70px rgba(31, 29, 26, 0.13), 0 8px 20px rgba(31, 29, 26, 0.06);
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-/* Explicit light/dark overrides: a manual choice wins over the OS. */
-:root[data-theme="light"] {
-  --bg: #faf7f2;
-  --surface: #ffffff;
-  --ink: #1f1d1a;
-  --muted: #6b6660;
-  --muted-2: #8a847c;
-  --line: #e8e2d9;
-  --line-strong: #d9d2c6;
-  --accent: #c15f3c;
-  --accent-hover: #a94f30;
-  --accent-soft: #f7e5dd;
-  --accent-ink: #ffffff;
-  --nav-bg: rgba(250, 247, 242, 0.88);
-}
-:root[data-theme="dark"] {
-  --bg: #1b1a18;
-  --surface: #24221f;
-  --ink: #ece9e2;
-  --muted: #a6a099;
-  --muted-2: #7d776f;
-  --line: #35322d;
-  --line-strong: #45413a;
-  --accent: #d08a6e;
-  --accent-hover: #e0977a;
-  --accent-soft: #3a2d27;
-  --accent-ink: #1b1a18;
-  --nav-bg: rgba(27, 26, 24, 0.88);
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.30);
-  --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.30), 0 14px 40px rgba(0, 0, 0, 0.38);
-  --shadow-window: 0 30px 70px rgba(0, 0, 0, 0.45), 0 8px 20px rgba(0, 0, 0, 0.30);
-}
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  background: var(--bg);
-  color: var(--ink);
-  line-height: 1.6;
-  letter-spacing: -0.011em;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.container { max-width: var(--wrapper-width); margin: 0 auto; padding: 0 24px; }
-section { padding: 72px 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncPilot — Linux 上的官方 Resilio Sync 体验</title>
+    <meta name="description" content="Resilio Sync 的原生 Linux 桌面外壳：官方 Web UI 装进真正的桌面窗口，带托盘、开机自启、守护进程看护与应用内更新。免费开源，AGPL-3.0。">
+    <link rel="canonical" href="https://syncpilot.jrtx.site/">
+    <meta name="theme-color" content="#D97757">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SyncPilot">
+    <meta property="og:title" content="SyncPilot — The official Resilio Sync experience on Linux">
+    <meta property="og:description" content="Native Linux desktop shell for Resilio Sync: the official Web UI in a real desktop window, with tray, autostart, daemon watchdog and in-app updates. Free, AGPL-3.0.">
+    <meta property="og:url" content="https://syncpilot.jrtx.site/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="SyncPilot — The official Resilio Sync experience on Linux">
+    <meta name="twitter:description" content="Native Linux desktop shell for Resilio Sync: the official Web UI in a real desktop window, with tray, autostart, daemon watchdog and in-app updates. Free, AGPL-3.0.">
 
-/* ---- nav ---- */
-nav {
-  position: sticky; top: 0; z-index: 50;
-  background: var(--nav-bg);
-  backdrop-filter: saturate(1.6) blur(14px);
-  -webkit-backdrop-filter: saturate(1.6) blur(14px);
-  border-bottom: 1px solid var(--line);
-}
-.nav-wrapper {
-  max-width: var(--wrapper-width); margin: 0 auto; padding: 0 24px;
-  height: 60px; display: flex; align-items: center; justify-content: space-between;
-}
-.nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 19px; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
-.nav-brand img { width: 30px; height: 30px; border-radius: 8px; }
-.nav-links { display: flex; align-items: center; gap: 22px; }
-.nav-links a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; }
-.nav-links a:hover { color: var(--accent); }
-.nav-links a.nav-cta {
-  background: var(--accent); color: var(--accent-ink); padding: 7px 16px; border-radius: 999px; font-weight: 600;
-}
-.nav-links a.nav-cta:hover { background: var(--accent-hover); color: var(--accent-ink); }
+    <!-- Theme pre-paint: resolve data-theme before first paint — localStorage
+         when the visitor has picked manually, otherwise the system preference. -->
+    <script>
+        (function () {
+            var t;
+            try { t = localStorage.getItem('syncpilot-theme'); } catch (e) {}
+            if (t !== 'dark' && t !== 'light') {
+                t = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.dataset.theme = t;
+            var l;
+            try { l = localStorage.getItem('syncpilot-lang-override-v2'); } catch (e) {}
+            if (l !== 'zh' && l !== 'en') {
+                l = (navigator.language || 'zh').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
+            }
+            document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+        })();
+    </script>
 
-/* ---- language dropdown (family standard) ---- */
-.lang-dropdown-wrapper { position: relative; }
-.lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; font-family: var(--font-sans); font-size: 14px; color: var(--muted); padding: 6px 10px; border-radius: 8px; transition: color .2s, background .2s; }
-.lang-btn:hover { color: var(--accent); background: var(--accent-soft); }
-.lang-menu { position: absolute; top: calc(100% + 6px); right: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-s); box-shadow: var(--shadow-hover); padding: 6px; min-width: 132px; margin: 0; list-style: none; opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .18s var(--ease), visibility .18s var(--ease), transform .18s var(--ease); z-index: 10000; }
-.lang-dropdown-wrapper:hover .lang-menu, .lang-dropdown-wrapper:focus-within .lang-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-.lang-menu li { margin: 0; }
-.lang-menu button { display: block; width: 100%; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 14px; color: var(--ink); text-align: left; padding: 7px 12px; border-radius: 6px; transition: background .15s, color .15s; }
-.lang-menu button:hover, .lang-menu button:focus-visible { background: var(--accent-soft); color: var(--accent); outline: none; }
-
-/* ---- theme toggle (family standard) ---- */
-.theme-btn {
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--muted);
-  border-radius: 8px;
-  padding: 5px 9px;
-  font-size: 13px;
-  cursor: pointer;
-}
-.theme-btn:hover { background: var(--accent-soft); color: var(--accent); }
-
-/* ---- hero ---- */
-.hero { text-align: center; padding: 88px 0 64px; }
-.eyebrow {
-  display: inline-block; font-size: 13px; font-weight: 600; letter-spacing: 0.05em;
-  text-transform: uppercase; color: var(--accent); background: var(--accent-soft);
-  padding: 5px 14px; border-radius: 999px; margin-bottom: 22px;
-}
-h1 {
-  font-size: clamp(38px, 6vw, 60px); line-height: 1.06; letter-spacing: -0.028em;
-  margin: 0 0 20px; font-weight: 700;
-}
-h1 .soft { color: var(--muted-2); }
-.hero-sub { font-size: 20px; color: var(--muted); max-width: 660px; margin: 0 auto 34px; }
-.hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-.btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 13px 26px; border-radius: var(--radius-s);
-  font-size: 16px; font-weight: 600; text-decoration: none;
-  transition: transform 0.15s var(--ease), box-shadow 0.2s var(--ease), background 0.15s;
-}
-.btn-primary { background: var(--accent); color: var(--accent-ink); box-shadow: 0 6px 18px var(--accent-soft); }
-.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
-.btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); box-shadow: var(--shadow-card); }
-.btn-secondary:hover { transform: translateY(-1px); box-shadow: var(--shadow-hover); }
-.trust-row { margin-top: 18px; font-size: 13.5px; color: var(--muted-2); }
-.trust-row b { color: var(--muted); font-weight: 600; }
-
-/* ---- window mockup ---- */
-.hero-visual { max-width: 940px; margin: 60px auto 0; position: relative; }
-.code-window {
-  background: #1e1e22; border-radius: var(--radius); overflow: hidden;
-  box-shadow: var(--shadow-window); border: 1px solid var(--line-strong);
-}
-.window-header {
-  display: flex; align-items: center; padding: 11px 14px;
-  background: rgba(255,255,255,0.045); border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.window-controls { display: flex; gap: 8px; }
-.traffic-light { width: 11px; height: 11px; border-radius: 50%; }
-.traffic-light.close { background: #FF5F57; }
-.traffic-light.minimize { background: #FEBC2E; }
-.traffic-light.maximize { background: #28C840; }
-.window-title { flex: 1; text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); font-family: var(--font-mono); padding-right: 52px; }
-.window-body img { display: block; width: 100%; height: auto; }
-
-/* ---- features ---- */
-.section-head { text-align: center; max-width: 640px; margin: 0 auto 48px; }
-h2 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -0.022em; margin: 0 0 14px; font-weight: 700; }
-.section-head p { color: var(--muted); font-size: 17px; margin: 0; }
-.grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px;
-}
-.card {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 26px 26px 24px; box-shadow: var(--shadow-card);
-  transition: transform 0.2s var(--ease), box-shadow 0.25s var(--ease);
-}
-.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
-.card .icon {
-  width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center;
-  background: var(--accent-soft); color: var(--accent); margin-bottom: 16px;
-}
-.card .icon svg { width: 22px; height: 22px; }
-.card h3 { margin: 0 0 7px; font-size: 16.5px; font-weight: 650; letter-spacing: -0.01em; }
-.card p { margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.55; }
-.card code { font-family: var(--font-mono); font-size: 0.9em; }
-
-/* ---- how ---- */
-.how { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.steps { display: flex; align-items: stretch; justify-content: center; gap: 0; flex-wrap: wrap; }
-.step {
-  flex: 1 1 240px; max-width: 300px; text-align: center; padding: 10px 22px;
-}
-.step-num {
-  width: 40px; height: 40px; margin: 0 auto 14px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 16px;
-  box-shadow: 0 6px 16px var(--accent-soft);
-}
-.step h3 { margin: 0 0 6px; font-size: 16.5px; }
-.step p { margin: 0; color: var(--muted); font-size: 14.5px; }
-.step-arrow { align-self: center; color: var(--muted-2); font-size: 26px; padding: 0 6px; }
-@media (max-width: 760px) { .step-arrow { display: none; } }
-
-/* ---- security strip ---- */
-.secure {
-  display: flex; gap: 14px; align-items: flex-start;
-  background: var(--accent-soft); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 22px 26px; max-width: 780px; margin: 0 auto;
-}
-.secure svg { flex: none; width: 24px; height: 24px; color: var(--accent); margin-top: 2px; }
-.secure p { margin: 0; font-size: 15px; color: var(--muted); }
-.secure b { color: var(--ink); }
-
-/* ---- download ---- */
-.dl-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; max-width: 940px; margin: 0 auto; }
-.dl-card {
-  display: flex; align-items: center; gap: 14px; text-decoration: none;
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 18px 20px; box-shadow: var(--shadow-card); color: var(--ink);
-  transition: transform 0.2s var(--ease), box-shadow 0.25s var(--ease);
-}
-.dl-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-.dl-card .dl-icon { width: 38px; height: 38px; border-radius: 9px; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; color: var(--accent); flex: none; }
-.dl-card b { display: block; font-size: 15px; }
-.dl-card span { display: block; font-size: 12.5px; color: var(--muted-2); }
-
-footer {
-  border-top: 1px solid var(--line); padding: 34px 24px; text-align: center;
-  color: var(--muted-2); font-size: 13.5px;
-}
-footer a { color: var(--muted); text-decoration: none; font-weight: 500; }
-footer a:hover { color: var(--accent); }
-
-/* ---- scroll animation ---- */
-.animate { opacity: 0; transform: translateY(18px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
-.animate.in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { .animate { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
-</style>
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?8e2445912635226bcba0c400bfb6079d";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-<style>
-  #product-support { display:flex; flex-wrap:wrap; justify-content:center; gap:12px 24px; padding:24px; font:inherit; border-top:1px solid var(--border, #a8a29e); }
-  #product-support a:focus-visible { outline:2px solid currentColor; outline-offset:4px; }
-  html:lang(en) #product-support .support-zh, html:lang(zh) #product-support .support-en { display:none; }
-</style>
-<style id="product-start-style">
-.product-availability{font-size:.95rem;line-height:1.65;max-width:72ch;margin:18px 0;opacity:.85} .hero .product-availability{margin-left:auto;margin-right:auto}
-.product-start{max-width:1120px;margin:64px auto;padding:32px 24px;border-top:1px solid var(--border,#aaa);font:inherit;line-height:1.65}
-.product-start h2{font-size:clamp(1.7rem,3vw,2.4rem);letter-spacing:-.025em;margin:0 0 16px}.product-start h3{font-size:1.05rem;margin:0 0 10px}.product-start p{margin:0 0 16px;max-width:74ch}.product-start-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:28px 0}.product-start a{text-decoration:underline;text-underline-offset:4px;overflow-wrap:anywhere}.product-start a:focus-visible{outline:2px solid currentColor;outline-offset:5px}.product-start .start-links{display:flex;gap:16px 24px;flex-wrap:wrap}.product-start .start-status{font-weight:600}.product-start .start-limits{font-size:.95em}
-html:lang(en) .reader-zh,html:lang(zh) .reader-en{display:none!important}@media(max-width:700px){.product-start{margin:40px auto;padding:24px 20px}.product-start-grid{grid-template-columns:1fr;gap:18px}}
-</style>
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="stylesheet" href="family.css">
+    <link rel="stylesheet" href="site.css">
+    <link rel="preload" href="fonts/newsreader-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+    <script src="family.js" defer></script>
 </head>
+
 <body>
-
-<nav>
-  <div class="nav-wrapper">
-    <a class="nav-brand" href="#"><img src="icon.png" alt="" />SyncPilot</a>
-    <div class="nav-links">
-      <a href="#features" data-i18n="nav.features">功能</a>
-      <a href="guide.html" data-i18n="nav.guide">手册</a>
-      <a href="https://github.com/turlamai/syncpilot#readme" data-i18n="nav.docs">文档</a>
-      <a href="https://github.com/turlamai/syncpilot">GitHub</a>
-      <div class="lang-dropdown-wrapper">
-        <button class="lang-btn" type="button" onclick="void 0" aria-label="Switch language">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span id="current-lang-label">简体中文</span>
-        </button>
-        <ul class="lang-menu">
-          <li><button type="button" onclick="setLanguage('en')">English</button></li>
-          <li><button type="button" onclick="setLanguage('zh')">简体中文</button></li>
-        </ul>
-      </div>
-      <button class="theme-btn" id="theme-btn" type="button" aria-label="Toggle theme">◐</button>
-      <a class="nav-cta" href="#download" data-i18n="nav.download">下载</a>
-    </div>
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="container">
-    <div class="eyebrow animate" data-i18n="hero.eyebrow">Linux 桌面版 Resilio Sync 客户端</div>
-    <h1 class="animate"><span data-i18n="hero.h1a">原汁原味的 Resilio Sync 体验，</span><br /><span class="soft" data-i18n="hero.h1b">终于登陆 Linux。</span></h1>
-<p class="reader-en product-availability" lang="en">Development preview. Free Linux maintenance project under AGPL-3.0. Resilio’s separate licence and service limits still apply; no SyncPilot paid tier.</p><p class="reader-zh product-availability" lang="zh">开发预览。AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</p>
-    <p class="hero-sub animate" data-i18n-html="hero.sub">SyncPilot 把<strong>官方 Resilio Web UI</strong>装进原生桌面窗口，并在背后托管官方 <code style="font-family:var(--font-mono);font-size:0.9em;">rslsync</code> 守护进程。每一屏都是官方界面——无需重新学习。</p>
-    <div class="hero-actions animate">
-      <a class="btn btn-primary" href="https://github.com/turlamai/syncpilot/releases/latest" data-release-suffix="linux-amd64.deb" data-i18n="hero.download">下载</a>
-      <a class="btn btn-secondary" href="https://github.com/turlamai/syncpilot" data-i18n="hero.source">在 GitHub 查看</a>
-    </div>
-    <div class="trust-row animate" data-i18n-html="hero.trust"><b>deb · rpm · AppImage · tar.gz · zip</b> &nbsp;—&nbsp; x64 / arm64（Ubuntu 24.04+）&nbsp;—&nbsp; 免费开源，AGPL-3.0</div>
-
-    <div class="hero-visual animate">
-      <div class="code-window">
-        <div class="window-header">
-          <div class="window-controls">
-            <span class="traffic-light close"></span>
-            <span class="traffic-light minimize"></span>
-            <span class="traffic-light maximize"></span>
-          </div>
-          <div class="window-title">SyncPilot — Resilio Sync</div>
+    <header class="kit-nav">
+        <div class="kit-container kit-nav-inner">
+            <a class="kit-brand" href="/">
+                <img class="kit-brand-mark" src="icon.png" alt="" width="24" height="24">
+                <span>SyncPilot</span>
+            </a>
+            <nav class="kit-nav-links">
+                <a href="#features" data-i18n="nav.features">功能</a>
+                <a href="guide.html" data-i18n="nav.guide">手册</a>
+                <a href="https://github.com/turlamai/syncpilot#readme" data-i18n="nav.docs">文档</a>
+                <a href="https://github.com/turlamai/syncpilot">GitHub</a>
+                <a href="#download" data-i18n="nav.download">下载</a>
+            </nav>
+            <div class="kit-nav-actions">
+                <div class="kit-lang">
+                    <button class="kit-lang-btn" type="button" aria-haspopup="true" aria-expanded="false">
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M1.8 8h12.4M8 1.8c-4.6 4-4.6 8.4 0 12.4 4.6-4 4.6-8.4 0-12.4z"/></svg>
+                        <span class="kit-lang-current">简体中文</span>
+                    </button>
+                    <ul class="kit-lang-menu">
+                        <li><button type="button" data-kit-lang="zh">简体中文</button></li>
+                        <li><button type="button" data-kit-lang="en">English</button></li>
+                    </ul>
+                </div>
+                <button class="kit-icon-btn kit-theme-toggle" type="button" aria-pressed="false" aria-label="Theme">
+                    <svg class="kit-icon-sun" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="10" cy="10" r="4"/><path d="M10 1.5v2M10 16.5v2M1.5 10h2M16.5 10h2M4 4l1.4 1.4M14.6 14.6L16 16M16 4l-1.4 1.4M5.4 14.6L4 16"/></svg>
+                    <svg class="kit-icon-moon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16.5 12.2A7 7 0 0 1 7.8 3.5a7 7 0 1 0 8.7 8.7z"/></svg>
+                </button>
+            </div>
         </div>
-        <div class="window-body" style="padding:26px;">
-          <p class="reader-en" lang="en">Select a verified rslsync binary and a disposable test folder. Connect another test device in the official interface and confirm that a small file transfers both ways before using valuable data.</p>
-          <p class="reader-zh" lang="zh">选择已验证的 rslsync 程序和可丢弃的测试文件夹，通过官方界面连接第二台测试设备，确认小文件能够双向传输后再使用重要数据。</p>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section class="kit-hero">
+            <div class="kit-container">
+                <span class="kit-eyebrow" data-i18n="hero.eyebrow">Linux 桌面版 Resilio Sync 客户端</span>
+                <h1><span data-i18n="hero.h1a">原汁原味的 Resilio Sync 体验，</span> <span class="kit-accent-word" data-i18n="hero.h1b">终于登陆 Linux。</span></h1>
+                <p class="kit-lead"><span data-i18n="hero.sub-a">SyncPilot 把</span><strong data-i18n="hero.sub-b">官方 Resilio Web UI</strong><span data-i18n="hero.sub-c">装进原生桌面窗口，并在背后托管官方 </span><code>rslsync</code><span data-i18n="hero.sub-d">守护进程。每一屏都是官方界面——无需重新学习。</span></p>
+                <div class="kit-btn-row">
+                    <div class="kit-dl">
+                        <a class="kit-btn kit-btn--primary" data-kit-dl-primary href="https://github.com/turlamai/syncpilot/releases/latest">
+                            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10 2.5v10M6 9l4 4 4-4M3.5 16.5h13"/></svg>
+                            <span class="kit-dl-label" data-i18n="dl.generic">获取 SyncPilot</span>
+                        </a>
+                        <button class="kit-dl-caret" type="button" aria-haspopup="true" aria-expanded="false" aria-label="All platforms">
+                            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 5.5L7 9.5l4-4"/></svg>
+                        </button>
+                        <ul class="kit-dl-menu">
+                            <li><a href="https://github.com/turlamai/syncpilot/releases/latest" data-kit-dl="linux"><span class="kit-dl-os" data-i18n="dl.linux">Linux 版</span><span class="kit-dl-kind">.deb</span></a></li>
+                            <li class="kit-dl-note kit-hidden" data-kit-dl-note data-i18n="dl.note">移动端与未知平台请前往 Releases 页面选取对应安装包。</li>
+                        </ul>
+                    </div>
+                    <a class="kit-btn kit-btn--secondary" href="https://github.com/turlamai/syncpilot" data-i18n="hero.source">在 GitHub 查看</a>
+                </div>
+                <p class="kit-hero-meta"><span class="kit-badge" data-i18n="hero.availability">开发预览。AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</span></p>
+                <p class="kit-hero-meta kit-hero-trust"><b>deb · rpm · AppImage · tar.gz · zip</b> <span data-i18n="hero.trust">— x64 / arm64（Ubuntu 24.04+）— 免费开源，AGPL-3.0</span></p>
+
+                <div class="hero-visual">
+                    <div class="code-window">
+                        <div class="window-header">
+                            <div class="window-controls">
+                                <span class="traffic-light traffic-light--close"></span>
+                                <span class="traffic-light traffic-light--min"></span>
+                                <span class="traffic-light traffic-light--max"></span>
+                            </div>
+                            <div class="window-title">SyncPilot — Resilio Sync</div>
+                        </div>
+                        <div class="window-body">
+                            <p data-i18n="hero.window-note">选择已验证的 rslsync 程序和可丢弃的测试文件夹，通过官方界面连接第二台测试设备，确认小文件能够双向传输后再使用重要数据。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="kit-section kit-section--alt" id="features">
+            <div class="kit-container">
+                <span class="kit-kicker" data-i18n="features.eyebrow">为什么是 SyncPilot</span>
+                <h2 class="kit-h2"><span data-i18n="features.title-a">关键处用官方，</span><br><span class="kit-accent-word" data-i18n="features.title-b">该原生处就原生。</span></h2>
+                <p class="kit-lead" data-i18n="features.sub">文件夹、伙伴、传输、偏好设置、激活——全部是官方 Resilio 界面，版本与你的 rslsync 构建一致。SyncPilot 补齐了官方在 Linux 上缺失的一切。</p>
+                <div class="kit-grid kit-grid--3" style="margin-top: 44px;">
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 17V9l6 8V9"/></svg></span>
+                        <h3 data-i18n="f1.title">零界面偏差</h3>
+                        <p data-i18n="f1.body">窗口内嵌的就是官方 Resilio Web UI——与 Windows、macOS 客户端相同的界面与工作流，没有任何会落后的二次实现。</p>
+                    </div>
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg></span>
+                        <h3 data-i18n="f2.title">守护进程全生命周期</h3>
+                        <p data-i18n="f2.body">一键启停，可接管已在运行的守护进程；崩溃看门狗按指数退避自动重启。还可选在应用退出后继续保活。</p>
+                    </div>
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>
+                        <h3 data-i18n="f3.title">首次运行与升级</h3>
+                        <p><span data-i18n="f3.body-a">机器上还没有 rslsync？一键从官方 CDN 下载，经 sha256 校验装入 </span><code>~/.local/bin</code><span data-i18n="f3.body-b">。数据路径跨版本不变，解压新版即可继续同步。</span></p>
+                    </div>
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="3"/><path d="M16 3l-4 4-4-4"/></svg></span>
+                        <h3 data-i18n="f4.title">自启与设置</h3>
+                        <p data-i18n="f4.body">XDG autostart 开机自启、单实例窗口唤起，还有独立的原生设置窗口管理守护进程、端口与凭据。</p>
+                    </div>
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/><path d="m9 12 2 2 4-4"/></svg></span>
+                        <h3 data-i18n="f5.title">在线更新</h3>
+                        <p data-i18n="f5.body">每天后台检查一次 Ed25519 签名的 manifest，下载前必先询问、验签通过才落盘；rslsync 数据绝不触碰。</p>
+                    </div>
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span>
+                        <h3 data-i18n="f6.title">默认安全</h3>
+                        <p><span data-i18n="f6.body-a">Web UI 仅留在 </span><code>127.0.0.1</code><span data-i18n="f6.body-b">，经注入认证的环回代理访问——不弹登录框，守护进程绝不响应未认证请求。</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it works -->
+        <section class="kit-section" id="how">
+            <div class="kit-container">
+                <span class="kit-kicker" data-i18n="how.kicker">上手步骤</span>
+                <h2 class="kit-h2" data-i18n="how.title">三步上手</h2>
+                <p class="kit-lead" data-i18n="how.sub">与在其他平台安装官方客户端的体验一致。</p>
+                <div class="kit-steps" style="margin-top: 44px;">
+                    <div class="kit-step">
+                        <h3 data-i18n="s1.title">安装</h3>
+                        <p data-i18n="s1.body">从 release 页获取 deb、rpm、AppImage 或 tar.gz，安装即用——GTK 4 与 WebKitGTK 在 Ubuntu 24.04+ 上系统自带。</p>
+                    </div>
+                    <div class="kit-step">
+                        <h3 data-i18n="s2.title">启动</h3>
+                        <p data-i18n="s2.body">SyncPilot 启动官方守护进程，并把窗口交给官方界面。还没有 rslsync？一键获取。</p>
+                    </div>
+                    <div class="kit-step">
+                        <h3 data-i18n="s3.title">同步</h3>
+                        <p data-i18n="s3.body">通过官方向导完成激活并添加文件夹——与 Windows、macOS 上完全一致。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security strip -->
+        <section class="kit-section kit-section--tight" id="security">
+            <div class="kit-container">
+                <div class="kit-callout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <p><b data-i18n="secure.title">本地控制，明确的对端文件传输。</b><span data-i18n="secure.body">SyncPilot 在本地生成守护进程凭据，官方 UI 经仅环回的代理提供服务，自身不带任何遥测。官方二进制向对端传输配置的文件，也可能使用发现或中继服务。</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download -->
+        <section class="kit-section kit-section--alt" id="download">
+            <div class="kit-container">
+                <span class="kit-kicker" data-i18n="nav.download">下载</span>
+                <h2 class="kit-h2" data-i18n="download.title">获取 SyncPilot</h2>
+                <p class="kit-lead" data-i18n="download.sub">安装即用。之后每天按签名 manifest 静默检查一次，下载前必先询问；验证过的更新交到你手上，应用那一步按安装形态手动完成（见手册）。缺失官方 rslsync 二进制时，会在首次启动时自动获取。</p>
+                <div class="dl-cards">
+                    <a class="dl-card" href="https://github.com/turlamai/syncpilot/releases/latest">
+                        <span class="dl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg></span>
+                        <span class="dl-card-text"><b>deb · rpm · AppImage · tar.gz · zip</b><span data-i18n="dl.sub">Linux · x64 / arm64 · 签名更新 manifest</span></span>
+                    </a>
+                </div>
+                <p class="dl-all"><a href="https://github.com/turlamai/syncpilot/releases" data-i18n="dl.all-releases">全部版本</a></p>
+            </div>
+        </section>
+
+        <!-- Get started -->
+        <section class="kit-section" id="start-here">
+            <div class="kit-container">
+                <span class="kit-kicker" data-i18n="start.kicker">开始使用</span>
+                <h2 class="kit-h2" data-i18n="start.title">从一次有效使用开始。</h2>
+                <p class="kit-lead"><span class="kit-badge" data-i18n="start.status">AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</span> <span data-i18n="start.linuxonly">仅支持 Linux。官方 rslsync 二进制及其条款独立于 SyncPilot；Windows/macOS 移植不是当前交付。</span></p>
+                <div class="kit-steps" style="margin-top: 44px;">
+                    <div class="kit-step">
+                        <p data-i18n="start.s1">先使用可丢弃的测试文件夹启动，确认所选守护进程二进制与版本。</p>
+                    </div>
+                    <div class="kit-step">
+                        <p data-i18n="start.s2">通过官方界面连接第二台测试设备，双向验证一个小文件。</p>
+                    </div>
+                    <div class="kit-step">
+                        <p data-i18n="start.s3">提供重要文件夹前，测试守护进程停止重启、登录自启与恢复。</p>
+                    </div>
+                </div>
+                <p class="kit-text-2 start-limits" style="margin-top: 30px; max-width: 62ch;"><span data-i18n="start.limits-a">第三方兼容、守护进程鉴权恢复及各安装形态更新仍在 </span><a href="https://github.com/turlamai/syncpilot/issues/10">#10</a><span data-i18n="start.limits-b"> 跟进。服务或静态安装可能需要运维者管理更新。</span></p>
+                <div class="start-links">
+                    <a href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md" data-en-href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.md" data-zh-href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md" data-i18n="start.guide">安装、隐私与恢复</a>
+                    <a href="https://github.com/turlamai/syncpilot/issues" data-i18n="start.help">反馈与帮助</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="kit-footer">
+        <div class="kit-container">
+            <div class="kit-footer-grid">
+                <div>
+                    <a class="kit-brand" href="/">
+                        <img class="kit-brand-mark" src="icon.png" alt="" width="24" height="24">
+                        <span>SyncPilot</span>
+                    </a>
+                    <p class="kit-footer-tagline" data-i18n="footer.tagline">Linux 上的官方 Resilio Sync 体验。</p>
+                    <p class="kit-footer-legal"><span data-i18n="footer.legal-pre">SyncPilot 为</span> <a href="https://github.com/turlamai/syncpilot/blob/main/LICENSE">AGPL-3.0</a> <span data-i18n="footer.legal-post">自由软件，与 Resilio, Inc. 无隶属关系。「Resilio Sync」为其所有者的商标。</span></p>
+                </div>
+                <div>
+                    <h4 data-i18n="footer.product">产品</h4>
+                    <ul>
+                        <li><a href="#features" data-i18n="nav.features">功能</a></li>
+                        <li><a href="guide.html" data-i18n="nav.guide">手册</a></li>
+                        <li><a href="https://github.com/turlamai/syncpilot#readme" data-i18n="nav.docs">文档</a></li>
+                        <li><a href="https://github.com/turlamai/syncpilot/releases" data-i18n="footer.releases">版本发布</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 data-i18n="footer.family">家族</h4>
+                    <ul>
+                        <li><a href="https://jrtx.site/" data-i18n="footer.portal">全部产品</a></li>
+                        <li><a href="https://rivet.jrtx.site/">Rivet</a></li>
+                        <li><a href="https://glaze.jrtx.site/">Glaze</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 data-i18n="footer.legal">条款</h4>
+                    <ul>
+                        <li><a href="https://github.com/turlamai/syncpilot" data-i18n="nav.github">GitHub</a></li>
+                        <li><a href="https://github.com/turlamai/syncpilot/blob/main/LICENSE" data-i18n="footer.license">源码许可</a></li>
+                        <li><a href="https://github.com/turlamai/syncpilot/issues" data-i18n="footer.feedback">反馈</a></li>
+                        <li><a href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md" data-en-href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.md" data-zh-href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md" data-i18n="footer.help">使用与帮助</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="kit-footer-bottom">
+                <span data-i18n="footer.copyright">© 2026 TuringLambda AI</span>
+                <span class="kit-mono">site-kit v1.0.2</span>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </footer>
 
-<section id="features">
-  <div class="container">
-    <div class="section-head animate">
-      <h2 data-i18n-html="features.title">关键处用官方，<br />该原生处就原生。</h2>
-      <p data-i18n="features.sub">文件夹、伙伴、传输、偏好设置、激活——全部是官方 Resilio 界面，版本与你的 rslsync 构建一致。SyncPilot 补齐了官方在 Linux 上缺失的一切。</p>
-    </div>
-    <div class="grid">
-      <div class="card animate">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 17V9l6 8V9"/></svg></div>
-        <h3 data-i18n="f1.title">零界面偏差</h3>
-        <p data-i18n="f1.body">窗口内嵌的就是官方 Resilio Web UI——与 Windows、macOS 客户端相同的界面与工作流，没有任何会落后的二次实现。</p>
-      </div>
-      <div class="card animate">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg></div>
-        <h3 data-i18n="f2.title">守护进程全生命周期</h3>
-        <p data-i18n="f2.body">一键启停，可接管已在运行的守护进程；崩溃看门狗按指数退避自动重启。还可选在应用退出后继续保活。</p>
-      </div>
-      <div class="card animate">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></div>
-        <h3 data-i18n="f3.title">首次运行与升级</h3>
-        <p data-i18n-html="f3.body">机器上还没有 rslsync？一键从官方 CDN 下载，经 sha256 校验装入 <code>~/.local/bin</code>。数据路径跨版本不变，解压新版即可继续同步。</p>
-      </div>
-      <div class="card animate">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="3"/><path d="M16 3l-4 4-4-4"/></svg></div>
-        <h3 data-i18n="f4.title">自启与设置</h3>
-        <p data-i18n="f4.body">XDG autostart 开机自启、单实例窗口唤起，还有独立的原生设置窗口管理守护进程、端口与凭据。</p>
-      </div>
-      <div class="card animate">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/><path d="m9 12 2 2 4-4"/></svg></div>
-        <h3 data-i18n="f5.title">在线更新</h3>
-        <p data-i18n="f5.body">每天后台检查一次 Ed25519 签名的 manifest，下载前必先询问、验签通过才落盘；rslsync 数据绝不触碰。</p>
-      </div>
-      <div class="card animate">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></div>
-        <h3 data-i18n="f6.title">默认安全</h3>
-        <p data-i18n-html="f6.body">Web UI 仅留在 <code>127.0.0.1</code>，经注入认证的环回代理访问——不弹登录框，守护进程绝不响应未认证请求。</p>
-      </div>
-    </div>
-  </div>
-</section>
+    <!-- Dictionaries: zh canonical, en complete. -->
+    <script type="application/json" id="kit-i18n">
+    {
+        "__meta__": {
+            "zh": {
+                "title": "SyncPilot — Linux 上的官方 Resilio Sync 体验",
+                "description": "Resilio Sync 的原生 Linux 桌面外壳：官方 Web UI 装进真正的桌面窗口，带托盘、开机自启、守护进程看护与应用内更新。免费开源，AGPL-3.0。"
+            },
+            "en": {
+                "title": "SyncPilot — the official Resilio Sync experience on Linux",
+                "description": "Native Linux desktop shell for Resilio Sync: the official Web UI in a real desktop window, with tray, autostart, daemon watchdog and in-app updates. Free, AGPL-3.0."
+            }
+        },
+        "zh": {
+            "nav.features": "功能", "nav.guide": "手册", "nav.docs": "文档", "nav.download": "下载", "nav.github": "GitHub",
+            "hero.eyebrow": "Linux 桌面版 Resilio Sync 客户端",
+            "hero.h1a": "原汁原味的 Resilio Sync 体验，",
+            "hero.h1b": "终于登陆 Linux。",
+            "hero.sub-a": "SyncPilot 把",
+            "hero.sub-b": "官方 Resilio Web UI",
+            "hero.sub-c": "装进原生桌面窗口，并在背后托管官方 ",
+            "hero.sub-d": "守护进程。每一屏都是官方界面——无需重新学习。",
+            "hero.source": "在 GitHub 查看",
+            "hero.availability": "开发预览。AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。",
+            "hero.trust": "— x64 / arm64（Ubuntu 24.04+）— 免费开源，AGPL-3.0",
+            "hero.window-note": "选择已验证的 rslsync 程序和可丢弃的测试文件夹，通过官方界面连接第二台测试设备，确认小文件能够双向传输后再使用重要数据。",
+            "dl.generic": "获取 SyncPilot",
+            "dl.linux": "Linux 版",
+            "dl.mac": "前往 Releases 下载",
+            "dl.win": "前往 Releases 下载",
+            "dl.note": "移动端与未知平台请前往 Releases 页面选取对应安装包。",
+            "features.eyebrow": "为什么是 SyncPilot",
+            "features.title-a": "关键处用官方，",
+            "features.title-b": "该原生处就原生。",
+            "features.sub": "文件夹、伙伴、传输、偏好设置、激活——全部是官方 Resilio 界面，版本与你的 rslsync 构建一致。SyncPilot 补齐了官方在 Linux 上缺失的一切。",
+            "f1.title": "零界面偏差",
+            "f1.body": "窗口内嵌的就是官方 Resilio Web UI——与 Windows、macOS 客户端相同的界面与工作流，没有任何会落后的二次实现。",
+            "f2.title": "守护进程全生命周期",
+            "f2.body": "一键启停，可接管已在运行的守护进程；崩溃看门狗按指数退避自动重启。还可选在应用退出后继续保活。",
+            "f3.title": "首次运行与升级",
+            "f3.body-a": "机器上还没有 rslsync？一键从官方 CDN 下载，经 sha256 校验装入 ",
+            "f3.body-b": "。数据路径跨版本不变，解压新版即可继续同步。",
+            "f4.title": "自启与设置",
+            "f4.body": "XDG autostart 开机自启、单实例窗口唤起，还有独立的原生设置窗口管理守护进程、端口与凭据。",
+            "f5.title": "在线更新",
+            "f5.body": "每天后台检查一次 Ed25519 签名的 manifest，下载前必先询问、验签通过才落盘；rslsync 数据绝不触碰。",
+            "f6.title": "默认安全",
+            "f6.body-a": "Web UI 仅留在 ",
+            "f6.body-b": "，经注入认证的环回代理访问——不弹登录框，守护进程绝不响应未认证请求。",
+            "how.kicker": "上手步骤",
+            "how.title": "三步上手",
+            "how.sub": "与在其他平台安装官方客户端的体验一致。",
+            "s1.title": "安装",
+            "s1.body": "从 release 页获取 deb、rpm、AppImage 或 tar.gz，安装即用——GTK 4 与 WebKitGTK 在 Ubuntu 24.04+ 上系统自带。",
+            "s2.title": "启动",
+            "s2.body": "SyncPilot 启动官方守护进程，并把窗口交给官方界面。还没有 rslsync？一键获取。",
+            "s3.title": "同步",
+            "s3.body": "通过官方向导完成激活并添加文件夹——与 Windows、macOS 上完全一致。",
+            "secure.title": "本地控制，明确的对端文件传输。",
+            "secure.body": "SyncPilot 在本地生成守护进程凭据，官方 UI 经仅环回的代理提供服务，自身不带任何遥测。官方二进制向对端传输配置的文件，也可能使用发现或中继服务。",
+            "download.title": "获取 SyncPilot",
+            "download.sub": "安装即用。之后每天按签名 manifest 静默检查一次，下载前必先询问；验证过的更新交到你手上，应用那一步按安装形态手动完成（见手册）。缺失官方 rslsync 二进制时，会在首次启动时自动获取。",
+            "dl.sub": "Linux · x64 / arm64 · 签名更新 manifest",
+            "dl.all-releases": "全部版本",
+            "start.kicker": "开始使用",
+            "start.title": "从一次有效使用开始。",
+            "start.status": "AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。",
+            "start.linuxonly": "仅支持 Linux。官方 rslsync 二进制及其条款独立于 SyncPilot；Windows/macOS 移植不是当前交付。",
+            "start.s1": "先使用可丢弃的测试文件夹启动，确认所选守护进程二进制与版本。",
+            "start.s2": "通过官方界面连接第二台测试设备，双向验证一个小文件。",
+            "start.s3": "提供重要文件夹前，测试守护进程停止重启、登录自启与恢复。",
+            "start.limits-a": "第三方兼容、守护进程鉴权恢复及各安装形态更新仍在 ",
+            "start.limits-b": " 跟进。服务或静态安装可能需要运维者管理更新。",
+            "start.guide": "安装、隐私与恢复",
+            "start.help": "反馈与帮助",
+            "footer.tagline": "Linux 上的官方 Resilio Sync 体验。",
+            "footer.product": "产品", "footer.family": "家族", "footer.legal": "条款",
+            "footer.releases": "版本发布", "footer.portal": "全部产品", "footer.license": "源码许可",
+            "footer.feedback": "反馈", "footer.help": "使用与帮助",
+            "footer.legal-pre": "SyncPilot 为",
+            "footer.legal-post": "自由软件，与 Resilio, Inc. 无隶属关系。「Resilio Sync」为其所有者的商标。",
+            "footer.copyright": "© 2026 TuringLambda AI"
+        },
+        "en": {
+            "nav.features": "Features", "nav.guide": "Manual", "nav.docs": "Docs", "nav.download": "Download", "nav.github": "GitHub",
+            "hero.eyebrow": "Resilio Sync desktop client for Linux",
+            "hero.h1a": "The official Resilio Sync experience,",
+            "hero.h1b": "finally on Linux.",
+            "hero.sub-a": "SyncPilot puts ",
+            "hero.sub-b": "the official Resilio Web UI",
+            "hero.sub-c": " inside a native desktop window and manages the official ",
+            "hero.sub-d": " daemon behind it. Every screen is the official one — nothing to re-learn.",
+            "hero.source": "View on GitHub",
+            "hero.availability": "Development preview. Free Linux maintenance project under AGPL-3.0. Resilio's separate licence and service limits still apply; no SyncPilot paid tier.",
+            "hero.trust": "— x64 / arm64 (Ubuntu 24.04+) — free, AGPL-3.0",
+            "hero.window-note": "Select a verified rslsync binary and a disposable test folder. Connect another test device in the official interface and confirm that a small file transfers both ways before using valuable data.",
+            "dl.generic": "Get SyncPilot",
+            "dl.linux": "For Linux",
+            "dl.mac": "Download from Releases",
+            "dl.win": "Download from Releases",
+            "dl.note": "On mobile or unknown platforms, pick the right package from the Releases page.",
+            "features.eyebrow": "Why SyncPilot",
+            "features.title-a": "Official where it matters,",
+            "features.title-b": "native where it counts.",
+            "features.sub": "Folders, peers, transfers, preferences, activation — all of it is the official Resilio interface, version-matched to your rslsync build. SyncPilot adds everything the official Linux story was missing.",
+            "f1.title": "Zero interface drift",
+            "f1.body": "The window embeds the official Resilio Web UI itself — same screens, same workflow as the Windows and macOS clients, nothing re-implemented to fall behind.",
+            "f2.title": "Daemon lifecycle",
+            "f2.body": "One-click start and stop, adopts an already-running daemon, and a crash watchdog restarts it with exponential backoff. Optionally keeps running after the app exits.",
+            "f3.title": "Setup & upgrades",
+            "f3.body-a": "No rslsync yet? One click fetches the official binary from Resilio's CDN, sha256-verified into ",
+            "f3.body-b": ". Data paths never change between versions — unpack an upgrade and keep syncing.",
+            "f4.title": "Autostart & settings",
+            "f4.body": "Launch at login via XDG autostart, single-instance window restore, and a standalone native settings window for the daemon, port and credentials.",
+            "f5.title": "Online updates",
+            "f5.body": "A daily background check against an Ed25519-signed manifest. SyncPilot asks before downloading, verifies the signature, and never touches rslsync state.",
+            "f6.title": "Secure by default",
+            "f6.body-a": "The Web UI stays on ",
+            "f6.body-b": " behind an auth-injecting loopback proxy — no login prompts, and the daemon never serves an unauthenticated request.",
+            "how.kicker": "Setup",
+            "how.title": "Up and running in three steps",
+            "how.sub": "Same feel as installing the official client on any other platform.",
+            "s1.title": "Install",
+            "s1.body": "Grab the deb, rpm, AppImage or tar.gz from the release page — GTK 4 and WebKitGTK come with Ubuntu 24.04+.",
+            "s2.title": "Launch",
+            "s2.body": "SyncPilot starts the official daemon and hands the window to the official interface. No rslsync yet? One click fetches it.",
+            "s3.title": "Sync",
+            "s3.body": "Activate and add folders through the official wizard — exactly like on Windows and macOS.",
+            "secure.title": "Local controls; explicit peer-to-peer transfer.",
+            "secure.body": "SyncPilot generates the daemon's credentials locally, serves the official UI through a loopback-only proxy, and ships no telemetry of its own. The official binary transfers configured files to peers and may use discovery or relay services.",
+            "download.title": "Get SyncPilot",
+            "download.sub": "Install and run. After that a daily signed-manifest check runs silently and always asks before downloading; the verified update is handed to you, and applying it stays one manual step per install format (see the manual). The official rslsync binary is fetched on first start if missing.",
+            "dl.sub": "Linux · x64 / arm64 · signed update manifest",
+            "dl.all-releases": "All releases",
+            "start.kicker": "Get started",
+            "start.title": "Start with one useful session.",
+            "start.status": "Free Linux maintenance project under AGPL-3.0. Resilio's separate licence and service limits still apply; no SyncPilot paid tier.",
+            "start.linuxonly": "Linux only. The official rslsync binary and its own terms are separate from SyncPilot; Windows/macOS ports are not planned deliveries.",
+            "start.s1": "Launch with a disposable test folder and confirm the selected daemon binary/version.",
+            "start.s2": "Connect a second test device through the official UI and verify a small file in each direction.",
+            "start.s3": "Test daemon stop/restart, login startup and recovery before giving it valuable folders.",
+            "start.limits-a": "Third-party compatibility, daemon authentication/recovery and installation-specific updates remain tracked in ",
+            "start.limits-b": ". Server/static installs can require operator-managed updates.",
+            "start.guide": "Installation, privacy & recovery",
+            "start.help": "Get help",
+            "footer.tagline": "The official Resilio Sync experience on Linux.",
+            "footer.product": "Product", "footer.family": "Family", "footer.legal": "Legal",
+            "footer.releases": "Releases", "footer.portal": "All products", "footer.license": "Source license",
+            "footer.feedback": "Feedback", "footer.help": "Usage & help",
+            "footer.legal-pre": "SyncPilot is free software under ",
+            "footer.legal-post": " and is not affiliated with Resilio, Inc. \"Resilio Sync\" is a trademark of its respective owner.",
+            "footer.copyright": "© 2026 TuringLambda AI"
+        }
+    }
+    </script>
 
-<section class="how">
-  <div class="container">
-    <div class="section-head animate">
-      <h2 data-i18n="how.title">三步上手</h2>
-      <p data-i18n="how.sub">与在其他平台安装官方客户端的体验一致。</p>
-    </div>
-    <div class="steps animate">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3 data-i18n="s1.title">安装</h3>
-        <p data-i18n="s1.body">从 release 页获取 deb、rpm、AppImage 或 tar.gz，安装即用——GTK 4 与 WebKitGTK 在 Ubuntu 24.04+ 上系统自带。</p>
-      </div>
-      <div class="step-arrow">→</div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3 data-i18n="s2.title">启动</h3>
-        <p data-i18n="s2.body">SyncPilot 启动官方守护进程，并把窗口交给官方界面。还没有 rslsync？一键获取。</p>
-      </div>
-      <div class="step-arrow">→</div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3 data-i18n="s3.title">同步</h3>
-        <p data-i18n="s3.body">通过官方向导完成激活并添加文件夹——与 Windows、macOS 上完全一致。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="container">
-    <div class="secure animate">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      <p data-i18n-html="secure.text"><b>本地控制，明确的对端文件传输。</b>SyncPilot 在本地生成守护进程凭据，官方 UI 经仅环回的代理提供服务，自身不带任何遥测。官方二进制向对端传输配置的文件，也可能使用发现或中继服务。</p>
-    </div>
-  </div>
-</section>
-
-<section id="download" style="padding-top: 24px;">
-  <div class="container">
-    <div class="section-head animate">
-      <h2 data-i18n="download.title">获取 SyncPilot</h2>
-      <p data-i18n="download.sub">安装即用。之后每天按签名 manifest 静默检查一次，下载前必先询问；验证过的更新交到你手上，应用那一步按安装形态手动完成（见手册）。缺失官方 rslsync 二进制时，会在首次启动时自动获取。</p>
-    </div>
-    <div class="dl-cards animate">
-      <a class="dl-card" href="https://github.com/turlamai/syncpilot/releases/latest" data-release-suffix="linux-amd64.deb">
-        <div class="dl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg></div>
-        <div><b>deb · rpm · AppImage · tar.gz · zip</b><span data-i18n="dl.sub">Linux · x64 / arm64 · 签名更新 manifest</span></div>
-      </a>
-    </div>
-    <p style="text-align:center;margin-top:16px"><a href="https://github.com/turlamai/syncpilot/releases" data-i18n="dl.all-releases">全部版本</a></p>
-  </div>
-</section>
-
-<section id="start-here" class="product-start" aria-label="Get started / 开始使用">
-<h2 class="reader-en " lang="en">Start with one useful session.</h2><h2 class="reader-zh " lang="zh">从一次有效使用开始。</h2><p class="reader-en start-status" lang="en">Free Linux maintenance project under AGPL-3.0. Resilio’s separate licence and service limits still apply; no SyncPilot paid tier.</p><p class="reader-zh start-status" lang="zh">AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。</p><p class="reader-en " lang="en">Linux only. The official rslsync binary and its own terms are separate from SyncPilot; Windows/macOS ports are not planned deliveries.</p><p class="reader-zh " lang="zh">仅支持 Linux。官方 rslsync 二进制及其条款独立于 SyncPilot；Windows/macOS 移植不是当前交付。</p><div class="product-start-grid"><article><h3 class="reader-en " lang="en">01</h3><h3 class="reader-zh " lang="zh">01</h3><p class="reader-en " lang="en">Launch with a disposable test folder and confirm the selected daemon binary/version.</p><p class="reader-zh " lang="zh">先使用可丢弃的测试文件夹启动，确认所选守护进程二进制与版本。</p></article><article><h3 class="reader-en " lang="en">02</h3><h3 class="reader-zh " lang="zh">02</h3><p class="reader-en " lang="en">Connect a second test device through the official UI and verify a small file in each direction.</p><p class="reader-zh " lang="zh">通过官方界面连接第二台测试设备，双向验证一个小文件。</p></article><article><h3 class="reader-en " lang="en">03</h3><h3 class="reader-zh " lang="zh">03</h3><p class="reader-en " lang="en">Test daemon stop/restart, login startup and recovery before giving it valuable folders.</p><p class="reader-zh " lang="zh">提供重要文件夹前，测试守护进程停止重启、登录自启与恢复。</p></article></div><p class="reader-en start-limits" lang="en">Third-party compatibility, daemon authentication/recovery and installation-specific updates remain tracked in <a href="https://github.com/turlamai/syncpilot/issues/10">#10</a>. Server/static installs can require operator-managed updates.</p><p class="reader-zh start-limits" lang="zh">第三方兼容、守护进程鉴权恢复及各安装形态更新仍在 <a href="https://github.com/turlamai/syncpilot/issues/10">#10</a> 跟进。服务或静态安装可能需要运维者管理更新。</p><div class="start-links"><a class="reader-en" lang="en" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.md">Installation, privacy &amp; recovery</a><a class="reader-zh" lang="zh" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md">安装、隐私与恢复</a><a href="https://github.com/turlamai/syncpilot/issues"><span class="reader-en " lang="en">Get help</span><span class="reader-zh " lang="zh">反馈与帮助</span></a></div>
-</section>
-<footer>
-  <span data-i18n="footer.legal-pre">SyncPilot 为</span> <a href="https://github.com/turlamai/syncpilot/blob/main/LICENSE">AGPL-3.0</a> <span data-i18n="footer.legal-post">自由软件，与 Resilio, Inc. 无隶属关系。「Resilio Sync」为其所有者的商标。</span><br /><br />
-  <a href="https://github.com/turlamai/syncpilot" data-i18n="footer.source">GitHub 查看源码</a>
-</footer>
-<nav id="product-support" aria-label="Support / 支持"><a href="https://github.com/turlamai/syncpilot/issues"><span class="support-zh">反馈</span><span class="support-en" lang="en">Feedback</span></a> <a href="https://github.com/turlamai/syncpilot/releases"><span class="support-zh">发布与更新</span><span class="support-en" lang="en">Releases</span></a> <a href="https://github.com/turlamai/syncpilot/blob/main/LICENSE"><span class="support-zh">源码许可</span><span class="support-en" lang="en">Source license</span></a> <a class="support-zh" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.zh-CN.md">使用与帮助</a> <a class="support-en" lang="en" href="https://github.com/turlamai/syncpilot/blob/main/docs/USER-GUIDE.md">Usage & help</a></nav>
-
-<script>
-const io = new IntersectionObserver((entries) => {
-  for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-}, { threshold: 0.12 });
-document.querySelectorAll('.animate').forEach((el) => io.observe(el));
-
-// i18n (family standard): data-i18n keys resolved against this dictionary;
-// the static page is Chinese (zh-CN) and the explicit choice persists —
-// otherwise the browser locale decides on every visit.
-const pageMetadata = {
-  en: {
-    title: 'SyncPilot — the official Resilio Sync experience on Linux',
-    description: 'Native Linux desktop shell for Resilio Sync: the official Web UI in a real desktop window, with tray, autostart, daemon watchdog and in-app updates. Free, AGPL-3.0.'
-  },
-  zh: {
-    title: 'SyncPilot — Linux 上的官方 Resilio Sync 体验',
-    description: 'Resilio Sync 的原生 Linux 桌面外壳：官方 Web UI 装进真正的桌面窗口，带托盘、开机自启、守护进程看护与应用内更新。免费开源，AGPL-3.0。'
-  }
-};
-const i18n = {
-  en: {
-    'nav.features': 'Features',
-    'nav.guide': 'Manual',
-    'nav.docs': 'Docs',
-    'nav.download': 'Download',
-    'hero.eyebrow': 'Resilio Sync desktop client for Linux',
-    'hero.h1a': 'The official Resilio Sync experience,',
-    'hero.h1b': 'finally on Linux.',
-    'hero.sub': 'SyncPilot puts the <strong>official Resilio Web UI</strong> inside a native desktop window and manages the official <code style="font-family:var(--font-mono);font-size:0.9em;">rslsync</code> daemon behind it. Every screen is the official one — nothing to re-learn.',
-    'hero.download': 'Download',
-    'hero.source': 'View on GitHub',
-    'hero.trust': '<b>deb · rpm · AppImage · tar.gz · zip</b> &nbsp;—&nbsp; x64 / arm64 (Ubuntu 24.04+) &nbsp;—&nbsp; free, AGPL-3.0',
-    'features.title': 'Official where it matters,<br />native where it counts.',
-    'features.sub': 'Folders, peers, transfers, preferences, activation — all of it is the official Resilio interface, version-matched to your rslsync build. SyncPilot adds everything the official Linux story was missing.',
-    'f1.title': 'Zero interface drift',
-    'f1.body': 'The window embeds the official Resilio Web UI itself — same screens, same workflow as the Windows and macOS clients, nothing re-implemented to fall behind.',
-    'f2.title': 'Daemon lifecycle',
-    'f2.body': 'One-click start and stop, adopts an already-running daemon, and a crash watchdog restarts it with exponential backoff. Optionally keeps running after the app exits.',
-    'f3.title': 'Setup &amp; upgrades',
-    'f3.body': 'No rslsync yet? One click fetches the official binary from Resilio&apos;s CDN, sha256-verified into <code>~/.local/bin</code>. Data paths never change between versions — unpack an upgrade and keep syncing.',
-    'f4.title': 'Autostart &amp; settings',
-    'f4.body': 'Launch at login via XDG autostart, single-instance window restore, and a standalone native settings window for the daemon, port and credentials.',
-    'f5.title': 'Online updates',
-    'f5.body': 'A daily background check against an Ed25519-signed manifest. SyncPilot asks before downloading, verifies the signature, and never touches rslsync state.',
-    'f6.title': 'Secure by default',
-    'f6.body': 'The Web UI stays on <code>127.0.0.1</code> behind an auth-injecting loopback proxy — no login prompts, and the daemon never serves an unauthenticated request.',
-    'how.title': 'Up and running in three steps',
-    'how.sub': 'Same feel as installing the official client on any other platform.',
-    's1.title': 'Install',
-    's1.body': 'Grab the deb, rpm, AppImage or tar.gz from the release page — GTK 4 and WebKitGTK come with Ubuntu 24.04+.',
-    's2.title': 'Launch',
-    's2.body': 'SyncPilot starts the official daemon and hands the window to the official interface. No rslsync yet? One click fetches it.',
-    's3.title': 'Sync',
-    's3.body': 'Activate and add folders through the official wizard — exactly like on Windows and macOS.',
-    'secure.text': '<b>Local controls; explicit peer-to-peer transfer.</b> SyncPilot generates the daemon&apos;s credentials locally, serves the official UI through a loopback-only proxy, and ships no telemetry of its own. The official binary transfers configured files to peers and may use discovery or relay services.',
-    'download.title': 'Get SyncPilot',
-    'download.sub': 'Install and run. After that a daily signed-manifest check runs silently and always asks before downloading; the verified update is handed to you, and applying it stays one manual step per install format (see the manual). The official rslsync binary is fetched on first start if missing.',
-    'dl.sub': 'Linux · x64 / arm64 · signed update manifest',
-    'dl.all-releases': 'All releases',
-    'footer.legal-pre': 'SyncPilot is free software under',
-    'footer.legal-post': 'and is not affiliated with Resilio, Inc. "Resilio Sync" is a trademark of its respective owner.',
-    'footer.source': 'Source on GitHub'
-  },
-  zh: {
-    'nav.features': '功能',
-    'nav.guide': '手册',
-    'nav.docs': '文档',
-    'nav.download': '下载',
-    'hero.eyebrow': 'Linux 桌面版 Resilio Sync 客户端',
-    'hero.h1a': '原汁原味的 Resilio Sync 体验，',
-    'hero.h1b': '终于登陆 Linux。',
-    'hero.sub': 'SyncPilot 把<strong>官方 Resilio Web UI</strong>装进原生桌面窗口，并在背后托管官方 <code style="font-family:var(--font-mono);font-size:0.9em;">rslsync</code> 守护进程。每一屏都是官方界面——无需重新学习。',
-    'hero.download': '下载',
-    'hero.source': '在 GitHub 查看',
-    'hero.trust': '<b>deb · rpm · AppImage · tar.gz · zip</b> &nbsp;—&nbsp; x64 / arm64（Ubuntu 24.04+）&nbsp;—&nbsp; 免费开源，AGPL-3.0',
-    'features.title': '关键处用官方，<br />该原生处就原生。',
-    'features.sub': '文件夹、伙伴、传输、偏好设置、激活——全部是官方 Resilio 界面，版本与你的 rslsync 构建一致。SyncPilot 补齐了官方在 Linux 上缺失的一切。',
-    'f1.title': '零界面偏差',
-    'f1.body': '窗口内嵌的就是官方 Resilio Web UI——与 Windows、macOS 客户端相同的界面与工作流，没有任何会落后的二次实现。',
-    'f2.title': '守护进程全生命周期',
-    'f2.body': '一键启停，可接管已在运行的守护进程；崩溃看门狗按指数退避自动重启。还可选在应用退出后继续保活。',
-    'f3.title': '首次运行与升级',
-    'f3.body': '机器上还没有 rslsync？一键从官方 CDN 下载，经 sha256 校验装入 <code>~/.local/bin</code>。数据路径跨版本不变，解压新版即可继续同步。',
-    'f4.title': '自启与设置',
-    'f4.body': 'XDG autostart 开机自启、单实例窗口唤起，还有独立的原生设置窗口管理守护进程、端口与凭据。',
-    'f5.title': '在线更新',
-    'f5.body': '每天后台检查一次 Ed25519 签名的 manifest，下载前必先询问、验签通过才落盘；rslsync 数据绝不触碰。',
-    'f6.title': '默认安全',
-    'f6.body': 'Web UI 仅留在 <code>127.0.0.1</code>，经注入认证的环回代理访问——不弹登录框，守护进程绝不响应未认证请求。',
-    'how.title': '三步上手',
-    'how.sub': '与在其他平台安装官方客户端的体验一致。',
-    's1.title': '安装',
-    's1.body': '从 release 页获取 deb、rpm、AppImage 或 tar.gz，安装即用——GTK 4 与 WebKitGTK 在 Ubuntu 24.04+ 上系统自带。',
-    's2.title': '启动',
-    's2.body': 'SyncPilot 启动官方守护进程，并把窗口交给官方界面。还没有 rslsync？一键获取。',
-    's3.title': '同步',
-    's3.body': '通过官方向导完成激活并添加文件夹——与 Windows、macOS 上完全一致。',
-    'secure.text': '<b>本地控制，明确的对端文件传输。</b>SyncPilot 在本地生成守护进程凭据，官方 UI 经仅环回的代理提供服务，自身不带任何遥测。官方二进制向对端传输配置的文件，也可能使用发现或中继服务。',
-    'download.title': '获取 SyncPilot',
-    'download.sub': '安装即用。之后每天按签名 manifest 静默检查一次，下载前必先询问；验证过的更新交到你手上，应用那一步按安装形态手动完成（见手册）。缺失官方 rslsync 二进制时，会在首次启动时自动获取。',
-    'dl.sub': 'Linux · x64 / arm64 · 签名更新 manifest',
-    'footer.legal-pre': 'SyncPilot 为',
-    'footer.legal-post': '自由软件，与 Resilio, Inc. 无隶属关系。「Resilio Sync」为其所有者的商标。',
-    'footer.source': 'GitHub 查看源码'
-  }
-};
-
-const LANG_OVERRIDE_KEY = 'syncpilot-lang-override-v2';
-const LEGACY_LANGUAGE_KEY = 'syncpilot-lang';
-
-function readLanguageOverride() {
-  try { const v = localStorage.getItem(LANG_OVERRIDE_KEY); return v === 'zh' || v === 'en' ? v : null; } catch (e) { return null; }
-}
-function detectBrowserLanguage() {
-  const locale = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-  if (!locale) return 'zh';
-  return String(locale).toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en';
-}
-function applyLanguage(lang) {
-  const dict = i18n[lang] || i18n.zh;
-  document.querySelectorAll('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
-    if (dict[key] !== undefined) el.textContent = dict[key];
-  });
-  document.querySelectorAll('[data-i18n-html]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-html');
-    if (dict[key] !== undefined) el.innerHTML = dict[key];
-  });
-  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-  const label = document.getElementById('current-lang-label');
-  if (label) label.textContent = lang === 'zh' ? '简体中文' : 'English';
-  const meta = pageMetadata[lang];
-  if (meta) {
-    document.title = meta.title;
-    const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute('content', meta.description);
-  }
-}
-window.setLanguage = function (lang) {
-  if (lang !== 'zh' && lang !== 'en') return;
-  try { localStorage.setItem(LANG_OVERRIDE_KEY, lang); } catch (e) { /* private mode */ }
-  applyLanguage(lang);
-};
-try { localStorage.removeItem(LEGACY_LANGUAGE_KEY); } catch (e) { /* private mode */ }
-applyLanguage(readLanguageOverride() || detectBrowserLanguage());
-window.addEventListener('languagechange', () => {
-  if (!readLanguageOverride()) applyLanguage(detectBrowserLanguage());
-});
-
-// Theme toggle: persists an explicit choice; the head script handles the
-// system-preference default without flashing.
-document.getElementById('theme-btn').addEventListener('click', function () {
-  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.dataset.theme = next;
-  try { localStorage.setItem('syncpilot-theme', next); } catch (e) { /* private mode */ }
-});
-
-// Linux-only application. Download links use the exact versioned DEB name
-// from the accepted Release; unsupported hosts see the Release page instead.
-(function () {
-  const PAGE = 'https://github.com/turlamai/syncpilot/releases/latest';
-  const ua = navigator.userAgent;
-  const isLinux = /Linux|X11/i.test(ua) && !/Android/i.test(ua);
-  const arch = /aarch64|arm/i.test(ua) ? 'arm64' : 'amd64';
-  const links = document.querySelectorAll('a[data-i18n="hero.download"], .dl-card');
-  const style = document.createElement('style');
-  style.textContent = '.dl-card.current{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}';
-  document.head.appendChild(style);
-  links.forEach(function (a) {
-    a.href = PAGE;
-    if (isLinux) a.dataset.releaseSuffix = 'linux-' + arch + '.deb';
-  });
-  if (isLinux) {
-    const card = document.querySelector('.dl-card');
-    if (card) card.classList.add('current');
-    i18n.zh['hero.download'] = '下载 Linux 版';
-    i18n.en['hero.download'] = 'Download for Linux';
-    fetch('https://api.github.com/repos/turlamai/syncpilot/releases/latest',
-          {headers: {'Accept': 'application/vnd.github+json'}})
-      .then(function (r) { if (!r.ok) throw new Error('release lookup'); return r.json(); })
-      .then(function (release) {
-        if (release.draft || release.prerelease ||
-            !/^v[0-9]+\.[0-9]+\.[0-9]+$/.test(release.tag_name)) return;
-        const name = 'syncpilot-' + release.tag_name.slice(1) + '-linux-' + arch + '.deb';
-        const exact = 'https://github.com/turlamai/syncpilot/releases/download/' + release.tag_name + '/' + name;
-        if ((release.assets || []).some(function (x) {
-          return x.name === name && x.size > 0 && x.browser_download_url === exact;
-        })) links.forEach(function (a) { a.href = exact; });
-      }).catch(function () { /* User can still open Releases. */ });
-  }
-  applyLanguage(readLanguageOverride() || detectBrowserLanguage());
-})();
-
-</script>
+    <!-- Download config: Linux-only product — one pattern, one menu row. -->
+    <script type="application/json" id="kit-download">
+    {
+        "repo": "turlamai/syncpilot",
+        "assets": {
+            "linux": "syncpilot-{v}-linux-{arch}.deb"
+        },
+        "archMap": { "linux": { "x64": "amd64", "arm64": "arm64" } }
+    }
+    </script>
 </body>
+
 </html>

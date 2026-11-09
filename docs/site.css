@@ -1,0 +1,195 @@
+/* ============================================================
+   SyncPilot site.css — per-site sections only.
+   Shared frame (nav, hero, cards, footer, tokens) lives in
+   family.css from site-kit; do not duplicate it here.
+   ============================================================ */
+
+/* ---------- Hero trust row (formats · arch · licence) ---------- */
+.kit-hero .kit-hero-trust {
+    margin-top: 12px;
+}
+.kit-hero .kit-hero-trust b {
+    color: var(--kit-text-2);
+    font-weight: 600;
+}
+
+/* ---------- Desktop window mock (the embedded official Web UI) ---------- */
+.hero-visual {
+    max-width: 940px;
+    margin: 64px auto 0;
+}
+.code-window {
+    background: #1e1e22;
+    border: 1px solid var(--kit-border-strong);
+    border-radius: var(--kit-radius-m);
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(31, 29, 26, 0.13), 0 8px 20px rgba(31, 29, 26, 0.06);
+}
+html[data-theme="dark"] .code-window {
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+.window-header {
+    display: flex;
+    align-items: center;
+    padding: 11px 14px;
+    background: rgba(255, 255, 255, 0.045);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.window-controls {
+    display: flex;
+    gap: 8px;
+}
+.traffic-light {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+}
+.traffic-light--close { background: #FF5F57; }
+.traffic-light--min { background: #FEBC2E; }
+.traffic-light--max { background: #28C840; }
+.window-title {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--kit-font-mono);
+    padding-right: 52px;
+}
+.window-body {
+    padding: 26px;
+}
+.window-body p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14.5px;
+    line-height: 1.7;
+    max-width: 62ch;
+    margin-inline: auto;
+}
+
+/* ---------- Security callout strip ---------- */
+.kit-callout {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--kit-accent-soft);
+    border: 1px solid var(--kit-border);
+    border-radius: var(--kit-radius-m);
+    padding: 22px 26px;
+    max-width: 780px;
+    margin: 0 auto;
+}
+.kit-callout svg {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    color: var(--kit-accent);
+    margin-top: 2px;
+}
+.kit-callout p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--kit-text-2);
+    line-height: 1.65;
+    text-align: left;
+}
+.kit-callout b {
+    color: var(--kit-text);
+}
+
+/* ---------- Download format card ---------- */
+.dl-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    max-width: 620px;
+    margin: 44px auto 0;
+}
+.dl-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    background: var(--kit-surface);
+    border: 1px solid var(--kit-border);
+    border-radius: var(--kit-radius-m);
+    padding: 18px 20px;
+    box-shadow: var(--kit-shadow);
+    color: var(--kit-text);
+    transition: transform 0.2s ease, box-shadow 0.25s ease;
+}
+.dl-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--kit-shadow-lift);
+}
+.dl-card .dl-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+    background: var(--kit-accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--kit-accent);
+    flex: none;
+}
+.dl-card .dl-icon svg {
+    width: 20px;
+    height: 20px;
+}
+.dl-card-text b {
+    display: block;
+    font-size: 15px;
+}
+.dl-card-text span {
+    display: block;
+    font-size: 12.5px;
+    color: var(--kit-text-3);
+    margin-top: 2px;
+}
+.dl-all {
+    text-align: center;
+    margin-top: 18px;
+}
+.dl-all a {
+    color: var(--kit-accent-strong);
+    font-weight: 600;
+    font-size: 14.5px;
+    text-decoration: none;
+}
+html[data-theme="dark"] .dl-all a { color: var(--kit-accent); }
+.dl-all a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Start section extras ---------- */
+.start-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+}
+.start-links a {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--kit-accent-strong);
+}
+html[data-theme="dark"] .start-links a { color: var(--kit-accent); }
+.start-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.start-limits a { color: var(--kit-accent-strong); }
+html[data-theme="dark"] .start-limits a { color: var(--kit-accent); }
+
+/* ---------- Footer attribution line (Resilio trademark notice) ---------- */
+.kit-footer-legal {
+    margin-top: 14px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--kit-text-3);
+    max-width: 42ch;
+}
+.kit-footer-legal a {
+    color: var(--kit-text-2);
+    font-weight: 600;
+}
+
+/* ---------- Icon visibility per theme ---------- */
+html[data-theme="light"] .kit-icon-moon { display: none; }
+html[data-theme="dark"] .kit-icon-sun { display: none; }
