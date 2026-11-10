@@ -23,17 +23,33 @@ case "$(uname -m)" in
   *) echo "unsupported arch: $(uname -m)" >&2; exit 1 ;;
 esac
 
-URL="https://download-cdn.resilio.com/stable/linux/${ARCH_DIR}/0/resilio-sync_${ARCH_NAME}.tar.gz"
+# The versioned CDN URL is the official per-release form; the "stable"
+# alias is a moving pointer. On 2026-11-10 the alias drifted past v3.1.2
+# under CI and broke the integration smoke with a checksum mismatch, so
+# this script pins the versioned URL first and keeps the alias only as a
+# fallback. The sha256 gate below stays authoritative either way: bytes
+# from either URL must hash to the pinned value before anything installs.
+URL_VERSIONED="https://download-cdn.resilio.com/${VERSION}/linux/${ARCH_DIR}/0/resilio-sync_${ARCH_NAME}.tar.gz"
+URL_STABLE="https://download-cdn.resilio.com/stable/linux/${ARCH_DIR}/0/resilio-sync_${ARCH_NAME}.tar.gz"
 mkdir -p "$DEST"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "downloading $URL"
-curl -fL --progress-bar -o "$TMP/rslsync.tar.gz" "$URL"
+downloaded=""
+for url in "$URL_VERSIONED" "$URL_STABLE"; do
+  echo "downloading $url"
+  if curl -fsSL --max-time 300 -o "$TMP/rslsync.tar.gz" "$url"; then
+    downloaded="$url"
+    break
+  fi
+  echo "download failed, trying next URL" >&2
+done
+[ -n "$downloaded" ] || { echo "all download URLs failed" >&2; exit 1; }
 
 ACTUAL="$(sha256sum "$TMP/rslsync.tar.gz" | cut -d' ' -f1)"
 if [ "$ACTUAL" != "$EXPECTED" ]; then
   echo "checksum mismatch:" >&2
+  echo "  source:               $downloaded" >&2
   echo "  expected (v$VERSION): $EXPECTED" >&2
   echo "  actual:               $ACTUAL" >&2
   if [ "$SKIP_CHECKSUM" != "1" ]; then
