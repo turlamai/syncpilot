@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 # Rivet is consumed as a commit-pinned Git source — the hold-back form rivet
 # docs/ci.md prescribes for releases: every CI run and release builds
@@ -60,6 +61,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # TEMPORARY: evidence for the rslsync re-pin (continues 5016413 +
+      # 3b8ac66) — URL probes, hashes and version strings only, the binary
+      # is never executed and nothing is installed. Remove with the re-pin.
+      - name: TEMP rslsync CDN probe
+        run: bash scripts/probe-rslsync-cdn.sh
 
       # GitHub does not allow expressions in `uses:`, so this action pin
       # stays literal — keep it in sync with RIVET_PIN above.
