@@ -42,8 +42,11 @@ Grab an installer from [Releases](https://github.com/turlamai/syncpilot/releases
 | AppImage | `syncpilot-<version>-linux-x86_64.AppImage` · `…-aarch64.AppImage` | carries its own GTK4 dependency closure — runs on distributions older than the build image |
 | tar.gz | `syncpilot-<version>-linux-x64.tar.gz` · `…-arm64.tar.gz` | unpack and run `RivetHost`; also the update payload the in-app updater downloads and verifies |
 | portable zip | `syncpilot-<version>-linux-x64.zip` · `…-arm64.zip` | same layout as the tar.gz |
+| flatpak | `syncpilot-<version>-linux-x64.flatpak` · `…-arm64.flatpak` | sandboxed bundle of the same payload (app id `site.jrtx.syncpilot`); installs with `flatpak install ./syncpilot-<version>-linux-<arch>.flatpak` and pulls the GNOME Platform runtime from your Flatpak remote on first install |
 
 Every release publishes one verified `SHA256SUMS` for its versioned packages, a CycloneDX SBOM and third-party notices per architecture, and the Ed25519-signed `update-stable.json` (with the standard `update-manifest.json` alias) for in-app updates. Individual checksum sidecars remain CI artifacts rather than extra release downloads. Ubuntu 24.04+ ships the required GTK 4 / WebKitGTK 6.0; everything else is bundled or base-system.
+
+The flatpak form shares the host network namespace and your home directory so the managed daemon can sync your folders; within that sandbox two desktop integrations degrade, by construction: the tray icon and launch-at-login (the StatusNotifier watcher is unreachable through the filtered session bus, and an XDG autostart entry written from inside the sandbox carries an `Exec` path the host cannot launch), and the app data starts fresh under `~/.var/app/site.jrtx.syncpilot`. Synced folders outside home (external drives) need one extra grant, e.g. via Flatseal. Daemon management itself needs no bus: rslsync runs as a child process driven over loopback HTTP, which works unchanged inside the sandbox.
 
 If the official `rslsync` binary is not found (auto-detection covers `~/.local/bin`, `/usr/bin`, `/usr/local/bin`, `/opt/resilio-sync`, `$PATH`), SyncPilot offers to download it from Resilio's CDN on first launch (sha256-pinned, installed to `~/.local/bin`) — or install it yourself and point SyncPilot at it in **Settings**.
 

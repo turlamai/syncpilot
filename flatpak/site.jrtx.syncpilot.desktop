@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=SyncPilot
+Comment=Native desktop shell for Resilio Sync on Linux
+Exec=RivetHost
+Icon=site.jrtx.syncpilot
+Terminal=false
+Categories=Network;FileTransfer;
+StartupWMClass=SyncPilot

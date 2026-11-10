@@ -40,8 +40,11 @@ AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务�
 | AppImage | `syncpilot-<版本>-linux-x86_64.AppImage` · `…-aarch64.AppImage` | 自带 GTK4 依赖闭包——比构建镜像更老的发行版也能跑 |
 | tar.gz | `syncpilot-<版本>-linux-x64.tar.gz` · `…-arm64.tar.gz` | 解压运行 `RivetHost`；也是应用内更新器下载并校验的更新载荷 |
 | 便携 zip | `syncpilot-<版本>-linux-x64.zip` · `…-arm64.zip` | 与 tar.gz 同布局 |
+| flatpak | `syncpilot-<版本>-linux-x64.flatpak` · `…-arm64.flatpak` | 同一载荷的沙箱化打包（app id `site.jrtx.syncpilot`）；`flatpak install ./syncpilot-<版本>-linux-<架构>.flatpak` 安装，首次安装会从你的 Flatpak 远端拉取 GNOME Platform runtime |
 
 每次发布为版本化安装包发布一份经过校验的 `SHA256SUMS`，外加每个架构的 CycloneDX SBOM 与第三方声明，以及应用内更新器消费的 Ed25519 签名 `update-stable.json`（含标准的 `update-manifest.json` 别名）。单个文件的 `.sha256` sidecar 保留为 CI 工件，不作为额外的发布下载。Ubuntu 24.04+ 自带所需的 GTK 4 / WebKitGTK 6.0；其余依赖已捆绑或属系统基础库。
+
+flatpak 形态共享宿主网络命名空间与家目录，托管守护进程才能同步你的文件夹；在此沙箱内有两处桌面集成按构造降级：托盘图标与开机自启（过滤后的 session bus 不放行 StatusNotifier watcher；沙箱内写入的 XDG autostart 条目，其 `Exec` 路径宿主无法执行），应用数据在 `~/.var/app/site.jrtx.syncpilot` 下从零开始。家目录之外的同步文件夹（外接硬盘）需要再补一条授权，例如用 Flatseal。守护进程管理本身不需要总线：rslsync 以子进程方式经 loopback HTTP 驱动，沙箱内行为不变。
 
 若未检测到官方 `rslsync` 二进制（自动探测覆盖 `~/.local/bin`、`/usr/bin`、`/usr/local/bin`、`/opt/resilio-sync` 和 `$PATH`），SyncPilot 会在首次启动时提供从 Resilio CDN 一键下载（sha256 校验，装入 `~/.local/bin`）；也可以自行安装后在**设置**里指定路径。
 

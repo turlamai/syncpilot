@@ -1,0 +1,129 @@
+# Flatpak bundle manifest for the release payload (issue: the Linux
+# distribution contract — deb+rpm+AppImage+Flatpak+tar.gz).
+#
+# CI renders the __VERSION__ / __ARCH__ / __SHA256__ placeholders from the
+# linux tar.gz it just built and writes the generated manifest to the repo
+# root (see .github/workflows/release.yml, the Linux job's Flatpak bundle
+# step):
+#
+#   sed -e "s/__VERSION__/.../" -e "s/__ARCH__/.../" -e "s/__SHA256__/.../" \
+#     flatpak/site.jrtx.syncpilot.yml > site.jrtx.syncpilot.gen.yml
+#   flatpak-builder --user --force-clean --repo=repo build-dir site.jrtx.syncpilot.gen.yml
+#   flatpak build-bundle repo syncpilot-<v>-linux-<arch>.flatpak site.jrtx.syncpilot
+#
+# The payload is self-contained (embedded Racket CS runtime, res/, app/);
+# like every family product, readelf on the release binary shows exactly two
+# NEEDED entries outside the GNOME Platform runtime — liblz4.so.1 and
+# libtinfo.so.6 — provided by the two small modules below. WebKitGTK 6.0
+# needs no module of its own: the GNOME runtime ships libwebkitgtk-6.0,
+# which the embedded Web UI view links.
+app-id: site.jrtx.syncpilot
+runtime: org.gnome.Platform
+runtime-version: '50'
+sdk: org.gnome.Sdk
+command: RivetHost
+# The release contract bundles from branch `stable` (build-bundle arg);
+# builder otherwise commits to master.
+branch: stable
+separate-locales: false
+finish-args:
+  # prefer_xwayland_backend() picks X11 exactly when DISPLAY is set and
+  # WAYLAND_DISPLAY is not; granting only the X11 socket keeps that
+  # decision deterministic.
+  - --socket=x11
+  - --device=dri
+  - --share=ipc
+  # The sync protocol is the product: the managed rslsync daemon talks to
+  # peers, trackers and relays (README: "All Resilio Sync traffic ... is
+  # handled by the official binary itself"). Sharing the host network
+  # namespace also keeps the loopback triangle unchanged — the daemon
+  # binds 127.0.0.1:<webui-port> and the app drives it through the
+  # auth-injecting proxy on loopback. The same grant covers the first-run
+  # rslsync download from Resilio's CDN (app/install.rkt) and the daily
+  # signed-manifest update check (app/updater.rkt).
+  - --share=network
+  # rslsync indexes and transfers arbitrary user folders continuously for
+  # as long as the daemon runs — a portal grant would expire with the
+  # session while the folder set stays (same argument as autarx's
+  # workspace) — so home is the narrow grant that keeps sync working. It
+  # also covers the first-run binary install into ~/.local/bin and the
+  # well-known daemon lookup paths under home (manager.rkt probes
+  # ~/.local/bin before /usr/*). Folders outside home (external drives)
+  # need one more grant, e.g. via Flatseal.
+  - --filesystem=home
+  # No bus socket, deliberately. Daemon management is a direct child
+  # process driven over loopback HTTP (manager.rkt: subprocess
+  # --nodaemon --config + probe-port), never D-Bus or systemd, so neither
+  # --socket=session-bus nor --socket=system-bus is load-bearing. Two
+  # capabilities degrade instead (README flatpak row says so): the tray —
+  # rivet's StatusNotifierItem needs org.kde.StatusNotifierWatcher, which
+  # the filtered session bus does not pass, so TrayIcon::available() is
+  # false, no tray object is built and close-to-tray never engages (close
+  # just quits); and launch-at-login — rivet's Autostart writes an XDG
+  # entry with the running binary's absolute path as Exec, which inside
+  # the sandbox is /app/... and cannot launch from the host; granting
+  # xdg-config/autostart would write that broken entry to the host's
+  # real autostart dir, so the toggle stays a sandbox-scoped no-op
+  # instead. App data needs no grant either: the data dir derives from
+  # XDG_DATA_HOME, which the sandbox scopes to
+  # ~/.var/app/site.jrtx.syncpilot automatically (a Flatpak install starts
+  # with a fresh device identity, per the family pattern).
+modules:
+  - name: lz4
+    # Upstream keeps meson under build/ (flatpak-builder needs it at the
+    # module root), so use the primary Makefile build — library only.
+    buildsystem: simple
+    build-commands:
+      - make lib-release PREFIX=/app
+      - make -C lib install PREFIX=/app
+    sources:
+      - type: git
+        url: https://github.com/lz4/lz4.git
+        tag: v1.9.4
+        commit: 5ff839680134437dbf4678f3d0c7b371d84f4964
+  - name: ncurses
+    # libtinfo.so.6 only (the payload's NEEDED entry); no programs, no
+    # terminfo database install — the host system's entries stay put.
+    config-opts:
+      - --prefix=/app
+      - --with-shared
+      - --with-termlib
+      - --without-progs
+      - --without-tack
+      - --without-tests
+      # We only need libtinfo; the C++ binding does not survive the
+      # GNOME 50 SDK's GCC 15 libstdc++ (cstddef redefinition).
+      - --without-cxx-binding
+      - --without-cxx
+      - --disable-db-install
+    sources:
+      - type: archive
+        url: https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.5.tar.gz
+        sha256: 136d91bc269a9a5785e5f9e980bc76ab57428f604ce3e5a5a90cebc767971cc6
+  - name: syncpilot
+    buildsystem: simple
+    sources:
+      - type: archive
+        path: syncpilot-__VERSION__-linux-__ARCH__.tar.gz
+        sha256: __SHA256__
+      - type: file
+        # assets/icon-512.png is a true 512x512 render (the branded
+        # app-icon.png is 1024x1024 and flatpak's export check caps
+        # hicolor/512x512 icons at 512x512).
+        path: assets/icon-512.png
+      - type: file
+        path: flatpak/site.jrtx.syncpilot.desktop
+    build-commands:
+      # flatpak-builder strips the archive's leading directory: the payload
+      # (RivetHost, runtime/, res/, app/) lands flat in the build dir.
+      - mkdir -p /app/syncpilot
+      - cp -a RivetHost runtime res app /app/syncpilot/
+      # The bundle's `command` resolves on the sandbox PATH (/app/bin); the
+      # payload lives outside it. A symlink keeps /proc/self/exe pointing
+      # at the real binary so the runtime layout discovery works.
+      - mkdir -p /app/bin
+      - ln -s /app/syncpilot/RivetHost /app/bin/RivetHost
+      - install -Dm644 icon-512.png
+                    /app/share/icons/hicolor/512x512/apps/site.jrtx.syncpilot.png
+      - install -Dm644 site.jrtx.syncpilot.desktop
+                    /app/share/applications/site.jrtx.syncpilot.desktop
