@@ -48,12 +48,16 @@ done
 
 ACTUAL="$(sha256sum "$TMP/rslsync.tar.gz" | cut -d' ' -f1)"
 if [ "$ACTUAL" != "$EXPECTED" ]; then
+  # Evidence, not just a verdict: a CDN block/error page (HTTP 200, HTML)
+  # and a genuine upstream re-pack produce the same single-line mismatch.
   echo "checksum mismatch:" >&2
   echo "  source:               $downloaded" >&2
   echo "  expected (v$VERSION): $EXPECTED" >&2
   echo "  actual:               $ACTUAL" >&2
+  echo "  size: $(wc -c < "$TMP/rslsync.tar.gz") bytes; file: $(file -b "$TMP/rslsync.tar.gz")" >&2
+  echo "  head: $(head -c 64 "$TMP/rslsync.tar.gz" | od -An -c | tr -s ' ' | head -2)" >&2
   if [ "$SKIP_CHECKSUM" != "1" ]; then
-    echo "stable may have moved past v$VERSION. Re-pin in this script, or re-run with --i-know to install anyway." >&2
+    echo "stable may have moved past v$VERSION (or the CDN served this network an error page). Re-pin in this script, or re-run with --i-know to install anyway." >&2
     exit 1
   fi
   echo "installing anyway (--i-know)." >&2
