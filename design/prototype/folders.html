@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyncPilot — 主视图 · 同步文件夹（英雄屏）</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 内容区（官方 Resilio Web UI 语义）+ chrome 最小化 ==== */
+  .rail {
+    width: 232px; flex: none; display: flex; flex-direction: column;
+    background: var(--surface); border-right: 1px solid var(--line); padding: 12px 10px;
+  }
+  .sect { font-size: 11px; font-weight: 600; letter-spacing: .8px; color: var(--mute); padding: 12px 8px 6px; }
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .item {
+    display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px;
+    font-size: 13px; color: var(--ink); cursor: default; user-select: none; transition: background .15s ease;
+  }
+  .item:hover { background: var(--raised); }
+  .item .st { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .st.ok { background: var(--ok); } .st.busy { background: var(--accent); } .st.off { background: var(--mute); opacity: .45; } .st.err { background: var(--err); } .st.warn { background: var(--warn); }
+  .item.active { background: var(--raised); font-weight: 600; }
+  .item .cnt { margin-left: auto; font-size: 10.5px; color: var(--mute); }
+  .rail .foot { margin-top: auto; border-top: 1px solid var(--line); padding-top: 8px; }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .head { flex: none; display: flex; align-items: center; gap: 12px; padding: 14px 20px 12px; }
+  .head h1 { font-size: 17px; font-weight: 700; }
+  .head .sub { font-size: 12.5px; color: var(--mute); margin-top: 2px; }
+  .head .sp { flex: 1; }
+  .view { flex: 1; overflow-y: auto; padding: 0 20px 12px; }
+  .row {
+    display: flex; align-items: center; gap: 14px; padding: 13px 14px; border-radius: 12px;
+    border-bottom: 1px solid var(--line); transition: background .15s ease;
+  }
+  .row:last-child { border-bottom: none; }
+  .row:hover { background: color-mix(in srgb, var(--raised) 55%, transparent); }
+  .fico {
+    width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent);
+    display: grid; place-items: center; flex: none;
+  }
+  .fico.err { background: var(--err-soft); color: var(--err); }
+  .content { flex: 1; min-width: 0; }
+  .name { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; }
+  .name .ro { font-size: 10.5px; font-weight: 600; color: var(--mute); background: var(--raised); padding: 1px 7px; border-radius: 99px; }
+  .path { font-size: 12px; color: var(--mute); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .prog { width: 220px; margin-top: 7px; }
+  .prog .lbl { display: flex; justify-content: space-between; font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 3px; font-variant-numeric: tabular-nums; }
+  .meta { flex: none; text-align: right; font-size: 12px; color: var(--mute); line-height: 1.7; font-variant-numeric: tabular-nums; }
+  .meta b { color: var(--ink); font-weight: 600; }
+  .flags { flex: none; width: 210px; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+  .flags .line2 { display: flex; gap: 6px; }
+</style>
+</head>
+<body>
+  <div class="window" id="app">
+    <div class="titlebar">
+      <div class="lights"><i></i><i></i><i></i></div>
+      <div class="mark"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2M3 12a9 9 0 0 1 15.5-6.2"/><path d="M21 4v5h-5M3 20v-5h5"/></svg></div>
+      <div class="t">SyncPilot</div>
+      <span class="phase">守护进程运行中</span>
+      <div class="sp"></div>
+      <button class="iconbtn" id="themeBtn" title="切换亮暗主题">◐</button>
+    </div>
+    <div class="body">
+      <!-- 以下内容区 = 官方 Resilio Web UI（语义归 Resilio，本壳只承载） -->
+      <aside class="rail">
+        <div class="sect">同步文件夹</div>
+        <nav class="nav">
+          <div class="item"><span class="st ok"></span>照片库</div>
+          <div class="item active"><span class="st busy"></span>项目文档</div>
+          <div class="item"><span class="st off"></span>音乐采样</div>
+          <div class="item"><span class="st ok"></span>家庭共享</div>
+          <div class="item"><span class="st warn"></span>备份归档</div>
+          <div class="item"><span class="st err"></span>影片工程</div>
+        </nav>
+        <div class="sect">已连接设备</div>
+        <nav class="nav">
+          <div class="item"><span class="st ok"></span>jiren-macbook<span class="cnt">本机</span></div>
+          <div class="item"><span class="st ok"></span>studio-nas</div>
+          <div class="item"><span class="st off"></span>office-desktop</div>
+        </nav>
+        <div class="foot">
+          <div class="item">⚙ 偏好设置</div>
+        </div>
+      </aside>
+      <section class="main">
+        <div class="head">
+          <div>
+            <h1>同步文件夹</h1>
+            <div class="sub">6 个文件夹 · 3 台设备在线 · rslsync 3.1.2 (1076)</div>
+          </div>
+          <div class="sp"></div>
+          <button class="btn">粘贴密钥或 QR</button>
+          <button class="btn primary">＋ 添加文件夹</button>
+        </div>
+        <div class="view">
+          <div class="row">
+            <div class="fico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <div class="content">
+              <div class="name">照片库</div>
+              <div class="path">~/Pictures/Photo Library</div>
+            </div>
+            <div class="flags"><span class="badge ok">已同步</span><span class="line2"><span class="badge mute">4 台设备</span></span></div>
+            <div class="meta"><b>182.4 GB</b><br>12,803 个文件 · 刚刚校验</div>
+          </div>
+          <div class="row">
+            <div class="fico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <div class="content">
+              <div class="name">项目文档</div>
+              <div class="path">~/Codes/proposal-docs</div>
+              <div class="prog"><div class="lbl"><span>同步中 · 来自 studio-nas</span><span>62%</span></div><div><i style="width:62%"></i></div></div>
+            </div>
+            <div class="flags"><span class="badge busy">同步中</span><span class="line2"><span class="badge mute">3 台设备</span></span></div>
+            <div class="meta">↓ <b>2.4 MB/s</b> · ↑ <b>310 KB/s</b><br>剩余约 3 分钟</div>
+          </div>
+          <div class="row">
+            <div class="fico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <div class="content">
+              <div class="name">音乐采样</div>
+              <div class="path">~/Music/Samples</div>
+            </div>
+            <div class="flags"><span class="badge mute">已断开连接</span></div>
+            <div class="meta"><b>22.1 GB</b><br>上次同步 昨天 23:41</div>
+          </div>
+          <div class="row">
+            <div class="fico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <div class="content">
+              <div class="name">家庭共享<span class="ro">只读</span></div>
+              <div class="path">~/Family Share</div>
+            </div>
+            <div class="flags"><span class="badge ok">已同步</span><span class="line2"><span class="badge mute">2 台设备</span></span></div>
+            <div class="meta"><b>8.7 GB</b><br>1,204 个文件</div>
+          </div>
+          <div class="row">
+            <div class="fico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <div class="content">
+              <div class="name">备份归档</div>
+              <div class="path">/mnt/archive/backup</div>
+              <div class="prog"><div class="lbl"><span>正在扫描文件变化</span><span>89%</span></div><div><i style="width:89%"></i></div></div>
+            </div>
+            <div class="flags"><span class="badge warn busy">正在扫描</span></div>
+            <div class="meta"><b>832.0 GB</b><br>扫描中，暂不传输</div>
+          </div>
+          <div class="row">
+            <div class="fico err"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+            <div class="content">
+              <div class="name">影片工程</div>
+              <div class="path">~/Movies/Edit</div>
+            </div>
+            <div class="flags"><span class="badge err">出错 · 磁盘空间不足</span><span class="line2"><span class="badge mute">1 台设备</span></span></div>
+            <div class="meta"><b>410.2 GB</b><br>等待释放空间后继续</div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="statusbar">
+      <span>守护进程运行中</span>
+      <span class="speed">↓ <b>2.7 MB/s</b></span>
+      <span class="speed">↑ <b>310 KB/s</b></span>
+      <span class="sp"></span>
+      <span>本机回环代理 · 凭据已注入</span>
+      <span class="theme-note">原型 v0.1 · 按 ◐ 切换亮暗</span>
+    </div>
+  </div>
+  <script>
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      document.getElementById('app').classList.toggle('dark');
+    });
+  </script>
+</body>
+</html>

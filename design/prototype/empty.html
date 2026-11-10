@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyncPilot — 空态概览 · 许可横幅</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 首次运行：许可横幅 + 空文件夹列表（官方界面语义） ==== */
+  .rail {
+    width: 232px; flex: none; display: flex; flex-direction: column;
+    background: var(--surface); border-right: 1px solid var(--line); padding: 12px 10px;
+  }
+  .sect { font-size: 11px; font-weight: 600; letter-spacing: .8px; color: var(--mute); padding: 12px 8px 6px; }
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .item {
+    display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px;
+    font-size: 13px; color: var(--ink); cursor: default; user-select: none;
+  }
+  .item .st { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .st.ok { background: var(--ok); } .st.off { background: var(--mute); opacity: .45; }
+  .rail .hint { font-size: 11.5px; color: var(--mute); padding: 6px 8px; line-height: 1.6; }
+  .rail .foot { margin-top: auto; border-top: 1px solid var(--line); padding-top: 8px; }
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .head { flex: none; display: flex; align-items: center; gap: 12px; padding: 14px 20px 12px; }
+  .head h1 { font-size: 17px; font-weight: 700; }
+  .head .sub { font-size: 12.5px; color: var(--mute); margin-top: 2px; }
+  .head .sp { flex: 1; }
+  .empty { flex: 1; display: grid; place-items: center; padding: 0 24px 24px; }
+  .card {
+    width: 460px; max-width: 100%; text-align: center; padding: 36px 36px 32px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .card .big {
+    width: 56px; height: 56px; border-radius: 14px; background: var(--accent-soft); color: var(--accent);
+    display: grid; place-items: center; margin-bottom: 8px;
+  }
+  .card h2 { font-size: 16px; font-weight: 700; }
+  .card p { font-size: 13px; color: var(--mute); line-height: 1.65; }
+  .card .acts { display: flex; gap: 10px; margin-top: 14px; }
+  .card .btn { height: 34px; }
+  .card .note { margin-top: 12px; font-size: 11.5px; color: var(--mute); }
+  .card .note kbd { margin: 0 2px; }
+</style>
+</head>
+<body>
+  <div class="window" id="app">
+    <div class="titlebar">
+      <div class="lights"><i></i><i></i><i></i></div>
+      <div class="mark"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2M3 12a9 9 0 0 1 15.5-6.2"/><path d="M21 4v5h-5M3 20v-5h5"/></svg></div>
+      <div class="t">SyncPilot</div>
+      <span class="phase">守护进程运行中</span>
+      <div class="sp"></div>
+      <button class="iconbtn" id="themeBtn" title="切换亮暗主题">◐</button>
+    </div>
+    <div class="body">
+      <aside class="rail">
+        <div class="sect">同步文件夹</div>
+        <div class="hint">尚无文件夹。添加入口在右侧。</div>
+        <div class="sect">已连接设备</div>
+        <nav class="nav">
+          <div class="item"><span class="st ok"></span>jiren-macbook<span style="margin-left:auto;font-size:10.5px;color:var(--mute)">本机</span></div>
+        </nav>
+        <div class="foot">
+          <div class="item">⚙ 偏好设置</div>
+        </div>
+      </aside>
+      <section class="main">
+        <div class="head">
+          <div>
+            <h1>同步文件夹</h1>
+            <div class="sub">0 个文件夹 · 守护进程已就绪（rslsync 3.1.2）</div>
+          </div>
+          <div class="sp"></div>
+          <button class="btn">粘贴密钥或 QR</button>
+          <button class="btn primary">＋ 添加文件夹</button>
+        </div>
+        <div class="banner warn">Resilio Sync 许可未激活：添加文件夹前需先在官方界面激活（14 天免费试用）或登录已有账号 <span class="go">打开激活入口 →</span></div>
+        <div class="empty">
+          <div class="card">
+            <div class="big"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <h2>还没有同步文件夹</h2>
+            <p>选择一个本地文件夹开始同步，或粘贴其他设备分享给你的密钥。<br>添加与授权都在官方 Resilio 界面内完成，SyncPilot 负责让它随时可用。</p>
+            <div class="acts">
+              <button class="btn">粘贴密钥或 QR</button>
+              <button class="btn primary">＋ 添加文件夹</button>
+            </div>
+            <div class="note">同步不是备份——重要文件夹请另行备份</div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="statusbar">
+      <span>守护进程运行中</span>
+      <span class="speed">↓ <b>0 KB/s</b></span>
+      <span class="speed">↑ <b>0 KB/s</b></span>
+      <span class="sp"></span>
+      <span>许可未激活 · 试用可激活 14 天</span>
+      <span class="theme-note">原型 v0.1 · 按 ◐ 切换亮暗</span>
+    </div>
+  </div>
+  <script>
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      document.getElementById('app').classList.toggle('dark');
+    });
+  </script>
+</body>
+</html>

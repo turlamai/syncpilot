@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyncPilot — 设置</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 设置窗（独立窗口）：六节，与 settings_window.cpp / i18n 对齐 ==== */
+  .window { width: 780px; height: 700px; }
+  .winbody { flex: 1; display: flex; flex-direction: column; min-height: 0; background: var(--bg); }
+  .scroll { flex: 1; overflow-y: auto; padding: 16px 20px 12px; }
+  .sect { font-size: 11px; font-weight: 600; letter-spacing: .8px; color: var(--mute); padding: 14px 2px 7px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+  .row:last-child { border-bottom: none; }
+  .row .lab { flex: 1; min-width: 0; }
+  .row .lab .t { font-size: 13.5px; font-weight: 600; }
+  .row .lab .d { font-size: 12px; color: var(--mute); margin-top: 2px; line-height: 1.5; }
+  .row .lab .d code { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: 11px; background: var(--raised); border-radius: 5px; padding: .1em .4em; }
+  .entry {
+    width: 250px; height: 30px; padding: 0 10px; font-size: 12.5px; color: var(--ink);
+    background: var(--raised); border: 1px solid var(--line); border-radius: 8px;
+    display: flex; align-items: center; gap: 6px; font-variant-numeric: tabular-nums;
+  }
+  .entry.mono { font-family: ui-monospace, "SF Mono", Consolas, monospace; font-size: 11.5px; color: var(--mute); overflow: hidden; white-space: nowrap; }
+  .check { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink); }
+  .check .box {
+    width: 16px; height: 16px; border-radius: 5px; border: 1px solid var(--line);
+    background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 700;
+  }
+  .check.off .box { background: var(--raised); color: transparent; }
+  .drop {
+    height: 30px; padding: 0 10px; font-size: 12.5px; color: var(--ink);
+    background: var(--raised); border: 1px solid var(--line); border-radius: 8px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .foot { flex: none; display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-top: 1px solid var(--line); background: var(--surface); }
+  .foot .note { font-size: 11.5px; color: var(--mute); }
+  .foot .sp { flex: 1; }
+  .foot .btn.primary { height: 34px; padding: 0 18px; }
+</style>
+</head>
+<body>
+  <div class="window" id="app">
+    <div class="titlebar">
+      <div class="lights"><i></i><i></i><i></i></div>
+      <div class="t">SyncPilot 设置</div>
+      <div class="sp"></div>
+      <button class="iconbtn" id="themeBtn" title="切换亮暗主题">◐</button>
+    </div>
+    <div class="winbody">
+      <div class="scroll">
+        <div class="sect">守护进程</div>
+        <div class="card">
+          <div class="row">
+            <div class="lab"><div class="t">rslsync 二进制</div><div class="d">自动检测：<code>~/.local/bin</code>、<code>/usr/bin</code> 等 · 当前 <code>/usr/bin/rslsync</code>（3.1.2）</div></div>
+            <button class="btn">浏览…</button>
+          </div>
+          <div class="row">
+            <div class="lab"><div class="t">随 SyncPilot 一起启动守护进程</div></div>
+            <label class="check"><span class="box">✓</span></label>
+          </div>
+          <div class="row">
+            <div class="lab"><div class="t">守护进程崩溃后自动重启</div><div class="d">指数退避重试</div></div>
+            <label class="check"><span class="box">✓</span></label>
+          </div>
+          <div class="row">
+            <div class="lab"><div class="t">SyncPilot 退出时保持守护进程运行</div></div>
+            <label class="check off"><span class="box">✓</span></label>
+          </div>
+          <div class="row">
+            <div class="lab"><div class="t">重启守护进程</div><div class="d">对已连接对端短暂中断</div></div>
+            <button class="btn danger">重启…</button>
+          </div>
+        </div>
+        <div class="sect">设备</div>
+        <div class="card">
+          <div class="row">
+            <div class="lab"><div class="t">显示给同步对端的设备名</div></div>
+            <div class="entry">jiren-macbook</div>
+          </div>
+          <div class="row">
+            <div class="lab"><div class="t">本地 API 端口</div><div class="d">仅本机回环（1024–65535），改动后需重启守护进程</div></div>
+            <div class="entry" style="width:110px">38889</div>
+          </div>
+        </div>
+        <div class="sect">桌面</div>
+        <div class="card">
+          <div class="row">
+            <div class="lab"><div class="t">登录时启动 SyncPilot</div><div class="d">XDG autostart（Flatpak 内不可用）</div></div>
+            <label class="check"><span class="box">✓</span></label>
+          </div>
+          <div class="row">
+            <div class="lab"><div class="t">关闭窗口时隐藏到托盘而非退出</div></div>
+            <label class="check"><span class="box">✓</span></label>
+          </div>
+          <div class="row">
+            <div class="lab"><div class="t">界面语言</div><div class="d">改动后重启 SyncPilot 生效</div></div>
+            <div class="drop">跟随系统 / Follow system ▾</div>
+          </div>
+        </div>
+        <div class="sect">更新</div>
+        <div class="card">
+          <div class="row">
+            <div class="lab"><div class="t">检查更新</div><div class="d">每天自动检查一次；下载前都会先询问，并经 Ed25519 签名校验</div></div>
+            <button class="btn">检查更新</button>
+          </div>
+        </div>
+        <div class="sect">关于</div>
+        <div class="card">
+          <div class="row">
+            <div class="lab"><div class="t">SyncPilot v0.8.4</div><div class="d">Linux 上 Resilio Sync（rslsync）的非官方桌面外壳。窗口内展示的是官方 Resilio Web UI。AGPL-3.0 · github.com/turlamai/syncpilot</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="foot">
+        <span class="note">改动在保存后生效；端口与语言两项会分别提示重启。</span>
+        <span class="sp"></span>
+        <button class="btn">还原</button>
+        <button class="btn primary">保存设置</button>
+      </div>
+    </div>
+    <div class="toast"><span class="ok">✓</span> 设置已保存</div>
+  </div>
+  <script>
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      document.getElementById('app').classList.toggle('dark');
+    });
+  </script>
+</body>
+</html>

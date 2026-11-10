@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SyncPilot — 引导页 · 首次安装下载态</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* ==== 引导页：居中卡（对应 build_boot_page 的真实结构） ==== */
+  .holder { flex: 1; display: grid; place-items: center; }
+  .card {
+    width: 520px; max-width: calc(100% - 48px); text-align: center;
+    padding: 34px 48px 30px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 16px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .card .markrow { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .card .markrow .mark { width: 30px; height: 30px; border-radius: 8px; }
+  .card .markrow .t { font-size: 19px; font-weight: 700; letter-spacing: .2px; }
+  .card .status { font-size: 14.5px; font-weight: 600; line-height: 1.5; max-width: 60ch; }
+  .card .detail { font-size: 12.5px; color: var(--mute); line-height: 1.7; max-width: 60ch; }
+  .card .detail code {
+    font-size: 11.5px; font-family: ui-monospace, "SF Mono", Consolas, monospace;
+    background: var(--raised); border-radius: 5px; padding: .15em .4em;
+  }
+  .prog { width: 100%; max-width: 360px; margin-top: 8px; }
+  .prog .lbl { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 5px; font-variant-numeric: tabular-nums; }
+  .card .acts { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; align-items: center; }
+  .card .acts .btn { height: 34px; }
+  .card .note { font-size: 11.5px; color: var(--mute); margin-top: 4px; }
+  .card .note .ok { color: var(--ok); font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="window" id="app">
+    <div class="titlebar">
+      <div class="lights"><i></i><i></i><i></i></div>
+      <div class="mark"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2M3 12a9 9 0 0 1 15.5-6.2"/><path d="M21 4v5h-5M3 20v-5h5"/></svg></div>
+      <div class="t">SyncPilot</div>
+      <span class="phase starting">守护进程启动中</span>
+      <div class="sp"></div>
+      <button class="iconbtn" id="themeBtn" title="切换亮暗主题">◐</button>
+    </div>
+    <div class="holder">
+      <div class="card">
+        <div class="markrow">
+          <div class="mark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2M3 12a9 9 0 0 1 15.5-6.2"/><path d="M21 4v5h-5M3 20v-5h5"/></svg></div>
+          <div class="t">SyncPilot</div>
+        </div>
+        <div class="status">尚未安装 Resilio Sync。</div>
+        <div class="detail">
+          SyncPilot 运行官方 rslsync 二进制。正在从 Resilio CDN 下载
+          （<code>sha256</code> 已固定校验）到 <code>~/.local/bin</code>；
+          也可以自行安装后，在设置中指定其路径。
+        </div>
+        <div class="prog">
+          <div class="lbl"><span>下载中…</span><span>6.7 MB / 15 MB</span></div>
+          <div><i style="width:45%"></i></div>
+        </div>
+        <div class="acts">
+          <button class="btn">打开 SyncPilot 设置</button>
+        </div>
+        <div class="note">下载完成后将校验 <span class="ok">SHA-256</span>，再启动守护进程并移交官方界面</div>
+      </div>
+    </div>
+    <div class="statusbar">
+      <span>守护进程已停止</span>
+      <span class="sp"></span>
+      <span>首次运行 · 无凭据注入前不联网到官方界面</span>
+      <span class="theme-note">原型 v0.1 · 按 ◐ 切换亮暗</span>
+    </div>
+  </div>
+  <script>
+    document.getElementById('themeBtn').addEventListener('click', () => {
+      document.getElementById('app').classList.toggle('dark');
+    });
+  </script>
+</body>
+</html>
