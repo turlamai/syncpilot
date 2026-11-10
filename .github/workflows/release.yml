@@ -5,6 +5,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 concurrency:
   group: release-${{ github.ref }}
@@ -212,3 +214,7 @@ jobs:
                 gh release delete-asset "$GITHUB_REF_NAME" "$name" --yes
               fi
             done
+      - name: Attest public build provenance
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: public/*
