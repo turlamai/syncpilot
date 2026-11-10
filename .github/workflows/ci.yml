@@ -62,12 +62,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # TEMPORARY: evidence for the rslsync re-pin (continues 5016413 +
-      # 3b8ac66) — URL probes, hashes and version strings only, the binary
-      # is never executed and nothing is installed. Remove with the re-pin.
-      - name: TEMP rslsync CDN probe
-        run: bash scripts/probe-rslsync-cdn.sh
-
       # GitHub does not allow expressions in `uses:`, so this action pin
       # stays literal — keep it in sync with RIVET_PIN above.
       - name: Set up embeddable Racket CS

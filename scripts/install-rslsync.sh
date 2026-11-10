@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 # Download the official rslsync binary (Resilio Sync) into ~/.local/bin.
-# Checksums are pinned from the AUR rslsync PKGBUILD for the version below;
-# when Resilio ships a new "stable", re-pin or pass --i-know to skip.
+# Checksums are pinned below; when Resilio ships a new "stable", re-pin
+# or pass --i-know to skip.
 set -euo pipefail
 
 VERSION="3.1.2"
-SHA_X64="3cfedd41b3d21e2ae5fae58ca2114704d1ea4e4bab896796323c4a15c570f0f0"
-SHA_ARM64="cdc30638d4a1909fb16685d25924216af70c2758160ffa74822d371f574fe136"
+# 2026-11-05 repack: Resilio re-published the stable alias with new bytes
+# under the same version label. No versioned CDN path exists for them
+# (every plausible /<version>/linux/... URL 404s) and AUR still pins the
+# old (3cfedd41... / cdc30638...) bytes, so these hashes were measured off
+# the official CDN on CI runners — identical across two independent runs.
+SHA_X64="4c4ebf8cdf992682843cd13baee307cc569615dfe1e4ba3c5061734bd7117e9b"
+SHA_ARM64="cb8247c5ef6659cebd06d472e02a6fb8a7dc9aeaa584101adadad202bf328be7"
 
 DEST="${RSLSYNC_DEST:-$HOME/.local/bin}"
 SKIP_CHECKSUM=0
@@ -23,12 +28,13 @@ case "$(uname -m)" in
   *) echo "unsupported arch: $(uname -m)" >&2; exit 1 ;;
 esac
 
-# The versioned CDN URL is the official per-release form; the "stable"
-# alias is a moving pointer. On 2026-11-10 the alias drifted past v3.1.2
-# under CI and broke the integration smoke with a checksum mismatch, so
-# this script pins the versioned URL first and keeps the alias only as a
-# fallback. The sha256 gate below stays authoritative either way: bytes
-# from either URL must hash to the pinned value before anything installs.
+# The "stable" alias is a moving pointer, but since the 2026-11-05 repack
+# it is the only live URL for the pinned bytes: the versioned /3.1.2/...
+# CDN path is gone (404) and Resilio published no versioned path for the
+# repacked artifact. Try the alias first; keep the versioned URL as a
+# fallback for when per-release paths return. The sha256 gate below stays
+# authoritative either way: bytes from either URL must hash to the pinned
+# value before anything installs.
 URL_VERSIONED="https://download-cdn.resilio.com/${VERSION}/linux/${ARCH_DIR}/0/resilio-sync_${ARCH_NAME}.tar.gz"
 URL_STABLE="https://download-cdn.resilio.com/stable/linux/${ARCH_DIR}/0/resilio-sync_${ARCH_NAME}.tar.gz"
 mkdir -p "$DEST"
@@ -36,7 +42,7 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
 downloaded=""
-for url in "$URL_VERSIONED" "$URL_STABLE"; do
+for url in "$URL_STABLE" "$URL_VERSIONED"; do
   echo "downloading $url"
   if curl -fsSL --max-time 300 -o "$TMP/rslsync.tar.gz" "$url"; then
     downloaded="$url"
