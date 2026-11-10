@@ -37,11 +37,11 @@ AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务�
 |---|---|---|
 | deb | `syncpilot-<版本>-linux-amd64.deb` · `…-arm64.deb` | 安装到 `/opt/syncpilot`，带桌面入口与图标 |
 | rpm | `syncpilot-<版本>-linux-x86_64.rpm` · `…-aarch64.rpm` | 与 deb 同一载荷 |
-| AppImage | `syncpilot-<版本>-linux-x64.AppImage` · `…-arm64.AppImage` | 自带 GTK4 依赖闭包——比构建镜像更老的发行版也能跑 |
+| AppImage | `syncpilot-<版本>-linux-x86_64.AppImage` · `…-aarch64.AppImage` | 自带 GTK4 依赖闭包——比构建镜像更老的发行版也能跑 |
 | tar.gz | `syncpilot-<版本>-linux-x64.tar.gz` · `…-arm64.tar.gz` | 解压运行 `RivetHost`；也是应用内更新器下载并校验的更新载荷 |
 | 便携 zip | `syncpilot-<版本>-linux-x64.zip` · `…-arm64.zip` | 与 tar.gz 同布局 |
 
-每个文件都带 `.sha256` 校验文件，另有每个架构的合并 `SHA256SUMS`、CycloneDX SBOM 与第三方声明，以及应用内更新器消费的 Ed25519 签名 `update-stable.json` manifest。Ubuntu 24.04+ 自带所需的 GTK 4 / WebKitGTK 6.0；其余依赖已捆绑或属系统基础库。
+每次发布为版本化安装包发布一份经过校验的 `SHA256SUMS`，外加每个架构的 CycloneDX SBOM 与第三方声明，以及应用内更新器消费的 Ed25519 签名 `update-stable.json`（含标准的 `update-manifest.json` 别名）。单个文件的 `.sha256` sidecar 保留为 CI 工件，不作为额外的发布下载。Ubuntu 24.04+ 自带所需的 GTK 4 / WebKitGTK 6.0；其余依赖已捆绑或属系统基础库。
 
 若未检测到官方 `rslsync` 二进制（自动探测覆盖 `~/.local/bin`、`/usr/bin`、`/usr/local/bin`、`/opt/resilio-sync` 和 `$PATH`），SyncPilot 会在首次启动时提供从 Resilio CDN 一键下载（sha256 校验，装入 `~/.local/bin`）；也可以自行安装后在**设置**里指定路径。
 
