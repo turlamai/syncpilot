@@ -83,7 +83,7 @@
             <div class="kit-container">
                 <span class="kit-eyebrow" data-i18n="hero.eyebrow">Linux 桌面版 Resilio Sync 客户端</span>
                 <h1><span data-i18n="hero.h1a">原汁原味的 Resilio Sync 体验，</span> <span class="kit-accent-word" data-i18n="hero.h1b">终于登陆 Linux。</span></h1>
-                <p class="kit-lead"><span data-i18n="hero.sub-a">SyncPilot 把</span><strong data-i18n="hero.sub-b">官方 Resilio Web UI</strong><span data-i18n="hero.sub-c">装进原生桌面窗口，并在背后托管官方 </span><code>rslsync</code><span data-i18n="hero.sub-d">守护进程。每一屏都是官方界面——无需重新学习。</span></p>
+                <p class="kit-lead"><span data-i18n="hero.sub-a">SyncPilot 把</span><strong data-i18n="hero.sub-b">官方 Resilio Web UI</strong><span data-i18n="hero.sub-c">装进原生桌面窗口，并在背后托管官方 </span><code>rslsync</code><span data-i18n="hero.sub-d">守护进程。每一屏都是官方界面——无需重新学习。</span> <span data-i18n="hero.sub-e">SyncPilot 只做外壳：自有界面仅出现在标题栏、状态栏、引导页、设置窗、更新卡与托盘六处——管 Resilio，不变成第二个 UI。</span></p>
                 <div class="kit-btn-row">
                     <div class="kit-dl">
                         <a class="kit-btn kit-btn--primary" data-kit-dl-primary href="https://github.com/turlamai/syncpilot/releases/latest">
@@ -104,19 +104,43 @@
                 <p class="kit-hero-meta kit-hero-trust"><b>deb · rpm · AppImage · tar.gz · zip</b> <span data-i18n="hero.trust">— x64 / arm64（Ubuntu 24.04+）— 免费开源，AGPL-3.0</span></p>
 
                 <div class="hero-visual">
-                    <div class="code-window">
-                        <div class="window-header">
+                    <!-- Shell boundary schematic (design/DESIGN.md invariant #1) — a labelled
+                         diagram, not a screenshot: SyncPilot chrome = title bar + status bar only. -->
+                    <div class="shell-demo">
+                        <div class="shell-titlebar">
                             <div class="window-controls">
                                 <span class="traffic-light traffic-light--close"></span>
                                 <span class="traffic-light traffic-light--min"></span>
                                 <span class="traffic-light traffic-light--max"></span>
                             </div>
-                            <div class="window-title">SyncPilot — Resilio Sync</div>
+                            <span class="shell-demo-title">SyncPilot</span>
+                            <span class="shell-phase" data-i18n="demo.phase">守护进程运行中</span>
+                            <span class="shell-tag" data-i18n="demo.tag-shell">SyncPilot 外壳</span>
                         </div>
-                        <div class="window-body">
-                            <p data-i18n="hero.window-note">选择已验证的 rslsync 程序和可丢弃的测试文件夹，通过官方界面连接第二台测试设备，确认小文件能够双向传输后再使用重要数据。</p>
+                        <div class="shell-content">
+                            <div class="shell-grid">
+                                <div class="shell-rail" aria-hidden="true">
+                                    <i style="width: 72%;"></i>
+                                    <i style="width: 88%;"></i>
+                                    <i style="width: 60%;"></i>
+                                    <i style="width: 78%;"></i>
+                                </div>
+                                <div class="shell-rows" aria-hidden="true">
+                                    <div class="shell-row"><i class="dot dot--ok"></i><em style="width: 46%;"></em></div>
+                                    <div class="shell-row"><i class="dot dot--busy"></i><em style="width: 24%;"></em><span class="shell-prog"><b style="width: 62%;"></b></span></div>
+                                    <div class="shell-row"><i class="dot dot--off"></i><em style="width: 38%;"></em></div>
+                                    <div class="shell-row"><i class="dot dot--warn"></i><em style="width: 58%;"></em></div>
+                                    <div class="shell-row"><i class="dot dot--err"></i><em style="width: 30%;"></em></div>
+                                </div>
+                            </div>
+                            <span class="shell-tag shell-tag--official" data-i18n="demo.tag-official">官方 Resilio Web UI · 归 Resilio</span>
+                        </div>
+                        <div class="shell-statusbar">
+                            <span data-i18n="demo.phase">守护进程运行中</span>
+                            <span class="shell-speed">↓ 2.7 MB/s · ↑ 310 KB/s</span>
                         </div>
                     </div>
+                    <p class="shell-caption" data-i18n="demo.caption">边界示意（非截图）：SyncPilot 自有界面只有标题栏与底部状态栏两处 chrome，窗口主角始终是官方 Resilio Web UI。</p>
                 </div>
             </div>
         </section>
@@ -126,17 +150,17 @@
             <div class="kit-container">
                 <span class="kit-kicker" data-i18n="features.eyebrow">为什么是 SyncPilot</span>
                 <h2 class="kit-h2"><span data-i18n="features.title-a">关键处用官方，</span><br><span class="kit-accent-word" data-i18n="features.title-b">该原生处就原生。</span></h2>
-                <p class="kit-lead" data-i18n="features.sub">文件夹、伙伴、传输、偏好设置、激活——全部是官方 Resilio 界面，版本与你的 rslsync 构建一致。SyncPilot 补齐了官方在 Linux 上缺失的一切。</p>
+                <p class="kit-lead" data-i18n="features.sub">窗口主角始终是官方 Resilio 界面：文件夹、伙伴、传输、激活，版本与你的 rslsync 构建一致——不重绘、不改词、不翻译。SyncPilot 只补齐外壳该做的事。</p>
                 <div class="kit-grid kit-grid--3" style="margin-top: 44px;">
                     <div class="kit-card">
                         <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 17V9l6 8V9"/></svg></span>
                         <h3 data-i18n="f1.title">零界面偏差</h3>
-                        <p data-i18n="f1.body">窗口内嵌的就是官方 Resilio Web UI——与 Windows、macOS 客户端相同的界面与工作流，没有任何会落后的二次实现。</p>
+                        <p data-i18n="f1.body">窗口内嵌的就是官方 Resilio Web UI——与 Windows、macOS 客户端相同的界面与工作流；SyncPilot 不重绘、不改词、不翻译，没有任何会落后的二次实现。</p>
                     </div>
                     <div class="kit-card">
                         <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg></span>
                         <h3 data-i18n="f2.title">守护进程全生命周期</h3>
-                        <p data-i18n="f2.body">一键启停，可接管已在运行的守护进程；崩溃看门狗按指数退避自动重启。还可选在应用退出后继续保活。</p>
+                        <p data-i18n="f2.body">一键启停，可接管已在运行的守护进程；崩溃看门狗按指数退避自动重启。相位（运行中/启动中/已停止/已崩溃/失败）在标题栏与底部状态栏双可见，永不静默。还可选在应用退出后继续保活。</p>
                     </div>
                     <div class="kit-card">
                         <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>
@@ -145,18 +169,33 @@
                     </div>
                     <div class="kit-card">
                         <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="3"/><path d="M16 3l-4 4-4-4"/></svg></span>
-                        <h3 data-i18n="f4.title">自启与设置</h3>
-                        <p data-i18n="f4.body">XDG autostart 开机自启、单实例窗口唤起，还有独立的原生设置窗口管理守护进程、端口与凭据。</p>
+                        <h3 data-i18n="f4.title">自启、托盘与设置</h3>
+                        <p data-i18n="f4.body">XDG autostart 开机自启、单实例窗口唤起、关闭窗口隐藏到托盘（打开 / 设置 / 退出），还有独立的原生设置窗口管理守护进程、端口与凭据。</p>
                     </div>
                     <div class="kit-card">
                         <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/><path d="m9 12 2 2 4-4"/></svg></span>
                         <h3 data-i18n="f5.title">在线更新</h3>
-                        <p data-i18n="f5.body">每天后台检查一次 Ed25519 签名的 manifest，下载前必先询问、验签通过才落盘；rslsync 数据绝不触碰。</p>
+                        <p data-i18n="f5.body">每天后台检查一次签名 manifest，三步走：发现新版本 → 下载并经 Ed25519 验签 → 按安装形态手动应用。下载前必先询问，rslsync 数据绝不触碰。</p>
                     </div>
                     <div class="kit-card">
                         <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg></span>
                         <h3 data-i18n="f6.title">默认安全</h3>
                         <p><span data-i18n="f6.body-a">Web UI 仅留在 </span><code>127.0.0.1</code><span data-i18n="f6.body-b">，经注入认证的环回代理访问——不弹登录框，守护进程绝不响应未认证请求。</span></p>
+                    </div>
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                        <h3 data-i18n="f7.title">状态一目了然</h3>
+                        <p data-i18n="f7.body">每个文件夹五种状态直接来自官方数据：已同步、同步中（进度与剩余时间）、已断开连接（上次同步）、正在扫描、出错；底部状态栏常驻全局 ↓/↑ 速度。</p>
+                    </div>
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></span>
+                        <h3 data-i18n="f8.title">密钥与对端</h3>
+                        <p data-i18n="f8.body">文件夹详情提供读写/只读密钥卡，一键复制给其他设备加入；对端连接态一眼可辨——同步中、已连接、正在连接、离线，附速率与最近同步。</p>
+                    </div>
+                    <div class="kit-card">
+                        <span class="kit-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>
+                        <h3 data-i18n="f9.title">许可门禁如实呈现</h3>
+                        <p data-i18n="f9.body">Resilio 3.x 添加文件夹前需先激活许可。SyncPilot 不伪装也不代劳：未激活/试用中以横幅如实呈现，激活与添加都在官方界面完成，SyncPilot 不设任何付费层。</p>
                     </div>
                 </div>
             </div>
@@ -304,10 +343,14 @@
             "hero.sub-b": "官方 Resilio Web UI",
             "hero.sub-c": "装进原生桌面窗口，并在背后托管官方 ",
             "hero.sub-d": "守护进程。每一屏都是官方界面——无需重新学习。",
+            "hero.sub-e": "SyncPilot 只做外壳：自有界面仅出现在标题栏、状态栏、引导页、设置窗、更新卡与托盘六处——管 Resilio，不变成第二个 UI。",
             "hero.source": "在 GitHub 查看",
             "hero.availability": "开发预览。AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务限制仍适用；SyncPilot 不设付费层。",
             "hero.trust": "— x64 / arm64（Ubuntu 24.04+）— 免费开源，AGPL-3.0",
-            "hero.window-note": "选择已验证的 rslsync 程序和可丢弃的测试文件夹，通过官方界面连接第二台测试设备，确认小文件能够双向传输后再使用重要数据。",
+            "demo.phase": "守护进程运行中",
+            "demo.tag-shell": "SyncPilot 外壳",
+            "demo.tag-official": "官方 Resilio Web UI · 归 Resilio",
+            "demo.caption": "边界示意（非截图）：SyncPilot 自有界面只有标题栏与底部状态栏两处 chrome，窗口主角始终是官方 Resilio Web UI。",
             "dl.generic": "获取 SyncPilot",
             "dl.linux": "Linux 版",
             "dl.mac": "前往 Releases 下载",
@@ -316,21 +359,27 @@
             "features.eyebrow": "为什么是 SyncPilot",
             "features.title-a": "关键处用官方，",
             "features.title-b": "该原生处就原生。",
-            "features.sub": "文件夹、伙伴、传输、偏好设置、激活——全部是官方 Resilio 界面，版本与你的 rslsync 构建一致。SyncPilot 补齐了官方在 Linux 上缺失的一切。",
+            "features.sub": "窗口主角始终是官方 Resilio 界面：文件夹、伙伴、传输、激活，版本与你的 rslsync 构建一致——不重绘、不改词、不翻译。SyncPilot 只补齐外壳该做的事。",
             "f1.title": "零界面偏差",
-            "f1.body": "窗口内嵌的就是官方 Resilio Web UI——与 Windows、macOS 客户端相同的界面与工作流，没有任何会落后的二次实现。",
+            "f1.body": "窗口内嵌的就是官方 Resilio Web UI——与 Windows、macOS 客户端相同的界面与工作流；SyncPilot 不重绘、不改词、不翻译，没有任何会落后的二次实现。",
             "f2.title": "守护进程全生命周期",
-            "f2.body": "一键启停，可接管已在运行的守护进程；崩溃看门狗按指数退避自动重启。还可选在应用退出后继续保活。",
+            "f2.body": "一键启停，可接管已在运行的守护进程；崩溃看门狗按指数退避自动重启。相位（运行中/启动中/已停止/已崩溃/失败）在标题栏与底部状态栏双可见，永不静默。还可选在应用退出后继续保活。",
             "f3.title": "首次运行与升级",
             "f3.body-a": "机器上还没有 rslsync？一键从官方 CDN 下载，经 sha256 校验装入 ",
             "f3.body-b": "。数据路径跨版本不变，解压新版即可继续同步。",
-            "f4.title": "自启与设置",
-            "f4.body": "XDG autostart 开机自启、单实例窗口唤起，还有独立的原生设置窗口管理守护进程、端口与凭据。",
+            "f4.title": "自启、托盘与设置",
+            "f4.body": "XDG autostart 开机自启、单实例窗口唤起、关闭窗口隐藏到托盘（打开 / 设置 / 退出），还有独立的原生设置窗口管理守护进程、端口与凭据。",
             "f5.title": "在线更新",
-            "f5.body": "每天后台检查一次 Ed25519 签名的 manifest，下载前必先询问、验签通过才落盘；rslsync 数据绝不触碰。",
+            "f5.body": "每天后台检查一次签名 manifest，三步走：发现新版本 → 下载并经 Ed25519 验签 → 按安装形态手动应用。下载前必先询问，rslsync 数据绝不触碰。",
             "f6.title": "默认安全",
             "f6.body-a": "Web UI 仅留在 ",
             "f6.body-b": "，经注入认证的环回代理访问——不弹登录框，守护进程绝不响应未认证请求。",
+            "f7.title": "状态一目了然",
+            "f7.body": "每个文件夹五种状态直接来自官方数据：已同步、同步中（进度与剩余时间）、已断开连接（上次同步）、正在扫描、出错；底部状态栏常驻全局 ↓/↑ 速度。",
+            "f8.title": "密钥与对端",
+            "f8.body": "文件夹详情提供读写/只读密钥卡，一键复制给其他设备加入；对端连接态一眼可辨——同步中、已连接、正在连接、离线，附速率与最近同步。",
+            "f9.title": "许可门禁如实呈现",
+            "f9.body": "Resilio 3.x 添加文件夹前需先激活许可。SyncPilot 不伪装也不代劳：未激活/试用中以横幅如实呈现，激活与添加都在官方界面完成，SyncPilot 不设任何付费层。",
             "how.kicker": "上手步骤",
             "how.title": "三步上手",
             "how.sub": "与在其他平台安装官方客户端的体验一致。",
@@ -374,10 +423,14 @@
             "hero.sub-b": "the official Resilio Web UI",
             "hero.sub-c": " inside a native desktop window and manages the official ",
             "hero.sub-d": " daemon behind it. Every screen is the official one — nothing to re-learn.",
+            "hero.sub-e": "SyncPilot stays a shell: its own interface appears only in six places — title bar, status bar, boot card, settings window, update card and tray. It manages Resilio instead of becoming a second UI.",
             "hero.source": "View on GitHub",
             "hero.availability": "Development preview. Free Linux maintenance project under AGPL-3.0. Resilio's separate licence and service limits still apply; no SyncPilot paid tier.",
             "hero.trust": "— x64 / arm64 (Ubuntu 24.04+) — free, AGPL-3.0",
-            "hero.window-note": "Select a verified rslsync binary and a disposable test folder. Connect another test device in the official interface and confirm that a small file transfers both ways before using valuable data.",
+            "demo.phase": "Daemon running",
+            "demo.tag-shell": "SyncPilot shell",
+            "demo.tag-official": "Official Resilio Web UI · Resilio's domain",
+            "demo.caption": "Boundary diagram (not a screenshot): SyncPilot's own interface is only two chrome strips — the title bar and the status bar. The window's protagonist is always the official Resilio Web UI.",
             "dl.generic": "Get SyncPilot",
             "dl.linux": "For Linux",
             "dl.mac": "Download from Releases",
@@ -386,21 +439,27 @@
             "features.eyebrow": "Why SyncPilot",
             "features.title-a": "Official where it matters,",
             "features.title-b": "native where it counts.",
-            "features.sub": "Folders, peers, transfers, preferences, activation — all of it is the official Resilio interface, version-matched to your rslsync build. SyncPilot adds everything the official Linux story was missing.",
+            "features.sub": "The window's protagonist is always the official Resilio interface: folders, peers, transfers, activation — version-matched to your rslsync build, never redrawn, reworded or retranslated. SyncPilot only does what a shell should.",
             "f1.title": "Zero interface drift",
-            "f1.body": "The window embeds the official Resilio Web UI itself — same screens, same workflow as the Windows and macOS clients, nothing re-implemented to fall behind.",
+            "f1.body": "The window embeds the official Resilio Web UI itself — same screens and workflow as the Windows and macOS clients; SyncPilot never redraws, rewords or retranslates it, and nothing re-implemented falls behind.",
             "f2.title": "Daemon lifecycle",
-            "f2.body": "One-click start and stop, adopts an already-running daemon, and a crash watchdog restarts it with exponential backoff. Optionally keeps running after the app exits.",
+            "f2.body": "One-click start and stop, adopts an already-running daemon, and a crash watchdog restarts it with exponential backoff. The phase (running / starting / stopped / crashed / failed) shows in both the title bar chip and the status bar — never silent. Optionally keeps running after the app exits.",
             "f3.title": "Setup & upgrades",
             "f3.body-a": "No rslsync yet? One click fetches the official binary from Resilio's CDN, sha256-verified into ",
             "f3.body-b": ". Data paths never change between versions — unpack an upgrade and keep syncing.",
-            "f4.title": "Autostart & settings",
-            "f4.body": "Launch at login via XDG autostart, single-instance window restore, and a standalone native settings window for the daemon, port and credentials.",
+            "f4.title": "Autostart, tray & settings",
+            "f4.body": "Launch at login via XDG autostart, single-instance window restore, close-to-tray with an Open / Settings / Quit menu, and a standalone native settings window for the daemon, port and credentials.",
             "f5.title": "Online updates",
-            "f5.body": "A daily background check against an Ed25519-signed manifest. SyncPilot asks before downloading, verifies the signature, and never touches rslsync state.",
+            "f5.body": "A daily background check against a signed manifest, in three steps: update found → downloaded and Ed25519-verified → applied manually per install format. SyncPilot asks before downloading and never touches rslsync state.",
             "f6.title": "Secure by default",
             "f6.body-a": "The Web UI stays on ",
             "f6.body-b": " behind an auth-injecting loopback proxy — no login prompts, and the daemon never serves an unauthenticated request.",
+            "f7.title": "Sync states at a glance",
+            "f7.body": "Each folder's five states come straight from official data: synced, syncing (progress and ETA), disconnected (last sync), scanning, and error; the status bar keeps global ↓/↑ speeds always visible.",
+            "f8.title": "Keys & peers",
+            "f8.body": "The folder detail offers read/write and read-only key cards, one click to copy for joining devices; peer states are clear at a glance — syncing, connected, connecting, offline — with rates and last-sync times.",
+            "f9.title": "The licence gate, honestly",
+            "f9.body": "Resilio 3.x requires licence activation before folders can be added. SyncPilot neither hides it nor fakes it: not-activated/trial states surface as an honest banner, activation happens in the official UI, and there is no SyncPilot paid tier.",
             "how.kicker": "Setup",
             "how.title": "Up and running in three steps",
             "how.sub": "Same feel as installing the official client on any other platform.",

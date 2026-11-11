@@ -13,29 +13,42 @@
     font-weight: 600;
 }
 
-/* ---------- Desktop window mock (the embedded official Web UI) ---------- */
+/* ---------- Shell boundary schematic (hero) ----------
+   An annotated diagram of the shell boundary from design/DESIGN.md —
+   clearly not a screenshot. Colors are the product contract tokens
+   (accent #1565d8 from the app icon; chrome vs official-content areas). */
 .hero-visual {
     max-width: 940px;
     margin: 64px auto 0;
 }
-.code-window {
-    background: #1e1e22;
-    border: 1px solid var(--kit-border-strong);
-    border-radius: var(--kit-radius-m);
+.shell-demo {
+    --sp-ok: #1f8a4d; --sp-busy: #1565d8; --sp-warn: #96660d; --sp-err: #c63939;
+    --sp-off: rgba(27, 31, 36, 0.32);
+    --sp-chrome: #f3f4f6; --sp-surface: #ffffff; --sp-raised: #eceff2; --sp-line: #e1e4e8;
+    --sp-ink: #1b1f24; --sp-mute: #6b7480; --sp-ok-soft: #e3f2e9;
+    border: 1px solid rgba(27, 31, 36, 0.2);
+    border-radius: var(--kit-radius-l);
     overflow: hidden;
+    background: var(--sp-chrome);
     box-shadow: 0 30px 70px rgba(31, 29, 26, 0.13), 0 8px 20px rgba(31, 29, 26, 0.06);
 }
-html[data-theme="dark"] .code-window {
+html[data-theme="dark"] .shell-demo {
+    --sp-ok: #55c47f; --sp-busy: #6aa5ff; --sp-warn: #d9a94e; --sp-err: #ef8073;
+    --sp-off: rgba(230, 233, 238, 0.32);
+    --sp-chrome: #15181c; --sp-surface: #1e2126; --sp-raised: #262a30; --sp-line: #30353c;
+    --sp-ink: #e6e9ee; --sp-mute: #8e98a4; --sp-ok-soft: #14301e;
+    border-color: rgba(230, 233, 238, 0.16);
     box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 8px 20px rgba(0, 0, 0, 0.3);
 }
-.window-header {
+.shell-titlebar {
     display: flex;
     align-items: center;
-    padding: 11px 14px;
-    background: rgba(255, 255, 255, 0.045);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    gap: 12px;
+    padding: 11px 16px;
+    background: var(--sp-surface);
+    border-bottom: 1px solid var(--sp-line);
 }
-.window-controls {
+.shell-titlebar .window-controls {
     display: flex;
     gap: 8px;
 }
@@ -47,24 +60,143 @@ html[data-theme="dark"] .code-window {
 .traffic-light--close { background: #FF5F57; }
 .traffic-light--min { background: #FEBC2E; }
 .traffic-light--max { background: #28C840; }
-.window-title {
+.shell-titlebar .shell-demo-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--sp-ink);
+}
+.shell-phase {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 99px;
+    background: var(--sp-ok-soft);
+    color: var(--sp-ok);
+}
+.shell-phase::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+.shell-tag {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--sp-mute);
+    border: 1px dashed var(--sp-line);
+    padding: 2px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+.shell-content {
+    position: relative;
+    padding: 20px;
+}
+.shell-grid {
+    display: flex;
+    gap: 16px;
+}
+.shell-rail {
+    width: 150px;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    padding: 14px 12px;
+    background: var(--sp-chrome);
+    border-right: 1px solid var(--sp-line);
+}
+.shell-rail i {
+    display: block;
+    height: 9px;
+    border-radius: 4px;
+    background: var(--sp-raised);
+}
+.shell-rows {
     flex: 1;
-    text-align: center;
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.55);
-    font-family: var(--kit-font-mono);
-    padding-right: 52px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    padding: 4px 0;
 }
-.window-body {
-    padding: 26px;
+.shell-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-.window-body p {
+.shell-row .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+}
+.shell-row .dot--ok { background: var(--sp-ok); }
+.shell-row .dot--busy { background: var(--sp-busy); }
+.shell-row .dot--warn { background: var(--sp-warn); }
+.shell-row .dot--err { background: var(--sp-err); }
+.shell-row .dot--off { background: var(--sp-off); }
+.shell-row em {
+    display: block;
+    height: 9px;
+    border-radius: 4px;
+    background: var(--sp-raised);
+}
+.shell-row .shell-prog {
+    flex: 1;
+    height: 5px;
+    border-radius: 99px;
+    background: var(--sp-raised);
+    overflow: hidden;
+}
+.shell-row .shell-prog b {
+    display: block;
+    height: 100%;
+    border-radius: 99px;
+    background: var(--sp-busy);
+}
+/* the annotation chip sits centered over the official-content area */
+.shell-tag--official {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     margin: 0;
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 14.5px;
-    line-height: 1.7;
-    max-width: 62ch;
-    margin-inline: auto;
+    background: var(--sp-surface);
+    border: 1px dashed var(--sp-line);
+    font-size: 12px;
+    padding: 6px 16px;
+    box-shadow: 0 6px 18px rgba(20, 23, 28, 0.14);
+}
+.shell-statusbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 16px;
+    background: var(--sp-surface);
+    border-top: 1px solid var(--sp-line);
+    font-size: 12px;
+    color: var(--sp-mute);
+    font-variant-numeric: tabular-nums;
+}
+.shell-statusbar .shell-speed {
+    color: var(--sp-ink);
+    font-weight: 600;
+}
+.shell-caption {
+    margin: 14px 6px 0;
+    font-size: 13px;
+    color: var(--kit-text-3);
+    text-align: center;
+}
+@media (max-width: 640px) {
+    .shell-rail { display: none; }
 }
 
 /* ---------- Security callout strip ---------- */
