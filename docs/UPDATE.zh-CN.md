@@ -6,9 +6,10 @@ SyncPilot 应用内更新器（构建于 `rivet/distribution`）的完整契约�
 
 ## Feed（更新源）
 
-- 通道：`stable`——签名的通道 manifest 是 **`update-stable.json`**，从固定位置
+- 通道：`stable`——签名的通道 manifest 是 **`update-manifest.json`**（家族统一名），从固定位置
   `https://github.com/turlamai/syncpilot/releases/latest/download`
-  获取；manifest *内部*的产物 URL 则钉死在具体 release tag 上。
+  获取；manifest *内部*的产物 URL 则钉死在具体 release tag 上。发布同时附带字节相同的
+  `update-stable.json` 别名，供切换前的旧安装使用，存量清空后退役。
 - manifest 用 **Ed25519 签名**（key id `syncpilot-2026-10`）。公钥内嵌在应用里
   （`racket/syncpilot/version.rkt`）；签名校验失败的 manifest——或携带的
   大小/SHA-256 与未签名文件不符的——在任何提供或下载动作之前就被拒绝。

@@ -42,7 +42,7 @@ AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务�
 | 便携 zip | `syncpilot-<版本>-linux-x64.zip` · `…-arm64.zip` | 与 tar.gz 同布局 |
 | flatpak | `syncpilot-<版本>-linux-x64.flatpak` · `…-arm64.flatpak` | 同一载荷的沙箱化打包（app id `site.jrtx.syncpilot`）；`flatpak install ./syncpilot-<版本>-linux-<架构>.flatpak` 安装，首次安装会从你的 Flatpak 远端拉取 GNOME Platform runtime |
 
-每次发布为版本化安装包发布一份经过校验的 `SHA256SUMS`，外加每个架构的 CycloneDX SBOM 与第三方声明，以及应用内更新器消费的 Ed25519 签名 `update-stable.json`（含标准的 `update-manifest.json` 别名）。单个文件的 `.sha256` sidecar 保留为 CI 工件，不作为额外的发布下载。Ubuntu 24.04+ 自带所需的 GTK 4 / WebKitGTK 6.0；其余依赖已捆绑或属系统基础库。
+每次发布为版本化安装包发布一份经过校验的 `SHA256SUMS`，外加每个架构的 CycloneDX SBOM 与第三方声明，以及应用内更新器消费的 Ed25519 签名 `update-manifest.json`（含字节相同的 `update-stable.json` 别名，供切换前的旧安装继续使用）。单个文件的 `.sha256` sidecar 保留为 CI 工件，不作为额外的发布下载。Ubuntu 24.04+ 自带所需的 GTK 4 / WebKitGTK 6.0；其余依赖已捆绑或属系统基础库。
 
 flatpak 形态共享宿主网络命名空间与家目录，托管守护进程才能同步你的文件夹；在此沙箱内有两处桌面集成按构造降级：托盘图标与开机自启（过滤后的 session bus 不放行 StatusNotifier watcher；沙箱内写入的 XDG autostart 条目，其 `Exec` 路径宿主无法执行），应用数据在 `~/.var/app/site.jrtx.syncpilot` 下从零开始。家目录之外的同步文件夹（外接硬盘）需要再补一条授权，例如用 Flatseal。守护进程管理本身不需要总线：rslsync 以子进程方式经 loopback HTTP 驱动，沙箱内行为不变。
 
@@ -52,7 +52,7 @@ flatpak 形态共享宿主网络命名空间与家目录，托管守护进程才
 
 SyncPilot 有应用内更新器，完整契约见 [docs/UPDATE.zh-CN.md](docs/UPDATE.zh-CN.md)。简述：
 
-- **每天静默检查一次**签名的 `update-stable.json` feed（启动时后台自动检查，24 小时节流；UI 里手动检查不受限），
+- **每天静默检查一次**签名的 `update-manifest.json` feed（启动时后台自动检查，24 小时节流；UI 里手动检查不受限），
 - 有可用更新时**应用内下载**，先对照签名 manifest 校验大小与 SHA-256 再交付，
 - **应用更新是手动步骤、按安装形态各不相同**：tar.gz/zip 解压覆盖应用目录，deb/rpm 安装新包，AppImage 替换文件——rslsync 数据与设置绝不被触碰。各形态交接与恢复手册见 [docs/UPDATE.zh-CN.md](docs/UPDATE.zh-CN.md)。
 

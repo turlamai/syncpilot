@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build update-stable.json for a release and sign it (the family's
+# Build update-manifest.json for a release and sign it (the family's
 # schema-1 Ed25519 envelope; see scripts/update-keys.sh history in taskly
 # and the updater contract in racket/syncpilot/updater.rkt).
 #
@@ -13,12 +13,12 @@
 #   <key-der-path>   Ed25519 private key, DER (OneAsymmetricKey) — the raw
 #                    form of the UPDATE_ED25519_PRIVATE_KEY_B64 CI secret
 #
-# Emits <dist-dir>/update-stable.json with one targz artifact per
-# architecture and versioned download URLs, plus its byte-identical twin
-# <dist-dir>/update-manifest.json (the family-standard feed name — the
-# signature covers the payload, not the filename, so both names verify).
-# Current hosts still fetch update-stable.json; the twin exists so the
-# feed name can migrate client-side later without re-releasing.
+# Emits <dist-dir>/update-manifest.json (the family-canonical feed name)
+# with one targz artifact per architecture and versioned download URLs,
+# plus its byte-identical twin <dist-dir>/update-stable.json — the retired
+# channel-file name pre-switch installs still pull; it retires once those
+# installs clear the field (family transition policy). The signature
+# covers the payload, not the filename, so both names verify.
 # rivet 0.6.1's built-in release manifest would point at the portable zip,
 # which the SyncPilot updater does not consume — the updater fetches the
 # tar.gz payload, so this script signs the manifest the updater actually
@@ -99,7 +99,7 @@ cat > "$SCRIPT" <<RKT
 ;; write-signed-manifest validates the struct against the manifest schema
 ;; before signing, so a malformed manifest fails the release instead of
 ;; shipping something every client would reject.
-(call-with-output-file (build-path dist "update-stable.json")
+(call-with-output-file (build-path dist "update-manifest.json")
   #:exists 'truncate/replace
   (lambda (out)
     (write-signed-manifest manifest
@@ -108,7 +108,7 @@ cat > "$SCRIPT" <<RKT
                            out)
     (newline out)))
 (printf "manifest: ~a (2 targz artifacts, key-id ~a)\\n"
-        (build-path dist "update-stable.json") key-id)
+        (build-path dist "update-manifest.json") key-id)
 RKT
 
 # rivet must be installed for the signer; the release publish job links a
@@ -116,4 +116,4 @@ RKT
 racket "$SCRIPT"
 
 # Dual-name feed: the same signed bytes under both names (see header).
-cp "$DIST/update-stable.json" "$DIST/update-manifest.json"
+cp "$DIST/update-manifest.json" "$DIST/update-stable.json"

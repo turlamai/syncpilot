@@ -121,10 +121,12 @@
       (if (and (string? configured) (not (string=? configured "")))
           configured
           default-update-base-url)))
+  ;; Family-canonical feed name. The release also publishes the retired
+  ;; update-stable.json as a byte-identical alias so pre-switch installs
+  ;; keep updating (family transition policy) — this side stopped reading
+  ;; it, so the alias can retire once those installs clear the field.
   (string-append (string-trim base "/" #:right? #t)
-                 "/update-"
-                 (symbol->string app-channel)
-                 ".json"))
+                 "/update-manifest.json"))
 
 ;; ---------- settings commit seam ----------
 

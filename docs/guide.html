@@ -456,7 +456,7 @@ var _hmt = _hmt || [];
     <!-- =================== FAQ: update =================== -->
     <section class="manual-section" id="faq-update">
       <h2 class="manual-h2"><span class="h2-emoji">⬆️</span><span data-i18n="fu.title">怎么更新？</span></h2>
-      <p data-i18n-html="fu.intro">应用内更新器每天静默检查一次 Ed25519 签名的 <code>update-stable.json</code> feed。想立刻查：设置 → <code>Check for updates</code>（不受 24 小时节流限制）。</p>
+      <p data-i18n-html="fu.intro">应用内更新器每天静默检查一次 Ed25519 签名的 <code>update-manifest.json</code> feed。想立刻查：设置 → <code>Check for updates</code>（不受 24 小时节流限制）。</p>
       <ol>
         <li data-i18n="fu.s1">有新版 → 应用内下载。字节数与 SHA-256 先对签名 manifest 核验，通过才交给你。</li>
         <li data-i18n="fu.s2">验证过的 tar.gz 落在数据目录的 updates/ 下，并有打开文件夹的入口。</li>
@@ -468,7 +468,7 @@ var _hmt = _hmt || [];
           <div class="callout-body" data-i18n="fu.safe-body">更新器只写 updates/ 目录；设置、凭据、storage/ 与已同步文件全部原样保留。</div>
         </div>
       </div>
-      <p data-i18n-html="fu.legacy">0.7.x 起用的就是这条 <code>update-stable.json</code> feed——在应用内「检查更新」即可拿到新版本。0.6.1 及更早版本的下载器有 302 重定向缺陷（0.7.0 已修复），请手动下载新安装包升级一次；此后的每日检查和应用内下载是自动的，应用更新这一步仍按上面的安装形态手动完成。</p>
+      <p data-i18n-html="fu.legacy">0.7.x 起就有应用内更新（旧版读 <code>update-stable.json</code>，当前版本读家族统一的 <code>update-manifest.json</code>，发布同时携带两者且字节相同）——在应用内「检查更新」即可拿到新版本。0.6.1 及更早版本的下载器有 302 重定向缺陷（0.7.0 已修复），请手动下载新安装包升级一次；此后的每日检查和应用内下载是自动的，应用更新这一步仍按上面的安装形态手动完成。</p>
     </section>
 
     <!-- =================== FAQ: uninstall =================== -->
@@ -602,13 +602,13 @@ const i18n = {
     'fl.lang': 'The app language follows the system by default. Settings → Desktop → Language: follow system / 简体中文 / English; it applies on the next launch (a toast reminds you to restart). Window styling follows the system GTK theme.',
     'fl.site': 'This website has a language switcher and a ◐ theme toggle at the top right; your choice is remembered. Without one, the browser locale and system appearance decide.',
     'fu.title': 'How do I update?',
-    'fu.intro': 'The in-app updater silently checks the Ed25519-signed <code>update-stable.json</code> feed once a day. Check now: Settings → <code>Check for updates</code> (bypasses the 24-hour throttle).',
+    'fu.intro': 'The in-app updater silently checks the Ed25519-signed <code>update-manifest.json</code> feed once a day. Check now: Settings → <code>Check for updates</code> (bypasses the 24-hour throttle).',
     'fu.s1': 'Update available → download in-app. Size and SHA-256 are verified against the signed manifest before anything is trusted.',
     'fu.s2': 'The verified tar.gz lands under updates/ in the data directory, with an open-folder handoff.',
     'fu.s3': 'Apply manually: extract the tar.gz over the app directory (tar.gz / zip installs) and restart <code>RivetHost</code>. Simpler for deb / rpm: download and install the new package. AppImage: download the new file from the release page and replace the old one (check the <code>.sha256</code> sidecar first).',
     'fu.safe-title': 'rslsync data is never touched',
     'fu.safe-body': 'The updater only writes under updates/. Settings, credentials, storage/ and synced files all stay exactly as they are.',
-    'fu.legacy': 'Installs from 0.7.x already use this same <code>update-stable.json</code> feed — just run “Check for updates” in the app to pick up a new version. 0.6.1 and earlier carry a 302-redirect flaw in the downloader (fixed in 0.7.0): update manually once; from then on the daily check and the in-app download are automatic, while applying stays a manual step per the install format above.',
+    'fu.legacy': 'In-app updates have shipped since 0.7.x (older builds read <code>update-stable.json</code>, the current build reads the family-canonical <code>update-manifest.json</code> — releases carry both names byte-identically) — just run “Check for updates” in the app to pick up a new version. 0.6.1 and earlier carry a 302-redirect flaw in the downloader (fixed in 0.7.0): update manually once; from then on the daily check and the in-app download are automatic, while applying stays a manual step per the install format above.',
     'fm.title': 'How do I uninstall?',
     'fm.s1': 'Turn off autostart first: Settings → Desktop → Launch at login (this removes the autostart entry).',
     'fm.s2': 'Remove the app: <code>deb</code> via <code>sudo apt remove syncpilot</code>; <code>rpm</code> via <code>sudo dnf remove syncpilot</code>; AppImage / tar.gz / zip — just delete the file or directory.',
@@ -712,13 +712,13 @@ const i18n = {
     'fl.lang': '应用语言默认跟随系统。设置 → Desktop → Language，选 跟随系统 / 简体中文 / English；保存后下次启动生效（保存时会提示重启）。应用窗口样式跟随 GTK 系统主题。',
     'fl.site': '本站（产品页）右上有语言和 ◐ 主题切换，选择会被记住；不选则跟随浏览器语言与系统深浅色。',
     'fu.title': '怎么更新？',
-    'fu.intro': '应用内更新器每天静默检查一次 Ed25519 签名的 <code>update-stable.json</code> feed。想立刻查：设置 → <code>Check for updates</code>（不受 24 小时节流限制）。',
+    'fu.intro': '应用内更新器每天静默检查一次 Ed25519 签名的 <code>update-manifest.json</code> feed。想立刻查：设置 → <code>Check for updates</code>（不受 24 小时节流限制）。',
     'fu.s1': '有新版 → 应用内下载。字节数与 SHA-256 先对签名 manifest 核验，通过才交给你。',
     'fu.s2': '验证过的 tar.gz 落在数据目录的 updates/ 下，并有打开文件夹的入口。',
     'fu.s3': '手动应用：把 tar.gz 解压覆盖应用目录（tar.gz / zip 安装的用户），重启 <code>RivetHost</code>。deb / rpm 用户更简单：直接下载安装新版包即可。AppImage 用户：从 release 页下载新文件替换旧的（带 <code>.sha256</code> 可先核对）。',
     'fu.safe-title': 'rslsync 数据绝不触碰',
     'fu.safe-body': '更新器只写 updates/ 目录；设置、凭据、storage/ 与已同步文件全部原样保留。',
-    'fu.legacy': '0.7.x 起用的就是这条 <code>update-stable.json</code> feed——在应用内「检查更新」即可拿到新版本。0.6.1 及更早版本的下载器有 302 重定向缺陷（0.7.0 已修复），请手动下载新安装包升级一次；此后的每日检查和应用内下载是自动的，应用更新这一步仍按上面的安装形态手动完成。',
+    'fu.legacy': '0.7.x 起就有应用内更新（旧版读 <code>update-stable.json</code>，当前版本读家族统一的 <code>update-manifest.json</code>，发布同时携带两者且字节相同）——在应用内「检查更新」即可拿到新版本。0.6.1 及更早版本的下载器有 302 重定向缺陷（0.7.0 已修复），请手动下载新安装包升级一次；此后的每日检查和应用内下载是自动的，应用更新这一步仍按上面的安装形态手动完成。',
     'fm.title': '怎么卸载？',
     'fm.s1': '先关自启：设置 → Desktop → Launch at login 关掉（会移除自启项）。',
     'fm.s2': '删应用：<code>deb</code> 用 <code>sudo apt remove syncpilot</code>；<code>rpm</code> 用 <code>sudo dnf remove syncpilot</code>；AppImage / tar.gz / zip 删文件或目录即可。',

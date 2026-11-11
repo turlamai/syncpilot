@@ -21,6 +21,16 @@ All notable changes to SyncPilot are documented here. Format: [Keep a Changelog]
 
 ### Changed
 
+- **The updater reads the family-canonical `update-manifest.json` feed.**
+  The manifest URL was the pre-switch channel-file name
+  (`update-stable.json`); it now serves the family-standard
+  `update-manifest.json` every other product already reads
+  (syncpilot#31). Releases keep publishing both names byte-identically
+  per the family transition policy, so pre-switch installs keep
+  updating; the alias retires once those installs clear the field.
+  README, SECURITY.md, docs/UPDATE(.zh-CN).md, the product manual and the
+  manifest script follow the canonical name.
+
 - Preserve independent CI results for every `main` commit even when runners
   are queued; continue cancelling only superseded PR checks without changing
   the Linux-only product acceptance or pinned Rivet dependency.

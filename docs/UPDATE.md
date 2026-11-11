@@ -7,8 +7,8 @@ This page is the single source of truth; the README summarizes it.
 
 ## Feed
 
-- Channel: `stable` — the signed channel manifest is **`update-stable.json`**,
-  fetched from the moving
+- Channel: `stable` — the signed channel manifest is **`update-manifest.json`**
+  (the family-canonical name), fetched from the moving
   `https://github.com/turlamai/syncpilot/releases/latest/download`
   location. Artifact URLs *inside* the manifest are pinned to the concrete
   release tag.
@@ -21,9 +21,11 @@ This page is the single source of truth; the README summarizes it.
 - A tagged release is **blocked before Linux builds** if the Ed25519 signing
   secret is absent, malformed or does not match the public key embedded in
   shipped clients. The publish step checks again and requires both signed
-  `update-stable.json` and byte-identical `update-manifest.json` before any
-  GitHub Release is created. CI tests missing, malformed and unrelated keys
-  offline; the real release private key is never part of CI test fixtures.
+  `update-manifest.json` and byte-identical `update-stable.json` (the
+  retired channel-file name, kept as an alias until pre-switch installs
+  clear the field) before any GitHub Release is created. CI tests missing,
+  malformed and unrelated keys offline; the real release private key is
+  never part of CI test fixtures.
 - SyncPilot currently ships **Linux only**; no paid publisher certificate is
   required for DEB, RPM or AppImage. Update-feed signing is independent of
   OS executable signing. No Apple notarization or Windows Authenticode is

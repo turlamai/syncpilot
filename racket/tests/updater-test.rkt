@@ -44,22 +44,22 @@
    (member (installer-extension) '(".dmg" ".msi" ".tar.gz"))
    "known installer extension"))
 
-(test-case "manifest url joins base and channel"
+(test-case "manifest url joins base and canonical feed name"
   (check-equal? (manifest-url (default-settings))
-                (string-append default-update-base-url "/update-stable.json"))
+                (string-append default-update-base-url "/update-manifest.json"))
   (check-equal?
    (manifest-url (struct-copy app-settings (default-settings)
                               [update-base-url "https://dl.example/sp/"]))
-   "https://dl.example/sp/update-stable.json")
+   "https://dl.example/sp/update-manifest.json")
   (check-equal?
    (manifest-url (struct-copy app-settings (default-settings)
                               [update-base-url "https://dl.example/sp"]))
-   "https://dl.example/sp/update-stable.json")
+   "https://dl.example/sp/update-manifest.json")
   ;; an empty override falls back to the embedded default
   (check-equal?
    (manifest-url (struct-copy app-settings (default-settings)
                               [update-base-url ""]))
-   (string-append default-update-base-url "/update-stable.json")))
+   (string-append default-update-base-url "/update-manifest.json")))
 
 (test-case "signed manifest verifies and selects updates"
   ;; throwaway keypair: same DER formats the release pipeline uses
@@ -72,7 +72,7 @@
 
   (define tmp (make-temporary-file "syncpilot-updater-~a" 'directory))
   (define priv-path (build-path tmp "priv.der"))
-  (define manifest-path (build-path tmp "update-stable.json"))
+  (define manifest-path (build-path tmp "update-manifest.json"))
   (call-with-output-file priv-path
     (lambda (o) (write-bytes priv-der o)) #:exists 'truncate/replace)
 

@@ -33,8 +33,10 @@ In scope:
   (`racket/syncpilot/install.rkt`, `scripts/install-rslsync.sh`).
   Adopting a port that answers with different credentials must fail
   closed, not drive a foreign daemon blindly.
-- Update trust: verification of the Ed25519-signed `update-stable.json`
-  manifest and the downloaded artifact's size and SHA-256
+- Update trust: verification of the Ed25519-signed `update-manifest.json`
+  manifest (with the retired `update-stable.json` name kept as a
+  byte-identical alias for pre-switch installs) and the downloaded
+  artifact's size and SHA-256
   (`racket/syncpilot/updater.rkt`, `racket/syncpilot/version.rkt`,
   `scripts/make-update-manifest.sh`, `scripts/check-release-signing-key.sh`;
   key id `syncpilot-2026-10`).
