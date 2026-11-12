@@ -491,6 +491,14 @@
     },
     {
       "arguments": [],
+      "name": "daemon-autostop",
+      "result": {
+        "kind": "record",
+        "name": "DaemonStatus"
+      }
+    },
+    {
+      "arguments": [],
       "name": "daemon-restart",
       "result": {
         "kind": "record",

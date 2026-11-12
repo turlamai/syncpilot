@@ -49,6 +49,9 @@ jobs:
           # backs the app updater (direct dependency), not rivet.
           raco pkg install --auto --no-docs 'https://github.com/turlamai/rivet.git#${{ env.RIVET_PIN }}'
           raco pkg install --auto --no-docs crypto
+      - name: Schema baseline is compatible
+        run: raco rivet schema check rivet-schema.json --json
+        shell: bash
       - name: Domain core tests
         run: raco test racket/
 
