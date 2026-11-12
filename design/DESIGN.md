@@ -22,24 +22,18 @@
 - **防错一致**：不发明 Resilio 没有的语义（3.x 已移除暂停，界面不得出现暂停）；破坏性操作（删除文件夹、重启守护进程）需确认；许可门禁如实呈现，不伪装成功能故障。
 - **层级克制**：bg < surface < 浮层三层足够；accent 只给交互与进行态，同步结果态用语义色。
 
-## Tokens（推导值，依据见开头；亮暗成对）
+## Tokens（推导语义，依据见开头；亮暗成对）
 
-| Token | Light | Dark | 用途 |
-|---|---|---|---|
-| `--bg` | `#f3f4f6` | `#15181c` | 画布/窗口底 |
-| `--surface` | `#ffffff` | `#1e2126` | 卡片/浮层/对话框 |
-| `--raised` | `#eceff2` | `#262a30` | 悬浮/选中底 |
-| `--line` | `#e1e4e8` | `#30353c` | 分隔 |
-| `--ink` | `#1b1f24` | `#e6e9ee` | 主文字 |
-| `--mute` | `#6b7480` | `#8e98a4` | 次级文字 |
-| `--accent` | `#1565d8` | `#6aa5ff` | 选中/链接/进行态/主按钮（icon 蓝） |
-| `--accent-soft` | `#e6effc` | `#1c2b42` | accent 弱底（徽标/进度槽） |
-| `--ok` | `#1f8a4d` | `#55c47f` | 已同步/运行中/对端在线 |
-| `--ok-soft` | `#e3f2e9` | `#14301e` | ok 弱底 |
-| `--err` | `#c63939` | `#ef8073` | 失败/崩溃/校验不匹配 |
-| `--err-soft` | `#fbebeb` | `#3a221e` | err 弱底 |
-| `--warn` | `#96660d` | `#d9a94e` | 正在扫描/需注意（许可等） |
-| `--warn-soft` | `#f7efdc` | `#32280f` | warn 弱底 |
+推导依据（why，三条）：① accent 蓝取自 `assets/app-icon.png`（用户在托盘/启动器里看到的产品色），按 WCAG 对比度在亮/暗底各校一档；② 中性色按 Linux 桌面基线（GTK Adwaita 冷中性灰）推导——chrome 必须与内嵌的官方 Resilio Web UI 同框不冲突，家族官网的暖纸色/terracotta 属 site-kit 网页体系，不搬进桌面 chrome；③ 圆角三档 8/12/16、动效 150ms 承继家族 site-kit（`site/family.css`）。值载体 = 原型 `design/prototype/shared.css`（宿主实现落地时从这里取值），本表只记语义。
+
+| Token | 语义 |
+|---|---|
+| `--bg --surface --raised --line` | 画布窗口底 / 卡片浮层对话框 / 悬浮选中底 / 分隔 |
+| `--ink --mute` | 主/次级文字 |
+| `--accent --accent-soft` | icon 蓝：选中/链接/进行态/主按钮 + 弱底（徽标/进度槽） |
+| `--ok --ok-soft` | 已同步/运行中/对端在线 + 弱底 |
+| `--err --err-soft` | 失败/崩溃/校验不匹配 + 弱底 |
+| `--warn --warn-soft` | 正在扫描/需注意（许可等）+ 弱底 |
 
 - **字体**：`system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif`；正文 14px/1.55，行标题 600，次级 13px，辅助 12px；速度/大小等数字用 `tabular-nums`。
 - **圆角**：窗口 16px · 卡片 12px · 控件 8px（承继 family site-kit 8/12/16 三档）。**间距节奏**：4/8/12/16/24。**动效**：150ms ease，不过度。
