@@ -3,7 +3,7 @@
 原型（`design/prototype/`）与实现（`linux/` GTK 宿主）都遵循本文件；改视觉先改这里，再同步实现。
 
 **Tokens 来源说明**：宿主目前无自定义 CSS 体系（GTK 默认 Adwaita），故 tokens 为推导值，依据三条，逐项注明——
-1. **accent 蓝**取自 `app-icon.png`（用户在托盘/启动器里看到的产品色，桌面品牌唯一载体），按 WCAG 对比度在亮/暗底上各校一档；
+1. **accent 蓝**取自 `assets/app-icon.png`（用户在托盘/启动器里看到的产品色，桌面品牌唯一载体），按 WCAG 对比度在亮/暗底上各校一档；
 2. **中性色**按 Linux 桌面基线（GTK Adwaita 冷中性灰）推导——chrome 必须与内嵌的官方 Resilio Web UI（中性灰系）同框不冲突，家族官网的暖纸色/terracotta 属 site-kit 网页体系，不搬进桌面 chrome；
 3. **圆角三档 8/12/16、动效 150ms** 承继家族 site-kit（`docs/family.css`）的框架值，保证家族一致性。
 
@@ -44,7 +44,7 @@
 - **字体**：`system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif`；正文 14px/1.55，行标题 600，次级 13px，辅助 12px；速度/大小等数字用 `tabular-nums`。
 - **圆角**：窗口 16px · 卡片 12px · 控件 8px（承继 family site-kit 8/12/16 三档）。**间距节奏**：4/8/12/16/24。**动效**：150ms ease，不过度。
 - **语言**：界面文案跟随产品 i18n 单源（`shared/i18n/{zh,en}.json`，zh 默认）；官方 Web UI 区域文案归 rslsync 自己的本地化，SyncPilot 不代写。
-- **品牌标记**：蓝色圆角方块 + 双循环箭头（`app-icon.png` 的矢量简化），只出现在标题栏/引导卡/关于节，不重复刷存在感。
+- **品牌标记**：蓝色圆角方块 + 双循环箭头（`assets/app-icon.png` 的矢量简化），只出现在标题栏/引导卡/关于节，不重复刷存在感。
 
 ## 组件词汇
 
