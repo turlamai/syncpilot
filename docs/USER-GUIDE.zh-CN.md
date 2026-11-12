@@ -42,7 +42,7 @@ AGPL-3.0 许可的免费 Linux 维护项目。Resilio 的独立许可和服务�
 
 ## 深入阅读
 
-- [详细手册](../docs/guide.html)
+- [详细手册](../site/guide.html)
 - [更新](../docs/UPDATE.md)
 - [守护进程接口](../docs/api-verified.md)
 - [项目说明与开发入口](../README.zh-CN.md)

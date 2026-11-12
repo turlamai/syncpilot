@@ -5,7 +5,7 @@
 **Tokens 来源说明**：宿主目前无自定义 CSS 体系（GTK 默认 Adwaita），故 tokens 为推导值，依据三条，逐项注明——
 1. **accent 蓝**取自 `assets/app-icon.png`（用户在托盘/启动器里看到的产品色，桌面品牌唯一载体），按 WCAG 对比度在亮/暗底上各校一档；
 2. **中性色**按 Linux 桌面基线（GTK Adwaita 冷中性灰）推导——chrome 必须与内嵌的官方 Resilio Web UI（中性灰系）同框不冲突，家族官网的暖纸色/terracotta 属 site-kit 网页体系，不搬进桌面 chrome；
-3. **圆角三档 8/12/16、动效 150ms** 承继家族 site-kit（`docs/family.css`）的框架值，保证家族一致性。
+3. **圆角三档 8/12/16、动效 150ms** 承继家族 site-kit（`site/family.css`）的框架值，保证家族一致性。
 
 ## Brief（2026-11-11）
 

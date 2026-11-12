@@ -42,7 +42,7 @@ Report problems in [GitHub Issues](https://github.com/turlamai/syncpilot/issues)
 
 ## Further reading
 
-- [Detailed manual](../docs/guide.html)
+- [Detailed manual](../site/guide.html)
 - [Updates](../docs/UPDATE.md)
 - [Verified daemon interface](../docs/api-verified.md)
 - [Project overview and development](../README.md)

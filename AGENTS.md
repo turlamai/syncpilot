@@ -58,7 +58,8 @@ suite 只要未执行、超时、失败或没有产生本次运行的新证据�
 ├── racket/             Racket 领域核心 + tests/
 ├── shared/i18n/        zh.json / en.json 单源
 ├── linux/              GTK4 宿主（唯一宿主；详见 linux/README.md）
-├── docs/               产品官网（GitHub Pages → syncpilot.jrtx.site）
+├── site/               产品官网（GitHub Pages → syncpilot.jrtx.site）
+├── docs/               用户文档（USER-GUIDE 等 .md）
 └── scripts/            gen-c-strings.mjs（i18n → C 头）、install-rslsync.sh
 ```
 
