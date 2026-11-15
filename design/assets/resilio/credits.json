@@ -1,0 +1,10 @@
+{
+  "sync-wordmark.png": {
+    "sourcePage": "https://help.resilio.com/hc/en-us/articles/204755009-Sync-Main-View-Desktop",
+    "sourceImage": "https://syncapp.zendesk.com/hc/article_attachments/32823473877907",
+    "owner": "Resilio, Inc.",
+    "license": "Copyright Resilio, Inc.; brand reference for the user-requested internal client prototype; no redistribution license asserted",
+    "processing": "Wordmark extracted from the official reference screenshot; 176 × 80 pixels",
+    "referenceDate": "2026-11-14"
+  }
+}
