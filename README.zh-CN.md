@@ -1,5 +1,7 @@
 # SyncPilot
 
+**产品：**[产品主页](https://syncpilot.jrtx.site/) · **支持：**[问题与反馈](https://github.com/turlamai/syncpilot/issues) · [当前交付策略](https://github.com/turlamai/turlamai.github.io/blob/master/PORTFOLIO.zh-CN.md)
+
 [Resilio Sync](https://www.resilio.com/individuals/)（`rslsync`）的 Linux 原生桌面壳——在桌面窗口内嵌**官方 Resilio Web UI**，界面与操作流程和官方 Windows/macOS 客户端完全一致，并补齐 Linux 缺的部分：守护进程管理、开机自启、崩溃看护和官方二进制首次运行安装。
 
 [![release](https://img.shields.io/github/v/release/turlamai/syncpilot)](https://github.com/turlamai/syncpilot/releases/latest) ![platform](https://img.shields.io/badge/platform-Linux-lightgrey) ![built with](https://img.shields.io/badge/built%20with-Rivet-9333ea) [![CI](https://github.com/turlamai/syncpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/turlamai/syncpilot/actions/workflows/ci.yml) [![License](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
