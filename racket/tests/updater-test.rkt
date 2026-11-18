@@ -32,17 +32,13 @@
   (cons cell (lambda (s) (set-box! cell s))))
 
 (test-case "platform symbols match rivet release manifests"
-  (case (system-type 'os)
-    [(macosx) (check-equal? (platform-symbol) 'macos)]
-    [(windows) (check-equal? (platform-symbol) 'windows)]
-    [else (check-equal? (platform-symbol) 'linux)])
+  ;; SyncPilot is Linux-only: the updater always manages the Linux
+  ;; artifact, on any host the domain-core tests happen to run on.
+  (check-equal? (platform-symbol) 'linux)
   (check-not-false (memq (architecture-symbol) '(arm64 x64))))
 
 (test-case "installer extension follows platform"
-  ;; SyncPilot ships Linux-only, but dev runs and CI hosts are macOS too
-  (check-not-false
-   (member (installer-extension) '(".dmg" ".msi" ".tar.gz"))
-   "known installer extension"))
+  (check-equal? (installer-extension) ".tar.gz"))
 
 (test-case "manifest url joins base and canonical feed name"
   (check-equal? (manifest-url (default-settings))

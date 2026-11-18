@@ -89,8 +89,8 @@
       "syncpilot-device"))
 
 ;; App data dir: contract path is ~/.local/share/site.jrtx.syncpilot on
-;; Linux; other platforms get their conventional base so dev runs and tests
-;; stay out of Linux's way. Tests pass their own directory explicitly.
+;; Linux — the only platform SyncPilot ships. There is deliberately no
+;; fallback for other hosts; callers pass their own directory explicitly.
 (define (default-data-dir)
   (define home (find-system-path 'home-dir))
   (build-path
@@ -99,8 +99,7 @@
                (if (and xdg (not (string=? xdg "")))
                    (string->path xdg)
                    (build-path home ".local" "share")))]
-     [(macosx) (build-path home "Library" "Application Support")]
-     [else (build-path home "AppData" "Roaming")])
+     [else (error 'default-data-dir "SyncPilot is Linux-only")])
    "site.jrtx.syncpilot"))
 
 ;; --------------------------------------------------------------- persistence

@@ -45,23 +45,17 @@
          start-download!
          rollout-bucket)
 
-;; rivet release tooling emits these exact symbols into update manifests
-(define (platform-symbol)
-  (case (system-type 'os)
-    [(macosx) 'macos]
-    [(windows) 'windows]
-    [else 'linux]))
+;; rivet release tooling emits these exact symbols into update manifests.
+;; SyncPilot ships Linux-only: the updater always manages the Linux
+;; artifact, even while the domain-core tests run on a macOS dev host.
+(define (platform-symbol) 'linux)
 
 (define (architecture-symbol)
   (case (system-type 'arch)
     [(aarch64 arm64) 'arm64]
     [else 'x64]))
 
-(define (installer-extension)
-  (case (system-type 'os)
-    [(macosx) ".dmg"]
-    [(windows) ".msi"]
-    [else ".tar.gz"]))
+(define (installer-extension) ".tar.gz")
 
 (define maximum-download-bytes (* 800 1024 1024))
 

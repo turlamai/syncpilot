@@ -91,6 +91,10 @@
 
 仍不满足完全一致退出条件：其余 5 屏为旧稿、固定客户端版本与语言未锁定、宿主未按本页对齐（#30 跟踪）。
 
+### 平台范围（2026-11-18 · issue #36 重申）
+
+SyncPilot 本体仅 Linux（与仓 AGENTS.md 一致）；其他平台由官方 Resilio 客户端作为同步对端覆盖，不做、也不必做本产品移植。原型与示例数据遵循：**「本机」设备必须为 Linux 设备名**（示例 `jiren-linux`）；对端可以是任何运行官方客户端的平台（macOS/Windows/NAS，示例 `jiren-macbook` 标注「官方客户端 · macOS」）。域核心的更新器已锁定 Linux 发布物（`platform-symbol` = 'linux、安装物恒为 tar.gz）；`default-data-dir` 无其他平台回退。
+
 ## 2026-11-15 · 原型交互补齐
 
 入口为 prototype/folders.html。设置入口可达，端口限制 1024–65535；新增本地示例、详情页、历史和共享入口有反馈，不调用 Resilio。外观还原页与系统外壳的状态样本保持各自范围。

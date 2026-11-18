@@ -21,6 +21,13 @@ All notable changes to SyncPilot are documented here. Format: [Keep a Changelog]
 
 ### Changed
 
+- **The updater is Linux-locked in code, not just in policy.** SyncPilot
+  ships Linux-only and the updater now says so: `platform-symbol` is the
+  constant `'linux` and the artifact extension is always `.tar.gz`, on
+  any host the domain core runs on; `default-data-dir` grew no other
+  platform's fallback. Nothing changes for Linux installs — the branches
+  removed were unreachable in the product (syncpilot#36).
+
 - **The updater reads the family-canonical `update-manifest.json` feed.**
   The manifest URL was the pre-switch channel-file name
   (`update-stable.json`); it now serves the family-standard
