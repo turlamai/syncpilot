@@ -2,109 +2,79 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SyncPilot — 空态概览 · 许可横幅</title>
-<link rel="stylesheet" href="shared.css">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SyncPilot — Resilio Sync 文件夹（空态）</title>
 <style>
-  /* ==== 首次运行：许可横幅 + 空文件夹列表（官方界面语义） ==== */
-  .rail {
-    width: 232px; flex: none; display: flex; flex-direction: column;
-    background: var(--surface); border-right: 1px solid var(--line); padding: 12px 10px;
-  }
-  .sect { font-size: 11px; font-weight: 600; letter-spacing: .8px; color: var(--mute); padding: 12px 8px 6px; }
-  .nav { display: flex; flex-direction: column; gap: 2px; }
-  .item {
-    display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px;
-    font-size: 13px; color: var(--ink); cursor: default; user-select: none;
-  }
-  .item .st { width: 7px; height: 7px; border-radius: 50%; flex: none; }
-  .st.ok { background: var(--ok); } .st.off { background: var(--mute); opacity: .45; }
-  .rail .hint { font-size: 11.5px; color: var(--mute); padding: 6px 8px; line-height: 1.6; }
-  .rail .foot { margin-top: auto; border-top: 1px solid var(--line); padding-top: 8px; }
-  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  .head { flex: none; display: flex; align-items: center; gap: 12px; padding: 14px 20px 12px; }
-  .head h1 { font-size: 17px; font-weight: 700; }
-  .head .sub { font-size: 12.5px; color: var(--mute); margin-top: 2px; }
-  .head .sp { flex: 1; }
-  .empty { flex: 1; display: grid; place-items: center; padding: 0 24px 24px; }
-  .card {
-    width: 460px; max-width: 100%; text-align: center; padding: 36px 36px 32px;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-  }
-  .card .big {
-    width: 56px; height: 56px; border-radius: 14px; background: var(--accent-soft); color: var(--accent);
-    display: grid; place-items: center; margin-bottom: 8px;
-  }
-  .card h2 { font-size: 16px; font-weight: 700; }
-  .card p { font-size: 13px; color: var(--mute); line-height: 1.65; }
-  .card .acts { display: flex; gap: 10px; margin-top: 14px; }
-  .card .btn { height: 34px; }
-  .card .note { margin-top: 12px; font-size: 11.5px; color: var(--mute); }
-  .card .note kbd { margin: 0 2px; }
+/* ==== 主视图空态（#35）：与 folders.html 同一套官方参数，内容区为
+   官方空态语义（"还没有同步文件夹 / 添加一个即可开始同步"）。
+   本页样式独立定义，避免影响其他页面。 ==== */
+:root{--navy:#000044;--blue:#1686ff;--link:#087bea;--text:#606060;--muted:#777;--line:#dadada;--bar:#f8f8fa;--white:#fff;--radius:3px;--font:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#e9ebee;color:var(--text);font:14px/1.5 var(--font);padding:32px}button,input{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}svg{width:24px;height:24px;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app{width:100%;max-width:1180px;min-height:680px;height:calc(100dvh - 64px);margin:auto;background:var(--white);display:flex;flex-direction:column;border:1px solid #c9c9ce;box-shadow:0 8px 32px #00000012}
+.toolbar{display:grid;grid-template-columns:60px 1fr 240px;min-height:60px;background:var(--navy);color:white;flex:none}
+.tool{width:60px;height:60px;border:0;background:none;color:white;display:grid;place-items:center}.tool svg{width:28px;height:28px;stroke-width:2.2}.tool:hover{background:#ffffff16}.tool.selected{background:var(--blue)}
+.wordmark{display:flex;align-items:center;justify-content:center;padding-left:180px}.wordmark img{width:88px;height:auto;aspect-ratio:176/80;display:block}
+.nav{display:flex}.bell{opacity:.4}
+.add{position:relative}.add summary{list-style:none;cursor:pointer;display:grid;place-items:center;width:60px;height:60px}.add summary::-webkit-details-marker{display:none}.add summary:hover{background:#ffffff16}.add summary svg{width:30px;height:30px;stroke-width:3}
+.popup{position:absolute;z-index:5;background:#3e3e3e;color:#fff;border-radius:var(--radius);padding:8px 0;box-shadow:0 4px 16px #0002;min-width:208px}.add .popup{left:8px;top:56px}
+.popup button{display:block;border:0;background:none;color:inherit;text-align:left;width:100%;padding:8px 16px}.popup button:hover{background:#525252}
+.filters{background:var(--bar);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;min-height:48px;padding:0 12px 0 20px;flex:none}
+.tabs{display:flex}.tab{border:0;background:none;padding:0 24px;font-weight:600;white-space:nowrap;line-height:16px;border-right:1px solid var(--line);color:var(--text)}.tab:first-child{padding-left:0}.tab:last-child{border:0}.tab[aria-selected=true]{color:#00a6ce}
+.search{margin-left:auto;display:flex;align-items:center;gap:8px;border:1px solid #c9c9c9;border-radius:4px;background:white;padding:4px 8px;width:256px}.search svg{width:18px;height:18px;color:#999;flex:none}.search input{border:0;outline:none;width:100%;min-width:0;color:var(--text);background:transparent}.search input::placeholder{color:#aaa}
+.empty{flex:1;display:grid;place-items:center;padding:24px;text-align:center;color:var(--muted)}
+.empty .big{width:56px;height:56px;border-radius:14px;color:#c2c2c6;fill:#c2c2c6;stroke:none;margin:0 auto 14px}.empty .big svg{width:56px;height:56px}
+.empty h2{font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px}
+.empty p{font-size:13px}
+.empty .demo-note{margin-top:18px}
+.footer{height:40px;border-top:1px solid var(--line);background:var(--bar);display:flex;align-items:center;justify-content:space-between;flex:none;padding:0 20px}
+.footer button{border:0;background:none;color:#999;padding:0 16px 0 0;height:24px;border-right:1px solid var(--line)}.footer svg{width:22px;height:22px}.footer .activity{border:0;padding:0 0 0 16px;border-left:1px solid var(--line);border-right:0}
+dialog{width:min(480px,calc(100vw - 32px));border:1px solid var(--line);border-radius:4px;padding:0;color:var(--text);font:14px/1.5 var(--font);box-shadow:0 16px 64px #0003}dialog::backdrop{background:#0005}
+.dialog-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}h1{font-size:18px;margin:0;font-weight:500}.close{border:0;background:none;padding:4px}.close svg{width:18px;height:18px}
+.dialog-body{padding:20px}.dialog-body p{margin:0 0 16px}.demo{color:var(--muted);font-size:12px}
+.dialog-footer{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+.button{background:white;border:1px solid #ccc;border-radius:3px;padding:4px 20px}
+@media(max-width:800px){body{padding:0}.app{height:100dvh;min-height:480px;border:0}.toolbar{grid-template-columns:60px 1fr 192px}.wordmark{padding-left:132px}}
 </style>
 </head>
 <body>
-  <div class="window" id="app">
-    <div class="titlebar">
-      <div class="lights"><i></i><i></i><i></i></div>
-      <div class="mark"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2M3 12a9 9 0 0 1 15.5-6.2"/><path d="M21 4v5h-5M3 20v-5h5"/></svg></div>
-      <div class="t">SyncPilot</div>
-      <span class="phase">守护进程运行中</span>
-      <div class="sp"></div>
-      <button class="iconbtn" id="themeBtn" title="切换亮暗主题">◐</button>
-    </div>
-    <div class="body">
-      <aside class="rail">
-        <div class="sect">同步文件夹</div>
-        <div class="hint">尚无文件夹。添加入口在右侧。</div>
-        <div class="sect">已连接设备</div>
-        <nav class="nav">
-          <div class="item"><span class="st ok"></span>jiren-macbook<span style="margin-left:auto;font-size:10.5px;color:var(--mute)">本机</span></div>
-        </nav>
-        <div class="foot">
-          <div class="item">⚙ 偏好设置</div>
-        </div>
-      </aside>
-      <section class="main">
-        <div class="head">
-          <div>
-            <h1>同步文件夹</h1>
-            <div class="sub">0 个文件夹 · 守护进程已就绪（rslsync 3.1.2）</div>
-          </div>
-          <div class="sp"></div>
-          <button class="btn">粘贴密钥或 QR</button>
-          <button class="btn primary">＋ 添加文件夹</button>
-        </div>
-        <div class="banner warn">Resilio Sync 许可未激活：添加文件夹前需先在官方界面激活（14 天免费试用）或登录已有账号 <span class="go">打开激活入口 →</span></div>
-        <div class="empty">
-          <div class="card">
-            <div class="big"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
-            <h2>还没有同步文件夹</h2>
-            <p>选择一个本地文件夹开始同步，或粘贴其他设备分享给你的密钥。<br>添加与授权都在官方 Resilio 界面内完成，SyncPilot 负责让它随时可用。</p>
-            <div class="acts">
-              <button class="btn">粘贴密钥或 QR</button>
-              <button class="btn primary">＋ 添加文件夹</button>
-            </div>
-            <div class="note">同步不是备份——重要文件夹请另行备份</div>
-          </div>
-        </div>
-      </section>
-    </div>
-    <div class="statusbar">
-      <span>守护进程运行中</span>
-      <span class="speed">↓ <b>0 KB/s</b></span>
-      <span class="speed">↑ <b>0 KB/s</b></span>
-      <span class="sp"></span>
-      <span>许可未激活 · 试用可激活 14 天</span>
-      <span class="theme-note">原型 v0.1 · 按 ◐ 切换亮暗</span>
-    </div>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M2 4h8l3 3h9v15H2z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-files" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1" fill="currentColor" stroke="none"/><path d="M8 8h8M8 12h8M8 16h5" stroke="var(--navy)" stroke-width="2"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l5 3"/></symbol>
+<symbol id="i-gear" viewBox="0 0 24 24"><path d="m9 3 1-2h4l1 2 2 1 2 0 2 3-1 2 1 3 2 1-1 4-2 0-2 2 0 2-4 1-1-2-3-1-2 1-3-3 1-2-1-3-2-1 1-4 2 0 2-2z" transform="translate(1 1) scale(.9)"/><circle cx="12" cy="12" r="4"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="3"/></symbol>
+<symbol id="i-activity" viewBox="0 0 24 24"><path d="M1 14h5l3-5 4 10 4-14 3 9h3"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+</defs></svg>
+<main class="app" aria-label="Resilio Sync 文件夹主视图（空态）">
+<header class="toolbar">
+<details class="add" id="addMenu"><summary aria-label="添加文件夹" title="添加文件夹"><svg><use href="#i-plus"/></svg></summary><div class="popup"><button data-action="add">标准文件夹…</button><button data-action="key">输入密钥或链接…</button></div></details>
+<div class="wordmark"><img src="../assets/resilio/sync-wordmark.png" alt="Resilio Sync" width="176" height="80"></div>
+<nav class="nav" aria-label="主菜单"><button class="tool bell" title="通知（无新通知）" aria-label="通知"><svg><use href="#i-bell"/></svg></button><button class="tool selected" title="文件夹" aria-label="文件夹" aria-current="page"><svg><use href="#i-folder"/></svg></button><button class="tool" title="共享文件" aria-label="共享文件"><svg><use href="#i-files"/></svg></button><button class="tool" title="历史记录" aria-label="历史记录"><svg><use href="#i-clock"/></svg></button><button class="tool" title="首选项" aria-label="首选项"><svg><use href="#i-gear"/></svg></button></nav>
+</header>
+<section class="filters" aria-label="文件夹筛选"><div class="tabs" role="tablist" aria-label="连接状态"><button class="tab" role="tab" aria-selected="true">全部</button><button class="tab" role="tab" aria-selected="false">已连接</button><button class="tab" role="tab" aria-selected="false">已断开连接</button><button class="tab" role="tab" aria-selected="false">本地</button></div><label class="search"><svg><use href="#i-search"/></svg><input type="search" placeholder="搜索…" aria-label="搜索文件夹"></label></section>
+<section class="empty" aria-label="空态">
+  <div>
+    <div class="big"><svg><use href="#i-folder"/></svg></div>
+    <h2>还没有同步文件夹</h2>
+    <p>添加一个即可开始同步</p>
+    <p class="demo-note">原型演示：官方空态语义；添加入口在左上角「＋」。</p>
   </div>
-  <script>
-    document.getElementById('themeBtn').addEventListener('click', () => {
-      document.getElementById('app').classList.toggle('dark');
-    });
-  </script>
+</section>
+<footer class="footer"><button aria-label="暂停同步" title="暂停同步"><svg><use href="#i-pause"/></svg></button><button class="activity" aria-label="传输速度" title="传输速度"><svg><use href="#i-activity"/></svg></button></footer>
+</main>
+<dialog id="dialog" aria-labelledby="dialogTitle"><header class="dialog-header"><h1 id="dialogTitle"></h1><button class="close" aria-label="关闭"><svg><use href="#i-close"/></svg></button></header><div class="dialog-body" id="dialogBody"></div><footer class="dialog-footer"><button class="button close">关闭</button></footer></dialog>
+<script>
+// 空态页本地演示：添加/密钥弹窗说明，不读取目录、不提交密钥。
+const dialog=document.querySelector('#dialog');
+function show(title,content){document.querySelector('#dialogTitle').textContent=title;document.querySelector('#dialogBody').innerHTML=content+'<p class="demo">原型演示：示例说明，未连接 Resilio Sync 服务。</p>';document.querySelector('#addMenu').open=false;dialog.showModal()}
+document.querySelectorAll('.close').forEach(b=>b.addEventListener('click',()=>dialog.close()));
+document.querySelectorAll('#addMenu .popup button').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.action;show(a==='add'?'添加标准文件夹':'输入密钥或链接',a==='add'?'<p>实际客户端会打开系统文件夹选择器。此原型不读取本机文件。</p>':'<p>实际客户端会粘贴密钥或链接以加入共享。此原型不提交或保存密钥。</p>')}));
+document.addEventListener('click',e=>{const d=document.querySelector('#addMenu');if(d && !d.contains(e.target))d.open=false});
+</script>
 <script src="prototype-runtime.js"></script>
 <script src="prototype-flow.js"></script>
 </body>
