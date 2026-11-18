@@ -15,8 +15,8 @@
          update-public-key-b64
          default-update-base-url)
 
-(define app-version "0.8.4")
-(define app-build 5)
+(define app-version "0.8.5")
+(define app-build 6)
 (define app-identifier "site.jrtx.syncpilot")
 (define app-channel 'stable)
 (define app-display-name "SyncPilot")

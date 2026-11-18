@@ -2,6 +2,8 @@
 
 All notable changes to SyncPilot are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning: [SemVer](https://semver.org/).
 
+## [0.8.5] - 2026-11-18
+
 ## [Unreleased]
 
 ### Fixed
