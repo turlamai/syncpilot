@@ -1,100 +1,343 @@
-/* ==== SyncPilot 原型共享壳层 — 官方客户端视觉语言，见 design/DESIGN.md ====
-   2026-11-18 (#35)：与主视图 folders.html 同一套官方参数——导航蓝 #000044、
-   主操作 #1686ff、链接 #087bea、主文字灰、分隔 #dadada、条底 #f8f8fa、
-   控件圆角 3px。旧稿的红绿灯、相位芯片、宿主状态栏、暗色主题已废弃。 */
+/* Shared light/dark palette: the only color-value source. */
 :root {
-  --navy: #000044; --blue: #1686ff; --link: #087bea; --cyan: #00a6ce;
-  --bg: #e9ebee; --surface: #ffffff; --raised: #f8f8fa; --line: #dadada;
-  --ink: #4a4a4a; --mute: #777;
-  --ok: #57a919; --ok-soft: #edf7e6;
-  --err: #bd3f3f; --err-soft: #f7ebeb;
-  --warn: #b97a0a; --warn-soft: #fdf3e3;
-  --radius: 3px;
-  --font: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color-scheme: light;
+  --theme-light-bg: #f3f4f6; --theme-dark-bg: #191b1f;
+  --theme-light-surface: #ffffff; --theme-dark-surface: #22252a;
+  --theme-light-raised: #eceff2; --theme-dark-raised: #2d3138;
+  --theme-light-line: #d7dce2; --theme-dark-line: #464c55;
+  --theme-light-ink: #1b1f24; --theme-dark-ink: #f0f1f3;
+  --theme-light-mute: #535d69; --theme-dark-mute: #bac1ca;
+  --theme-light-accent: #1565d8; --theme-dark-accent: #91baff;
+  --theme-light-accent-foreground: #ffffff; --theme-dark-accent-foreground: #142238;
+  --theme-light-accent-hover: #0e54bc; --theme-dark-accent-hover: #aacaff;
+  --theme-light-accent-soft: #e6effc; --theme-dark-accent-soft: #24354e;
+  --theme-light-selected: #e6effc; --theme-dark-selected: #273d59;
+  --theme-light-selected-foreground: #115bb8; --theme-dark-selected-foreground: #b5d4ff;
+  --theme-light-selected-strong: #1565d8; --theme-dark-selected-strong: #326ab6;
+  --theme-light-selected-strong-foreground: #ffffff; --theme-dark-selected-strong-foreground: #ffffff;
+  --theme-light-focus: #145ac3; --theme-dark-focus: #b3d0ff;
+  --theme-light-control-border: #737d88; --theme-dark-control-border: #89929e;
+  --theme-light-ok: #207742; --theme-dark-ok: #89d9a6;
+  --theme-light-ok-soft: #e3f2e9; --theme-dark-ok-soft: #203c2c;
+  --theme-light-warn: #795207; --theme-dark-warn: #f1ca79;
+  --theme-light-warn-soft: #f7efdc; --theme-dark-warn-soft: #423622;
+  --theme-light-err: #b52b2b; --theme-dark-err: #ffa49b;
+  --theme-light-err-soft: #fbebeb; --theme-dark-err-soft: #452c2d;
+  --theme-light-canvas: #e9ebee; --theme-dark-canvas: #191b1f;
+  --theme-light-canvas-start: #e9ebee; --theme-dark-canvas-start: #191b1f;
+  --theme-light-canvas-mid: #dde0e4; --theme-dark-canvas-mid: #1d2025;
+  --theme-light-canvas-end: #d2d6db; --theme-dark-canvas-end: #22252a;
+  --theme-light-nav: #000044; --theme-dark-nav: #000044;
+  --theme-light-nav-foreground: #ffffff; --theme-dark-nav-foreground: #ffffff;
+  --theme-light-nav-hover: #20205c; --theme-dark-nav-hover: #20205c;
+  --theme-light-bar: #f8f8fa; --theme-dark-bar: #292d33;
+  --theme-light-popup: #3e3e3e; --theme-dark-popup: #30353d;
+  --theme-light-popup-foreground: #ffffff; --theme-dark-popup-foreground: #f0f1f3;
+  --theme-light-popup-hover: #525252; --theme-dark-popup-hover: #444c57;
+  --theme-light-popup-control: #ffffff; --theme-dark-popup-control: #ffffff;
+  --theme-light-row-hover: #f0f4fa; --theme-dark-row-hover: #2c3541;
+  --theme-light-folder: #666666; --theme-dark-folder: #c0c7d0;
+  --theme-light-inverse: #ffffff; --theme-dark-inverse: #22252a;
+  --theme-light-overlay: #00000055; --theme-dark-overlay: #00000088;
+  --theme-light-dialog-overlay: #00000066; --theme-dark-dialog-overlay: #00000099;
+  --theme-light-shadow-color: #00000033; --theme-dark-shadow-color: #00000066;
+  --theme-light-shadow-soft: #00000012; --theme-dark-shadow-soft: #00000033;
+  --theme-light-shadow-medium: #00000022; --theme-dark-shadow-medium: #00000055;
+  --theme-light-window-shadow-one: #14171c1a; --theme-dark-window-shadow-one: #00000033;
+  --theme-light-window-shadow-two: #14171c29; --theme-dark-window-shadow-two: #00000055;
+  --theme-light-window-shadow-three: #14171c33; --theme-dark-window-shadow-three: #00000066;
+  --theme-light-window-close: #ff5f57; --theme-dark-window-close: #ff5f57;
+  --theme-light-window-minimize: #febc2e; --theme-dark-window-minimize: #febc2e;
+  --theme-light-window-maximize: #28c840; --theme-dark-window-maximize: #28c840;
+  --bg: var(--theme-light-bg);
+  --surface: var(--theme-light-surface);
+  --raised: var(--theme-light-raised);
+  --line: var(--theme-light-line);
+  --ink: var(--theme-light-ink);
+  --mute: var(--theme-light-mute);
+  --accent: var(--theme-light-accent);
+  --accent-foreground: var(--theme-light-accent-foreground);
+  --accent-hover: var(--theme-light-accent-hover);
+  --accent-soft: var(--theme-light-accent-soft);
+  --selected: var(--theme-light-selected);
+  --selected-foreground: var(--theme-light-selected-foreground);
+  --selected-strong: var(--theme-light-selected-strong);
+  --selected-strong-foreground: var(--theme-light-selected-strong-foreground);
+  --focus: var(--theme-light-focus);
+  --control-border: var(--theme-light-control-border);
+  --ok: var(--theme-light-ok);
+  --ok-soft: var(--theme-light-ok-soft);
+  --warn: var(--theme-light-warn);
+  --warn-soft: var(--theme-light-warn-soft);
+  --err: var(--theme-light-err);
+  --err-soft: var(--theme-light-err-soft);
+  --canvas: var(--theme-light-canvas);
+  --canvas-start: var(--theme-light-canvas-start);
+  --canvas-mid: var(--theme-light-canvas-mid);
+  --canvas-end: var(--theme-light-canvas-end);
+  --nav: var(--theme-light-nav);
+  --nav-foreground: var(--theme-light-nav-foreground);
+  --nav-hover: var(--theme-light-nav-hover);
+  --bar: var(--theme-light-bar);
+  --popup: var(--theme-light-popup);
+  --popup-foreground: var(--theme-light-popup-foreground);
+  --popup-hover: var(--theme-light-popup-hover);
+  --popup-control: var(--theme-light-popup-control);
+  --row-hover: var(--theme-light-row-hover);
+  --folder: var(--theme-light-folder);
+  --inverse: var(--theme-light-inverse);
+  --overlay: var(--theme-light-overlay);
+  --dialog-overlay: var(--theme-light-dialog-overlay);
+  --shadow-color: var(--theme-light-shadow-color);
+  --shadow-soft: var(--theme-light-shadow-soft);
+  --shadow-medium: var(--theme-light-shadow-medium);
+  --window-shadow-one: var(--theme-light-window-shadow-one);
+  --window-shadow-two: var(--theme-light-window-shadow-two);
+  --window-shadow-three: var(--theme-light-window-shadow-three);
+  --window-close: var(--theme-light-window-close);
+  --window-minimize: var(--theme-light-window-minimize);
+  --window-maximize: var(--theme-light-window-maximize);
+  --blue: var(--accent); --cyan: var(--selected-foreground); --link: var(--accent);
+  --text: var(--ink); --muted: var(--mute); --white: var(--surface);
+  --green: var(--ok); --orange: var(--warn);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  min-height: 100vh; display: grid; place-items: center; padding: 32px;
-  background: var(--bg); color: var(--ink);
-  font: 14px/1.5 var(--font);
+:root[data-theme="dark"], :root.dark {
+  color-scheme: dark;
+  --bg: var(--theme-dark-bg);
+  --surface: var(--theme-dark-surface);
+  --raised: var(--theme-dark-raised);
+  --line: var(--theme-dark-line);
+  --ink: var(--theme-dark-ink);
+  --mute: var(--theme-dark-mute);
+  --accent: var(--theme-dark-accent);
+  --accent-foreground: var(--theme-dark-accent-foreground);
+  --accent-hover: var(--theme-dark-accent-hover);
+  --accent-soft: var(--theme-dark-accent-soft);
+  --selected: var(--theme-dark-selected);
+  --selected-foreground: var(--theme-dark-selected-foreground);
+  --selected-strong: var(--theme-dark-selected-strong);
+  --selected-strong-foreground: var(--theme-dark-selected-strong-foreground);
+  --focus: var(--theme-dark-focus);
+  --control-border: var(--theme-dark-control-border);
+  --ok: var(--theme-dark-ok);
+  --ok-soft: var(--theme-dark-ok-soft);
+  --warn: var(--theme-dark-warn);
+  --warn-soft: var(--theme-dark-warn-soft);
+  --err: var(--theme-dark-err);
+  --err-soft: var(--theme-dark-err-soft);
+  --canvas: var(--theme-dark-canvas);
+  --canvas-start: var(--theme-dark-canvas-start);
+  --canvas-mid: var(--theme-dark-canvas-mid);
+  --canvas-end: var(--theme-dark-canvas-end);
+  --nav: var(--theme-dark-nav);
+  --nav-foreground: var(--theme-dark-nav-foreground);
+  --nav-hover: var(--theme-dark-nav-hover);
+  --bar: var(--theme-dark-bar);
+  --popup: var(--theme-dark-popup);
+  --popup-foreground: var(--theme-dark-popup-foreground);
+  --popup-hover: var(--theme-dark-popup-hover);
+  --popup-control: var(--theme-dark-popup-control);
+  --row-hover: var(--theme-dark-row-hover);
+  --folder: var(--theme-dark-folder);
+  --inverse: var(--theme-dark-inverse);
+  --overlay: var(--theme-dark-overlay);
+  --dialog-overlay: var(--theme-dark-dialog-overlay);
+  --shadow-color: var(--theme-dark-shadow-color);
+  --shadow-soft: var(--theme-dark-shadow-soft);
+  --shadow-medium: var(--theme-dark-shadow-medium);
+  --window-shadow-one: var(--theme-dark-window-shadow-one);
+  --window-shadow-two: var(--theme-dark-window-shadow-two);
+  --window-shadow-three: var(--theme-dark-window-shadow-three);
+  --window-close: var(--theme-dark-window-close);
+  --window-minimize: var(--theme-dark-window-minimize);
+  --window-maximize: var(--theme-dark-window-maximize);
 }
-button, input, select { font: inherit; }
-button { cursor: pointer; color: inherit; }
-button:focus-visible, input:focus-visible, summary:focus-visible, [role="checkbox"]:focus-visible {
-  outline: 2px solid var(--blue); outline-offset: 3px;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+  --bg: var(--theme-dark-bg);
+  --surface: var(--theme-dark-surface);
+  --raised: var(--theme-dark-raised);
+  --line: var(--theme-dark-line);
+  --ink: var(--theme-dark-ink);
+  --mute: var(--theme-dark-mute);
+  --accent: var(--theme-dark-accent);
+  --accent-foreground: var(--theme-dark-accent-foreground);
+  --accent-hover: var(--theme-dark-accent-hover);
+  --accent-soft: var(--theme-dark-accent-soft);
+  --selected: var(--theme-dark-selected);
+  --selected-foreground: var(--theme-dark-selected-foreground);
+  --selected-strong: var(--theme-dark-selected-strong);
+  --selected-strong-foreground: var(--theme-dark-selected-strong-foreground);
+  --focus: var(--theme-dark-focus);
+  --control-border: var(--theme-dark-control-border);
+  --ok: var(--theme-dark-ok);
+  --ok-soft: var(--theme-dark-ok-soft);
+  --warn: var(--theme-dark-warn);
+  --warn-soft: var(--theme-dark-warn-soft);
+  --err: var(--theme-dark-err);
+  --err-soft: var(--theme-dark-err-soft);
+  --canvas: var(--theme-dark-canvas);
+  --canvas-start: var(--theme-dark-canvas-start);
+  --canvas-mid: var(--theme-dark-canvas-mid);
+  --canvas-end: var(--theme-dark-canvas-end);
+  --nav: var(--theme-dark-nav);
+  --nav-foreground: var(--theme-dark-nav-foreground);
+  --nav-hover: var(--theme-dark-nav-hover);
+  --bar: var(--theme-dark-bar);
+  --popup: var(--theme-dark-popup);
+  --popup-foreground: var(--theme-dark-popup-foreground);
+  --popup-hover: var(--theme-dark-popup-hover);
+  --popup-control: var(--theme-dark-popup-control);
+  --row-hover: var(--theme-dark-row-hover);
+  --folder: var(--theme-dark-folder);
+  --inverse: var(--theme-dark-inverse);
+  --overlay: var(--theme-dark-overlay);
+  --dialog-overlay: var(--theme-dark-dialog-overlay);
+  --shadow-color: var(--theme-dark-shadow-color);
+  --shadow-soft: var(--theme-dark-shadow-soft);
+  --shadow-medium: var(--theme-dark-shadow-medium);
+  --window-shadow-one: var(--theme-dark-window-shadow-one);
+  --window-shadow-two: var(--theme-dark-window-shadow-two);
+  --window-shadow-three: var(--theme-dark-window-shadow-three);
+  --window-close: var(--theme-dark-window-close);
+  --window-minimize: var(--theme-dark-window-minimize);
+  --window-maximize: var(--theme-dark-window-maximize);
+  }
 }
-svg { width: 24px; height: 24px; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-/* ---- 窗口与卡片 ---- */
-.window {
+
+:where(html:not([data-screen="folders"])) * { box-sizing: border-box; margin: 0; padding: 0; }
+:where(html:not([data-screen="folders"])) body {
+  min-height: 100vh; display: grid; place-items: center; padding: 40px 24px;
+  background: radial-gradient(1200px 800px at 20% 0%, var(--canvas-start), var(--canvas-mid) 60%, var(--canvas-end));
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  -webkit-font-smoothing: antialiased; color: var(--ink);
+}
+:where(html:not([data-screen="folders"])) button { font: inherit; cursor: pointer; }
+:where(html:not([data-screen="folders"])) :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+:where(html:not([data-screen="folders"])) .window {
   position: relative;
-  width: 100%; max-width: 1180px; min-height: 640px; height: calc(100dvh - 64px);
-  background: var(--surface); display: flex; flex-direction: column;
-  border: 1px solid #c9c9ce; box-shadow: 0 8px 32px #00000012;
+  width: 1180px; max-width: 100%; height: 740px; border-radius: 16px; overflow: hidden;
+  display: flex; flex-direction: column;
+  background: var(--bg); color: var(--ink);
+  box-shadow: 0 1px 2px var(--window-shadow-one), 0 12px 32px var(--window-shadow-two), 0 32px 80px var(--window-shadow-three);
+  transition: background .15s ease, color .15s ease;
 }
-.card {
-  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 34px 48px 30px; display: flex; flex-direction: column; align-items: center; gap: 10px;
-  text-align: center;
+/* ---- SyncPilot 自有 chrome：标题栏（相位芯片）+ 底部状态栏 ---- */
+:where(html:not([data-screen="folders"])) .titlebar {
+  height: 44px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 14px;
+  background: var(--surface); border-bottom: 1px solid var(--line);
 }
-/* ---- 顶部标题条（原生 headerbar 语义：浅灰底、深色文字，无自绘控件） ---- */
-.titlebar {
-  height: 44px; flex: none; display: flex; align-items: center; gap: 10px; padding: 0 16px;
-  background: var(--raised); border-bottom: 1px solid var(--line);
+:where(html:not([data-screen="folders"])) .lights { display: flex; gap: 8px; }
+:where(html:not([data-screen="folders"])) .lights i { width: 12px; height: 12px; border-radius: 50%; }
+:where(html:not([data-screen="folders"])) .lights i:nth-child(1) { background: var(--window-close); }
+:where(html:not([data-screen="folders"])) .lights i:nth-child(2) { background: var(--window-minimize); }
+:where(html:not([data-screen="folders"])) .lights i:nth-child(3) { background: var(--window-maximize); }
+:where(html:not([data-screen="folders"])) .mark {
+  width: 22px; height: 22px; border-radius: 6px; background: var(--accent);
+  display: grid; place-items: center; color: var(--accent-foreground); flex: none;
 }
-.titlebar .t { font-size: 14px; font-weight: 600; color: var(--ink); }
-.titlebar .sp { flex: 1; }
-/* ---- 按钮：官方风格 ---- */
-.btn {
-  height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 20px;
-  border: 1px solid #ccc; border-radius: var(--radius); background: var(--surface); color: var(--ink);
-  font-size: 13px;
+:where(html:not([data-screen="folders"])) .titlebar .t { font-size: 13.5px; font-weight: 600; letter-spacing: .2px; }
+:where(html:not([data-screen="folders"])) .phase {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600;
+  padding: 2px 9px; border-radius: 99px; background: var(--ok-soft); color: var(--ok);
 }
-.btn:hover { background: var(--raised); }
-.btn.primary { background: var(--blue); border-color: transparent; color: #fff; font-weight: 600; }
-.btn.primary:hover { background: #0f74e0; }
-.btn.danger { color: var(--err); }
-.btn.sm { height: 26px; padding: 2px 12px; font-size: 12px; }
-/* ---- 表单控件 ---- */
-.entry {
-  width: 250px; height: 30px; padding: 0 10px; font-size: 13px; color: var(--ink);
-  background: var(--surface); border: 1px solid #ccc; border-radius: var(--radius);
-  display: flex; align-items: center; font-variant-numeric: tabular-nums;
+:where(html:not([data-screen="folders"])) .phase::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+:where(html:not([data-screen="folders"])) .phase.starting { background: var(--accent-soft); color: var(--accent); }
+:where(html:not([data-screen="folders"])) .phase.starting::before { animation: pulse 1.2s ease infinite; }
+:where(html:not([data-screen="folders"])) .phase.stopped, :where(html:not([data-screen="folders"])) .phase.mute-state { background: var(--raised); color: var(--mute); }
+:where(html:not([data-screen="folders"])) .phase.crashed, :where(html:not([data-screen="folders"])) .phase.failed { background: var(--err-soft); color: var(--err); }
+@keyframes pulse { 50% { opacity: .25; } }
+:where(html:not([data-screen="folders"])) .titlebar .sp { flex: 1; }
+:where(html:not([data-screen="folders"])) .iconbtn {
+  width: 26px; height: 26px; border-radius: 8px; border: 1px solid var(--control-border); background: var(--raised);
+  color: var(--mute); display: grid; place-items: center; font-size: 13px;
 }
-.check { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink); cursor: pointer; }
-.check .box {
-  width: 16px; height: 16px; border-radius: var(--radius); border: 1px solid #bbb;
-  background: var(--blue); color: #fff; display: grid; place-items: center;
-  font-size: 11px; font-weight: 700; line-height: 1;
+:where(html:not([data-screen="folders"])) .body { flex: 1; display: flex; min-height: 0; }
+:where(html:not([data-screen="folders"])) .statusbar {
+  flex: none; height: 34px; display: flex; align-items: center; gap: 14px; padding: 0 16px;
+  border-top: 1px solid var(--line); background: var(--surface); font-size: 12px; color: var(--mute);
 }
-.check.off .box { background: var(--surface); color: transparent; border-color: #ccc; }
-.drop {
-  height: 30px; padding: 0 10px; font-size: 13px; color: var(--ink);
-  background: var(--surface); border: 1px solid #ccc; border-radius: var(--radius);
-  display: inline-flex; align-items: center; gap: 8px;
+:where(html:not([data-screen="folders"])) .statusbar .sp { flex: 1; }
+:where(html:not([data-screen="folders"])) .statusbar .speed { font-variant-numeric: tabular-nums; }
+:where(html:not([data-screen="folders"])) .statusbar .speed b { color: var(--ink); font-weight: 600; }
+/* ---- 通用控件 ---- */
+:where(html:not([data-screen="folders"])) .btn {
+  height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: 8px;
+  font-size: 12.5px; font-weight: 600; border: 1px solid var(--control-border); background: var(--surface); color: var(--ink);
 }
-/* ---- 徽标 / 进度 / 提示 ---- */
-.badge {
+:where(html:not([data-screen="folders"])) .btn.primary { background: var(--accent); border-color: transparent; color: var(--accent-foreground); }
+:where(html:not([data-screen="folders"])) .btn.primary:hover { background: var(--accent-hover); }
+:where(html:not([data-screen="folders"])) .btn.danger { color: var(--err); }
+:where(html:not([data-screen="folders"])) .btn.sm { height: 26px; padding: 0 9px; font-size: 11.5px; }
+:where(html:not([data-screen="folders"])) kbd {
+  font-family: inherit; font-size: 10.5px; color: var(--mute);
+  background: var(--raised); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px;
+}
+:where(html:not([data-screen="folders"])) .badge {
   display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600;
-  padding: 2px 8px; border-radius: var(--radius);
+  padding: 2px 8px; border-radius: 99px;
 }
-.badge.ok { background: var(--ok-soft); color: var(--ok); }
-.badge.err { background: var(--err-soft); color: var(--err); }
-.badge.warn { background: var(--warn-soft); color: var(--warn); }
-.badge.mute { background: var(--raised); color: var(--mute); }
-.badge.busy { background: #e3f0ff; color: var(--blue); }
-.prog { height: 5px; border-radius: var(--radius); background: var(--raised); overflow: hidden; }
-.prog i { display: block; height: 100%; background: var(--blue); }
-kbd {
-  font-family: inherit; font-size: 11px; color: var(--mute);
-  background: var(--raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 1px 5px;
+:where(html:not([data-screen="folders"])) .badge.ok { background: var(--ok-soft); color: var(--ok); }
+:where(html:not([data-screen="folders"])) .badge.err { background: var(--err-soft); color: var(--err); }
+:where(html:not([data-screen="folders"])) .badge.warn { background: var(--warn-soft); color: var(--warn); }
+:where(html:not([data-screen="folders"])) .badge.mute { background: var(--raised); color: var(--mute); }
+:where(html:not([data-screen="folders"])) .badge.busy { background: var(--accent-soft); color: var(--accent); }
+:where(html:not([data-screen="folders"])) .badge.busy::before { content: ""; width: 8px; height: 8px; border-radius: 50%; border: 2px solid currentColor; border-top-color: transparent; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+:where(html:not([data-screen="folders"])) .banner {
+  flex: none; margin: 0 16px 10px; padding: 8px 14px; border-radius: 12px;
+  font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 8px;
 }
-.demo-note { font-size: 12px; color: var(--mute); }
-/* ---- 弹窗（官方对话框语言） ---- */
-.scrim { position: absolute; inset: 0; background: #0005; display: grid; place-items: center; }
-.dialog {
-  width: min(480px, calc(100% - 48px)); background: var(--surface);
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 24px;
-  box-shadow: 0 16px 64px #0003; display: flex; flex-direction: column; gap: 10px;
+:where(html:not([data-screen="folders"])) .banner.warn { background: var(--warn-soft); color: var(--warn); }
+:where(html:not([data-screen="folders"])) .banner .go { margin-left: auto; text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
+:where(html:not([data-screen="folders"])) .prog { height: 5px; border-radius: 99px; background: var(--raised); overflow: hidden; }
+:where(html:not([data-screen="folders"])) .prog i { display: block; height: 100%; border-radius: 99px; background: var(--accent); }
+:where(html:not([data-screen="folders"])) .toast {
+  position: absolute; left: 50%; bottom: 52px; transform: translateX(-50%);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 9px 16px; font-size: 13px; font-weight: 600;
+  box-shadow: 0 8px 24px var(--shadow-color); display: flex; align-items: center; gap: 8px;
 }
-.dialog h2 { font-size: 16px; font-weight: 500; color: var(--ink); }
-.dialog .acts { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+:where(html:not([data-screen="folders"])) .toast .ok { color: var(--ok); }
+:where(html:not([data-screen="folders"])) .theme-note { font-size: 11px; }
+
+
+/* Theme-only rules: no typography or spacing changes. */
+:root { accent-color: var(--accent); }
+body { color: var(--ink); }
+button, input, select, textarea { color-scheme: inherit; }
+.iconbtn.theme-toggle { width:26px; height:26px; display:inline-grid; place-items:center; border-radius:8px; border:1px solid var(--control-border); background:var(--raised); color:var(--ink); padding:0; flex:none; cursor:pointer; }
+.theme-toggle:hover { background:var(--selected); color:var(--selected-foreground); }
+.theme-toggle:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.markrow .theme-toggle { margin-left:auto; }
+.footer .theme-toggle { margin-left:auto; padding:0; border:1px solid var(--control-border); color:var(--ink); }
+:root[data-screen="folders"] body { background:var(--canvas); }
+:root[data-screen="folders"] dialog { background:var(--surface); }
+:root[data-screen="folders"] .tool.selected { background:var(--selected-strong); color:var(--selected-strong-foreground); }
+:root[data-screen="folders"] .tab[aria-selected="true"] { color:var(--selected-foreground); }
+:root[data-screen="folders"] .tab[aria-selected="true"]::after { content:""; display:block; border-bottom:2px solid currentColor; margin-bottom:-2px; }
+:root[data-screen="folders"] .columns input { accent-color:var(--popup-control); }
+:root[data-screen="folders"] .search, :root[data-screen="folders"] .button, :root[data-screen="folders"] .field { border-color:var(--control-border); }
+:root[data-screen="folders"] .field { background:var(--surface); color:var(--ink); }
+:root[data-screen="folders"] .footer .theme-toggle:hover { background:var(--selected); }
+:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.btn.primary, .proto-dialog button[type="submit"] { background:var(--accent); color:var(--accent-foreground); }
+.btn.primary:hover, .proto-dialog button[type="submit"]:hover { background:var(--accent-hover); color:var(--accent-foreground); }
+.entry, .drop, .check .box { border-color:var(--control-border); background:var(--surface); color:var(--ink); }
+.check:not(.off) .box { background:var(--accent); color:var(--accent-foreground); }
+.check.off .box { color:var(--mute); }
+@media(prefers-reduced-motion:reduce) { *, *::before, *::after { animation:none!important; transition:none!important; } }
+
+/* Existing progress-label containers must not clip their own text. */
+:where(html:not([data-screen="folders"])) .prog:has(.lbl) { height:auto; overflow:visible; background:transparent; }
+:where(html:not([data-screen="folders"])) .prog:has(.lbl) > div:last-child { height:5px; border-radius:inherit; background:var(--raised); }
+:where(html:not([data-screen="folders"])) .key, :where(html:not([data-screen="folders"])) .key > div { min-width:0; }
+:where(html:not([data-screen="folders"])) .key .cp { flex-shrink:0; }
+:where(html:not([data-screen="folders"])) .dialog { background:var(--surface); color:var(--ink); }
+:where(html:not([data-screen="folders"])) .scrim { background:var(--overlay); }
+.check .box { outline:1px solid var(--control-border); }
+.check.off .box { color:transparent; }
+.search:focus-within { outline:2px solid var(--focus); outline-offset:2px; }
+:root[data-screen="folders"] .columns input { outline:1px solid var(--popup-control); }
+:where(html:not([data-screen="folders"])) .mark svg { fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; }

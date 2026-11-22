@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-screen="settings">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SyncPilot — 设置</title>
+<script src="theme.js"></script>
 <link rel="stylesheet" href="shared.css">
 <style>
   /* ==== SyncPilot 设置（独立窗口，自有表面）：官方视觉语言（#35）。
@@ -31,14 +32,14 @@
     position: absolute; left: 50%; bottom: 52px; transform: translateX(-50%);
     background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
     padding: 9px 16px; font-size: 13px; font-weight: 600; color: var(--ink);
-    box-shadow: 0 8px 24px rgba(0,0,0,.18); display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 8px 24px var(--shadow-color); display: flex; align-items: center; gap: 8px;
   }
   .toast .ok { color: var(--ok); }
 </style>
 </head>
 <body>
   <div class="window" id="app">
-    <div class="titlebar"><span class="t">SyncPilot 设置</span><span class="sp"></span></div>
+    <div class="titlebar"><span class="t">SyncPilot 设置</span><span class="sp"></span><button type="button" class="iconbtn theme-toggle" id="themeBtn" aria-label="切换亮暗主题" title="切换亮暗主题">◐</button></div>
     <div class="body">
       <div class="scroll">
         <div class="sect">守护进程</div>

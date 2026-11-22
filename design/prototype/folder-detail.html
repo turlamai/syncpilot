@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-screen="folder-detail">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SyncPilot — 文件夹详情 · 对端与传输</title>
+<script src="theme.js"></script>
 <link rel="stylesheet" href="shared.css">
 <style>
   /* ==== 文件夹详情（自有演示页）：官方视觉语言（#35）。
@@ -39,7 +40,7 @@
     width: 36px; height: 36px; border-radius: 50%; background: var(--raised); color: var(--mute);
     display: grid; place-items: center; font-size: 14px; font-weight: 700; flex: none;
   }
-  .avatar.sync { background: #e3f0ff; color: var(--blue); }
+  .avatar.sync { background: var(--accent-soft); color: var(--blue); }
   .pname { font-size: 14px; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 8px; }
   .psub { font-size: 12px; color: var(--mute); margin-top: 2px; font-variant-numeric: tabular-nums; }
   .prog { width: 260px; margin-top: 7px; }
@@ -50,7 +51,7 @@
 </head>
 <body>
   <div class="window" id="app">
-    <div class="titlebar"><span class="t">SyncPilot — 项目文档</span><span class="sp"></span></div>
+    <div class="titlebar"><span class="t">SyncPilot — 项目文档</span><span class="sp"></span><button type="button" class="iconbtn theme-toggle" id="themeBtn" aria-label="切换亮暗主题" title="切换亮暗主题">◐</button></div>
     <section class="head">
       <div class="name">项目文档 <span class="badge busy">同步中</span></div>
       <div class="path">~/Codes/proposal-docs · 1.4 GB · 214 个文件 · 读写</div>
