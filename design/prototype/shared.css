@@ -375,3 +375,11 @@ button, input, select, textarea { color-scheme: inherit; }
 .search:focus-within { outline:2px solid var(--focus); outline-offset:2px; }
 :root[data-screen="folders"] .columns input { outline:1px solid var(--popup-control); }
 :where(html:not([data-screen="folders"])) .mark svg { fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ---- temperament profile pass ---- */
+/* typography baseline (family standard 2026-11-26-temperament-profiles): CJK/Latin spacing and kinsoku come from the rendering layer,
+   never from typed spaces (§4, §10). Values stay in the token block above. */
+body { text-autospace: normal; line-break: strict; }
+::selection { background: var(--accent-soft); color: var(--ink); }
+/* Paired neutral scrollbar for both themes; thin and non-distracting. */
+html { scrollbar-color: var(--line) transparent; }
