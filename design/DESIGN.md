@@ -1,6 +1,6 @@
 # SyncPilot — 设计与交互契约
 
-修订：2026-11-22 · 家族规范 `2026-11-20-minimal-family` 主题切片。
+修订：2026-11-26 · 家族规范 `2026-11-20-minimal-family`。最近切片：原型对齐家族基线，见文末「2026-11-26」。
 
 **真源分工**：颜色、几何与字号的唯一真源是 `design/prototype/shared.css`（亮暗成对，`--theme-light-*` / `--theme-dark-*`）；本文件只记语义、决策、不变式与退出条件。改值改 CSS，改语义改本文件。
 
@@ -69,7 +69,7 @@
 
 - 六屏均在共享 CSS 前同步载入本地 `theme.js`，首屏即解析主题；根节点 `data-theme` 表示实际亮暗，`data-theme-preference` 表示选择来源。
 - 无手动偏好时跟随 `prefers-color-scheme`；系统改变时立即更新。CSS 在脚本不可用时仍提供系统暗态的 token 回退。
-- ◐ 按钮沿用 `iconbtn` 角色：点击在亮暗之间切换；Shift+点击或 Shift+回车/空格恢复系统跟随。可访问名称和 tooltip 包含当前模式、下一动作与恢复方式，`aria-pressed` 表示当前是否为暗态。
+- 主题按钮沿用 `iconbtn` 角色：点击在亮暗之间切换；Shift+点击或 Shift+回车/空格恢复系统跟随。可访问名称和 tooltip 包含当前模式、下一动作与恢复方式，`aria-pressed` 表示当前是否为暗态。按钮外形以「2026-11-26 · 原型对齐家族基线」为准：`◐` 字形已换为线框图标。
 - 仅显式 `light/dark` 偏好保存到 localStorage 的 `syncpilot:theme`；恢复系统时删除该项。支持跨页重载与同源标签页同步。
 - localStorage 被禁止、损坏或不可用时安全回退；当前页仍能切换，不假装跨页持久化成功。旧运行脚本不再读写相互冲突的 `.dark` 状态。
 - boot 在原标识行放置按钮；folders 使用原底栏；其余四屏使用原标题栏。六屏不新增导航层级。
@@ -125,3 +125,39 @@
 ## Prototype source checkpoint — 2026-11-15
 
 `index.html` opens the primary prototype directly. Screen-directory launchers have been removed. All local scripts, styles and referenced assets needed by this checkpoint are versioned under this directory; OpenDesign metadata is excluded. This is an editable prototype checkpoint, not a claim that the native product or external services implement these interactions.
+
+
+## 2026-11-26 · 原型对齐家族基线
+
+家族规范修订 `2026-11-20-minimal-family`；起始提交 `e285de4`。范围仅 `prototype/`：不改信息架构、强调色、示例数据、文案含义与演示行为。
+
+### 变更
+
+- 主题按钮：六屏的 `◐` 字形改为内联线框 SVG（`aria-hidden`）。图标表示所在主题（深色为月亮、浅色为太阳），由根节点 `data-theme` 驱动；按钮为安静图标按钮：静止时透明无边框、辅助文字色，悬停为 `--selected` 浅底，`--focus` 焦点环。folders 底栏按钮沿用该栏图标按钮的规格。尺寸与描边只在 `shared.css` 的 `.theme-toggle` 规则维护。可访问名称与 tooltip 措辞不变。
+- 12px 字号下限：辅助文字类角色（相位、徽标、小按钮、`kbd`、主题说明、分组标题、密钥标签、计数胶囊、进度标签、步骤行、行内代码）统一升到 12px，小按钮高度随之升到 28px。层级保持说明 12、标签 13、正文 14。无记录例外。
+- 恢复 2026-11-22 主题提交（`5dc5cde`）丢失的结构规则：控件圆角 token `--radius`、正文字号与行高、`.entry` / `.check .box` / `.drop` 控件盒、`.demo-note`、`.scrim` 与 `.dialog` 浮层、`.dialog .acts`、次级按钮悬停。此前更新对话框不居中且无内边距，设置页字段与复选框退回浏览器默认，`var(--radius)` 未定义。
+- 窗口适配：窗口高度随视口收敛并保留下限，正文网格列允许窗口随视口收缩。1280×800 下页面高度 855 → 800；960 宽下 boot / empty / update 横向溢出 244px → 0。empty 空态区改为内部滚动，许可横幅的动作标签不再折行。
+- 减弱动效规则补 `scroll-behavior:auto`；装饰性内联 SVG 补 `aria-hidden="true"`（folders 11、update 4、empty 2、boot 1）。
+- 文案引用：empty 状态栏「按 ◐ 切换亮暗」改为「按主题按钮切换亮暗」，含义不变。
+
+### 自查（2026-11-26）
+
+| 检查 | 结果 | 证据 / 限制 |
+|---|---|---|
+| 字号下限（源码） | 通过 | `design/` 下小于 12px 的声明 15 → 0 |
+| 字号下限（渲染） | 通过 | 无头 Chromium 1280×800，六屏 × 亮暗：小于 12px 的可见文本 70 → 0 |
+| 主题按钮 | 通过 | 六屏 × 亮暗：26×26 有边框 → 28×28 透明，folders 底栏 38×28；静止、悬停、键盘焦点三种状态已放大核对，`aria-label` 与 `title` 随主题更新 |
+| 可访问名称与焦点 | 通过 | 无名称控件 0；Tab 遍历每主题 63 个焦点落点，全部有名称和 2px 焦点环 |
+| 文本对比度 | 通过 | 低于 4.5:1 的文本对 0 → 0；近似计算，渐变背景跳过 |
+| 溢出 | 通过 | 1280×800 横向溢出 0 → 0；960×620（`linux/src/main.cpp` 的窗口下限）boot / empty / update 横向 244 → 0，设置窗 720×640 为 0 |
+| 完整性 | 通过 | 远程依赖 0、悬空本地引用 0、页面错误与加载失败 0；脚本语法与 CSS 括号检查通过 |
+| 仓库门禁 | 不适用 | `.github/workflows/` 与 `scripts/` 均不读取 `design/` |
+| 未验证 | 开放 | 200% 文字放大、读屏、真实点击 / 重载 / 多标签存储、Rivet 原生宿主对照 |
+
+### 遗留
+
+- `index.html` 仍是直达主视图的跳转入口（2026-11-15 决定）。家族基线要求的页面目录与「返回概览」链接未加，待产品决定。
+- folders 在 960×620 下页面高 744（`.app` 最小高 680px），需整页滚动。
+- empty 空态卡在最小窗高下于内容区内滚动约 65px，原生实现需要紧凑变体。
+- 设置页端口字段显示为 250px：`prototype-flow.js` 以输入框替换 `.entry` 时未带入行内宽度。
+- empty 侧栏「⚙ 偏好设置」仍是字符图标；横幅内「打开激活入口 →」只有样式，不可交互。
