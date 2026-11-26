@@ -242,7 +242,7 @@
   width: 22px; height: 22px; border-radius: 6px; background: var(--accent);
   display: grid; place-items: center; color: var(--accent-foreground); flex: none;
 }
-:where(html:not([data-screen="folders"])) .titlebar .t { font-size: 13.5px; font-weight: 600; letter-spacing: .2px; }
+:where(html:not([data-screen="folders"])) .titlebar .t { font-size: 14px; font-weight: 600; letter-spacing: .2px; }
 :where(html:not([data-screen="folders"])) .phase {
   display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
   padding: 2px 9px; border-radius: 99px; background: var(--ok-soft); color: var(--ok);
@@ -269,7 +269,7 @@
 /* ---- 通用控件 ---- */
 :where(html:not([data-screen="folders"])) .btn {
   height: 30px; display: inline-flex; align-items: center; gap: 6px; padding: 0 12px; border-radius: 8px;
-  font-size: 12.5px; font-weight: 600; border: 1px solid var(--control-border); background: var(--surface); color: var(--ink);
+  font-size: 13px; font-weight: 600; border: 1px solid var(--control-border); background: var(--surface); color: var(--ink);
 }
 :where(html:not([data-screen="folders"])) .btn.primary { background: var(--accent); border-color: transparent; color: var(--accent-foreground); }
 :where(html:not([data-screen="folders"])) .btn.primary:hover { background: var(--accent-hover); }
@@ -292,7 +292,7 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 :where(html:not([data-screen="folders"])) .banner {
   flex: none; margin: 0 16px 10px; padding: 8px 14px; border-radius: 12px;
-  font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;
 }
 :where(html:not([data-screen="folders"])) .banner.warn { background: var(--warn-soft); color: var(--warn); }
 :where(html:not([data-screen="folders"])) .banner .go { margin-left: auto; white-space: nowrap; flex: none; text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
