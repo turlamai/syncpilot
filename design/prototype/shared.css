@@ -100,6 +100,8 @@
   --blue: var(--accent); --cyan: var(--selected-foreground); --link: var(--accent);
   --text: var(--ink); --muted: var(--mute); --white: var(--surface);
   --green: var(--ok); --orange: var(--warn);
+  /* Control corner radius; the screens read it through var(--radius). */
+  --radius: 3px;
 }
 :root[data-theme="dark"], :root.dark {
   color-scheme: dark;
@@ -208,9 +210,10 @@
 
 :where(html:not([data-screen="folders"])) * { box-sizing: border-box; margin: 0; padding: 0; }
 :where(html:not([data-screen="folders"])) body {
-  min-height: 100vh; display: grid; place-items: center; padding: 40px 24px;
+  min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; padding: 40px 24px;
   background: radial-gradient(1200px 800px at 20% 0%, var(--canvas-start), var(--canvas-mid) 60%, var(--canvas-end));
   font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  font-size: 14px; line-height: 1.5;
   -webkit-font-smoothing: antialiased; color: var(--ink);
 }
 :where(html:not([data-screen="folders"])) button { font: inherit; cursor: pointer; }
@@ -218,6 +221,8 @@
 :where(html:not([data-screen="folders"])) .window {
   position: relative;
   width: 1180px; max-width: 100%; height: 740px; border-radius: 16px; overflow: hidden;
+  /* Fit the viewport: body padding 40 + 40 and the prototype back-link row (35px). */
+  max-height: calc(100dvh - 115px); min-height: 480px;
   display: flex; flex-direction: column;
   background: var(--bg); color: var(--ink);
   box-shadow: 0 1px 2px var(--window-shadow-one), 0 12px 32px var(--window-shadow-two), 0 32px 80px var(--window-shadow-three);
@@ -239,7 +244,7 @@
 }
 :where(html:not([data-screen="folders"])) .titlebar .t { font-size: 13.5px; font-weight: 600; letter-spacing: .2px; }
 :where(html:not([data-screen="folders"])) .phase {
-  display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
   padding: 2px 9px; border-radius: 99px; background: var(--ok-soft); color: var(--ok);
 }
 :where(html:not([data-screen="folders"])) .phase::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
@@ -269,13 +274,13 @@
 :where(html:not([data-screen="folders"])) .btn.primary { background: var(--accent); border-color: transparent; color: var(--accent-foreground); }
 :where(html:not([data-screen="folders"])) .btn.primary:hover { background: var(--accent-hover); }
 :where(html:not([data-screen="folders"])) .btn.danger { color: var(--err); }
-:where(html:not([data-screen="folders"])) .btn.sm { height: 26px; padding: 0 9px; font-size: 11.5px; }
+:where(html:not([data-screen="folders"])) .btn.sm { height: 28px; padding: 0 9px; font-size: 12px; }
 :where(html:not([data-screen="folders"])) kbd {
-  font-family: inherit; font-size: 10.5px; color: var(--mute);
+  font-family: inherit; font-size: 12px; color: var(--mute);
   background: var(--raised); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px;
 }
 :where(html:not([data-screen="folders"])) .badge {
-  display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600;
   padding: 2px 8px; border-radius: 99px;
 }
 :where(html:not([data-screen="folders"])) .badge.ok { background: var(--ok-soft); color: var(--ok); }
@@ -290,7 +295,7 @@
   font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 8px;
 }
 :where(html:not([data-screen="folders"])) .banner.warn { background: var(--warn-soft); color: var(--warn); }
-:where(html:not([data-screen="folders"])) .banner .go { margin-left: auto; text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
+:where(html:not([data-screen="folders"])) .banner .go { margin-left: auto; white-space: nowrap; flex: none; text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
 :where(html:not([data-screen="folders"])) .prog { height: 5px; border-radius: 99px; background: var(--raised); overflow: hidden; }
 :where(html:not([data-screen="folders"])) .prog i { display: block; height: 100%; border-radius: 99px; background: var(--accent); }
 :where(html:not([data-screen="folders"])) .toast {
@@ -300,18 +305,48 @@
   box-shadow: 0 8px 24px var(--shadow-color); display: flex; align-items: center; gap: 8px;
 }
 :where(html:not([data-screen="folders"])) .toast .ok { color: var(--ok); }
-:where(html:not([data-screen="folders"])) .theme-note { font-size: 11px; }
+:where(html:not([data-screen="folders"])) .theme-note { font-size: 12px; }
+/* ---- Shared components: structure. Colors come from the theme rules below. ---- */
+:where(html:not([data-screen="folders"])) .btn:not(.primary):hover { background: var(--raised); }
+:where(html:not([data-screen="folders"])) .entry {
+  width: 250px; height: 30px; padding: 0 10px; border: 1px solid var(--control-border); border-radius: var(--radius);
+  font-family: inherit; font-size: 13px; font-variant-numeric: tabular-nums; display: inline-flex; align-items: center;
+}
+:where(html:not([data-screen="folders"])) .check { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+:where(html:not([data-screen="folders"])) .check .box {
+  width: 16px; height: 16px; flex: none; border: 1px solid var(--control-border); border-radius: var(--radius);
+  display: grid; place-items: center; font-size: 12px; font-weight: 700; line-height: 1;
+}
+:where(html:not([data-screen="folders"])) .drop {
+  height: 30px; padding: 0 10px; border: 1px solid var(--control-border); border-radius: var(--radius);
+  font-size: 13px; display: inline-flex; align-items: center; gap: 8px;
+}
+:where(html:not([data-screen="folders"])) .demo-note { font-size: 12px; color: var(--mute); }
+:where(html:not([data-screen="folders"])) .scrim { position: absolute; inset: 0; display: grid; place-items: center; }
+:where(html:not([data-screen="folders"])) .dialog {
+  width: min(480px, calc(100% - 48px)); padding: 20px 24px; border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: 0 16px 64px var(--shadow-color); display: flex; flex-direction: column; gap: 10px;
+}
+:where(html:not([data-screen="folders"])) .dialog h2 { font-size: 16px; font-weight: 500; color: var(--ink); }
+:where(html:not([data-screen="folders"])) .dialog .acts { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
 
 
-/* Theme-only rules: no typography or spacing changes. */
+/* Theme rules: colors only, no typography or spacing changes, except the toggle block noted below. */
 :root { accent-color: var(--accent); }
 body { color: var(--ink); }
 button, input, select, textarea { color-scheme: inherit; }
-.iconbtn.theme-toggle { width:26px; height:26px; display:inline-grid; place-items:center; border-radius:8px; border:1px solid var(--control-border); background:var(--raised); color:var(--ink); padding:0; flex:none; cursor:pointer; }
-.theme-toggle:hover { background:var(--selected); color:var(--selected-foreground); }
+/* Theme toggle: a quiet icon button (no chrome at rest, tint on hover); the icon shows the theme you are in. */
+.iconbtn.theme-toggle { width:28px; height:28px; display:inline-grid; place-items:center; border-radius:8px; border:0; background:transparent; color:var(--mute); padding:0; flex:none; cursor:pointer; }
+.theme-toggle svg { width:16px; height:16px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.theme-toggle .theme-icon-moon { display:none; }
+:root[data-theme="dark"] .theme-toggle .theme-icon-moon { display:block; }
+:root[data-theme="dark"] .theme-toggle .theme-icon-sun { display:none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme]) .theme-toggle .theme-icon-moon { display:block; } :root:not([data-theme]) .theme-toggle .theme-icon-sun { display:none; } }
+.theme-toggle:hover { background:var(--selected); }
 .theme-toggle:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
 .markrow .theme-toggle { margin-left:auto; }
-.footer .theme-toggle { margin-left:auto; padding:0; border:1px solid var(--control-border); color:var(--ink); }
+.footer .theme-toggle { margin-left:auto; width:auto; padding:0 16px 0 0; }
+:root[data-screen="folders"] .footer .theme-toggle svg { width:22px; height:22px; stroke-width:1.8; }
 :root[data-screen="folders"] body { background:var(--canvas); }
 :root[data-screen="folders"] dialog { background:var(--surface); }
 :root[data-screen="folders"] .tool.selected { background:var(--selected-strong); color:var(--selected-strong-foreground); }
@@ -327,7 +362,7 @@ button, input, select, textarea { color-scheme: inherit; }
 .entry, .drop, .check .box { border-color:var(--control-border); background:var(--surface); color:var(--ink); }
 .check:not(.off) .box { background:var(--accent); color:var(--accent-foreground); }
 .check.off .box { color:var(--mute); }
-@media(prefers-reduced-motion:reduce) { *, *::before, *::after { animation:none!important; transition:none!important; } }
+@media(prefers-reduced-motion:reduce) { *, *::before, *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
 
 /* Existing progress-label containers must not clip their own text. */
 :where(html:not([data-screen="folders"])) .prog:has(.lbl) { height:auto; overflow:visible; background:transparent; }
@@ -336,7 +371,6 @@ button, input, select, textarea { color-scheme: inherit; }
 :where(html:not([data-screen="folders"])) .key .cp { flex-shrink:0; }
 :where(html:not([data-screen="folders"])) .dialog { background:var(--surface); color:var(--ink); }
 :where(html:not([data-screen="folders"])) .scrim { background:var(--overlay); }
-.check .box { outline:1px solid var(--control-border); }
 .check.off .box { color:transparent; }
 .search:focus-within { outline:2px solid var(--focus); outline-offset:2px; }
 :root[data-screen="folders"] .columns input { outline:1px solid var(--popup-control); }
