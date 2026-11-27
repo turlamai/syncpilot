@@ -31,8 +31,11 @@
  if(file==='folder-detail.html'){
    match('button',/^复制$/,b=>copy(text($('.v',b.closest('.key')))+'（演示密钥，不能连接）'));
    match('button',/^邮件 \/ QR$/,()=>modal('分享示例','这是不可用于连接的示例密钥。原型不发送邮件，也不伪造可用二维码。',[{label:'示例只读密钥',name:'key',value:'DEMO-READONLY-NOT-A-REAL-KEY'}]));
-   const view=$('.view'),original=view.innerHTML;
-   $$('.tabs .tab').forEach((tab,i)=>link(tab,()=>{$$('.tabs .tab').forEach(t=>t.classList.toggle('active',t===tab));if(i===0)view.innerHTML=original;else if(i===1)view.innerHTML='<div class="card"><h2>传输样例</h2><p>proposal.md · 正在接收 · 62%</p></div>';else if(i===2)view.innerHTML='<div class="card"><h2>历史样例</h2><p>示例设备接入 · 14 分钟前</p></div>';else go('settings.html')}));
+   const view=$('.view'),original=[...view.childNodes];
+   const tabs=$('.tabs .tab');
+   function activate(tab){tabs.forEach(t=>{const active=t===tab;t.classList.toggle('active',active);t.setAttribute('aria-current',active?'true':'false')});}
+   tabs.forEach((tab,i)=>{tab.setAttribute('aria-current',i===0?'true':'false')});
+   tabs.forEach((tab,i)=>link(tab,()=>{activate(tab);if(i===0)view.replaceChildren(...original);else if(i===1)view.innerHTML='<div class="card"><h2>传输样例</h2><p>proposal.md · 正在接收 · 62%</p></div>';else if(i===2)view.innerHTML='<div class="card"><h2>历史样例</h2><p>示例设备接入 · 14 分钟前</p></div>';else go('settings.html')}));
  }
  if(file==='update.html'){
    match('button',/^关闭$/,()=>go('settings.html'));
