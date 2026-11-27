@@ -12,7 +12,7 @@ on:
 env:
   # Single source of truth for the rivet pin (same value as release.yml);
   # every install step below references this so a bump is one edit.
-  RIVET_PIN: 11b4d915a83d42f0e874a4e649a089d22028283d
+  RIVET_PIN: 0db8b76396f70dde6d0a9c7935a0bd91d8c066f3
 concurrency:
   # Preserve a distinct CI result for every main push: GitHub replaces queued
   # runs in a shared concurrency group even when cancellation is disabled.
@@ -68,7 +68,7 @@ jobs:
       # GitHub does not allow expressions in `uses:`, so this action pin
       # stays literal — keep it in sync with RIVET_PIN above.
       - name: Set up embeddable Racket CS
-        uses: turlamai/rivet/.github/actions/setup-embed-racket@11b4d915a83d42f0e874a4e649a089d22028283d
+        uses: turlamai/rivet/.github/actions/setup-embed-racket@0db8b76396f70dde6d0a9c7935a0bd91d8c066f3
 
       - name: Install system dependencies
         run: |
