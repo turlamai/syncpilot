@@ -2,6 +2,7 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -32,6 +33,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          [[ "$GITHUB_REF" == refs/tags/v* ]] || { echo "::error::Release requires a version tag"; exit 1; }
           bash scripts/check-release-version.sh "$GITHUB_REF_NAME"
           if [[ -z "${UPDATE_ED25519_PRIVATE_KEY_B64:-}" ]]; then
             echo "::error::UPDATE_ED25519_PRIVATE_KEY_B64 is required; refusing unsigned release"
