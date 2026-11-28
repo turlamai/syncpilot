@@ -18,7 +18,7 @@
  match('button',/打开 SyncPilot 设置/,()=>go('settings.html'));
  P.nav('.foot .item',{偏好设置:'settings.html'});
  if(file==='settings.html'){
-   const values=read('settings',{});$$('.entry').forEach((div,i)=>{const input=document.createElement('input');input.className=div.className;input.value=values[i]||text(div);input.type=i===1?'number':'text';input.setAttribute('aria-label',i===1?'本地 API 端口':'设备名');if(i===1){input.min=1024;input.max=65535}div.replaceWith(input)});
+   const values=read('settings',{});$$('.entry').forEach((div,i)=>{const input=document.createElement('input');input.className=div.className;input.value=values[i]??text(div);input.type=i===1?'number':'text';input.setAttribute('aria-label',i===1?'本地 API 端口':'设备名');if(i===1){input.min=1024;input.max=65535;input.step=1;input.required=true}div.replaceWith(input)});
    $$('.check').forEach((el,i)=>{if(values['check'+i]!==undefined)el.classList.toggle('off',!values['check'+i]);el.setAttribute('role','checkbox');el.setAttribute('aria-label',text($('.t',el.closest('.row'))));el.setAttribute('aria-checked',!el.classList.contains('off'));link(el,()=>{el.classList.toggle('off');el.setAttribute('aria-checked',!el.classList.contains('off'))})});
    const toast=$('.toast');if(toast)toast.hidden=true;
    match('button',/^保存设置$/,()=>{const entries=$$('.entry');if(!entries.every(x=>x.reportValidity()))return;const v={};entries.forEach((x,i)=>v[i]=x.value);$$('.check').forEach((x,i)=>v['check'+i]=!x.classList.contains('off'));save('settings',v);status('原型偏好已保存 · 未修改守护进程')});
@@ -31,7 +31,7 @@
  if(file==='folder-detail.html'){
    match('button',/^复制$/,b=>copy(text($('.v',b.closest('.key')))+'（演示密钥，不能连接）'));
    match('button',/^邮件 \/ QR$/,()=>modal('分享示例','这是不可用于连接的示例密钥。原型不发送邮件，也不伪造可用二维码。',[{label:'示例只读密钥',name:'key',value:'DEMO-READONLY-NOT-A-REAL-KEY'}]));
-   const view=$('.view'),original=[...view.childNodes];
+   const view=$('.view'),original=[...view.childNodes];view.setAttribute('aria-label','文件夹详情内容');
    const tabs=$('.tabs .tab');
    function activate(tab){tabs.forEach(t=>{const active=t===tab;t.classList.toggle('active',active);t.setAttribute('aria-current',active?'true':'false')});}
    tabs.forEach((tab,i)=>{tab.setAttribute('aria-current',i===0?'true':'false')});
